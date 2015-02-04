@@ -24,7 +24,7 @@ if(!estConnecte()){
 }*/
 ?>
 <?php
-	$menu .= '<ul style="margin-top: -20px;" id="nav">';
+	$menu = '<ul style="margin-top: -20px;" id="nav">';
 
 	$requete = $connexion->query("SELECT * FROM categorie");
 	$requete->setFetchMode(PDO::FETCH_OBJ);
@@ -37,8 +37,9 @@ if(!estConnecte()){
 			else{
 				$activ = '';
 			}
+			$menu .= '<li '.$activ.'><a href="categorie.php?id='.$enregistrement->idCategorie.'&titleCat='.$enregistrement->libelleCategorie.'">'.$enregistrement->libelleCategorie.'</a></li>';
 		}
-		$menu .= '<li '.$activ.'><a href="categorie.php?id='.$enregistrement->idCategorie.'&titleCat='.$enregistrement->libelleCategorie.'">'.$enregistrement->libelleCategorie.'</a></li>';
+		
 	}
 	$menu .= '  </ul>
 			  ';
