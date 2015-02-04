@@ -19,7 +19,6 @@ if(isset($_GET['ajouterPanier']))
 {
 	ajouterPanier($_GET['id'],$_GET['qte']);
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
