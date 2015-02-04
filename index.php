@@ -17,7 +17,7 @@ require_once('inc/inc_top.php');
 		<?php
 		require_once('inc/inc_menu.php');
 		?>
-        <h1><?php echo retourneParametre(nomSite); ?></h1>
+        <h1><?php echo retourneParametre('nomSite'); ?></h1>
         <p> <?php echo retourneParametre('nomSite'); ?> <br/><br/>
 		ADMIN : admin@admin.fr / admin<br/>
 		GESTIONAIRE : gestionaire@mail.ru / pass <br/>

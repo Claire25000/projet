@@ -8,7 +8,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><?php echo retourneParametre(nomSite); ?></a>
+          <a class="navbar-brand" href="#"><?php echo retourneParametre('nomSite'); ?></a>
         </div>
 		<div class="col-sm-3 col-md-3"><!-- champ de recherche-->
         <form class="navbar-form" role="search" method="get" action="recherche.php">
