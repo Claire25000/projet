@@ -17,7 +17,7 @@ if(isset($_GET['supp']))
 
 if(isset($_GET['ajouterPanier']))
 {
-	ajouterPanier($_GET['id'],1);
+	if(ajouterPanier($_GET['id'],1)){$message = '<div class="alert alert-success" role="alert">Le produit a été ajouté à votre panier.</div>';}
 }
 ?>
 <!DOCTYPE html>
@@ -68,7 +68,9 @@ if(isset($_GET['ajouterPanier']))
 			$sql->setFetchMode(PDO::FETCH_OBJ);
 			
 			echo "<tr>
-					<td>".$res->idProduit."</td>
+					<td>
+						<img style='max-width: 130px;' src='".$res->image."' alt='".$res->nomProduit."'/>
+					</td>
 					<td>".$res->nomProduit."</td>
 					<td>".$res->descriptionProduit."</td>
 					<td>".$res->prixProduit."</td>

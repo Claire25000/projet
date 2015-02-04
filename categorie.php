@@ -44,7 +44,7 @@ require_once("fonctions/fonctionProd.php");
 					  <div class="caption">
 						<h3>Thumbnail label</h3>
 						<p>...</p>
-						<p><a href="#" class="btn btn-primary btn-lg btn-block" role="button">Fiche produit</a></p>
+						<p><a href="produit.php?id='.$res->idProduit.'" class="btn btn-primary btn-lg btn-block" role="button">Fiche produit</a></p>
 						</div>
 					</div>
 				  </div>

@@ -24,7 +24,7 @@ if(!estConnecte()){
 }*/
 ?>
 <?php
-	$menu = '<ul style="margin-top: -20px;" id="nav">';
+	$menu = '<div class="row"><ul style="margin-top: -20px;" id="nav">';
 	$activ = '';
 	
 	$requete = $connexion->query("SELECT * FROM categorie");
@@ -39,7 +39,7 @@ if(!estConnecte()){
 		}
 		$menu .= '<li '.$activ.'><a href="categorie.php?id='.$enregistrement->idCategorie.'&titleCat='.$enregistrement->libelleCategorie.'">'.$enregistrement->libelleCategorie.'</a></li>';
 	}
-	$menu .= '  </ul>
+	$menu .= '  </ul></div>
 			  ';
 	echo $menu;
 ?>

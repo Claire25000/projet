@@ -7,6 +7,11 @@ function creationPanier()
 function ajouterPanier($idProd,$qte)
 {
     $_SESSION['panier'][$idProd]['qte']  = $qte; // Ajouter un nouvel article
+	
+	if(isset($_SESSION['panier'][$idProd])){ // si la session est définie a l'ID du produit
+		return true;
+	}
+	return false;
 }
 
 function modifierQte($idProd,$qte)
