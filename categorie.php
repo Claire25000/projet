@@ -44,7 +44,8 @@ require_once("fonctions/fonctionProd.php");
 					  <div class="caption">
 						<h3>Thumbnail label</h3>
 						<p>...</p>
-						<p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+						<p><a href="#" class="btn btn-primary btn-lg btn-block" role="button">Button</a></p>
+						
 					  </div>
 					</div>
 				  </div>
