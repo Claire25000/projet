@@ -57,43 +57,75 @@ elseif(isset($_POST['modifier']))
 elseif(isset($_POST['supprimer']))
 {
 	supprimerArticle($_POST['id']);
-}
-
-// Voici l'affichage du panier
-echo '<h2>Contenu de votre panier</h2><ul>';
-if (isset($_SESSION['panier']) && count($_SESSION['panier'])>0){
-        $total_panier = 0;
-        foreach($_SESSION['panier'] as $id_article=>$article_acheté){
-                // On affiche chaque ligne du panier : nom, prix et quantité modifiable + 2 boutons : modifier la qté et supprimer l'article
-				
-				$produit = retourneProduit($id_article);		
-				
-                if (isset($article_acheté['qte'])){
-                        echo '<li><form action="panier.php" method="POST">', $_SESSION['panier'][$id_article]['qte'],' ',$produit->nomProduit, ' (', number_format($produit->prixProduit, 2, ',', ' '), ' €) ',
-                         '<input type="hidden" name="id" value='.$id_article.' />
-                          <br />Qté: <select name="qte">
-								<option selected="selected" value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-								<option value="10">10</option>
-							</select>
-                          <input type="submit" name="modifier" value="Modifier la quantité" />
-                          <input type="submit" name="supprimer" value="Supprimer" />
-                        </form>
-                        </li>';
-						
-                        // Calcule le prix total du panier 
-                        $total_panier += $produit->prixProduit * $article_acheté['qte'];
-                }
-        }
-        echo '<hr><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €'; // Affiche le total du panier
-}
+}elseif(!isset($_GET['comm']))
+{
+	// Voici l'affichage du panier
+	echo '<h2>Contenu de votre panier</h2><ul>';
+	if (isset($_SESSION['panier']) && count($_SESSION['panier'])>0){
+			$total_panier = 0;
+			foreach($_SESSION['panier'] as $id_article=>$article_acheté){
+					// On affiche chaque ligne du panier : nom, prix et quantité modifiable + 2 boutons : modifier la qté et supprimer l'article
+					
+					$produit = retourneProduit($id_article);		
+					
+					if (isset($article_acheté['qte'])){
+							echo '<li><form action="panier.php" method="POST">', $_SESSION['panier'][$id_article]['qte'],' ',$produit->nomProduit, ' (', number_format($produit->prixProduit, 2, ',', ' '), ' €) ',
+							 '<input type="hidden" name="id" value='.$id_article.' />
+							  <br />Qté: <select name="qte">
+									<option selected="selected" value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+								</select>
+							  <input type="submit" name="modifier" value="Modifier la quantité" />
+							  <input type="submit" name="supprimer" value="Supprimer" />
+							</form>
+							</li>';
+							
+							// Calcule le prix total du panier 
+							$total_panier += $produit->prixProduit * $article_acheté['qte'];
+					}
+			}
+			echo '<hr><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €'; // Affiche le total du panier
+	}
 else { echo 'Votre panier est vide'; } // Message si le panier est vide
 echo "</ul>";
+}
+else
+{
+	echo '<div class="panel panel-default">
+			<div class="panel-heading">Récapitulatif de commande</div>
+
+			<table class="table">
+					<tr>
+						<th>Image</th>
+						<th>Nom du produit</th>
+						<th>Prix unitaire</th>
+						<th>Quantité</th>
+						<th>Prix</th>
+					</tr>';
+	
+				foreach($_SESSION['panier'] as $id_article=>$article_acheté)
+					{
+						$produit = retourneProduit($id_article);
+						
+						echo '<tr>
+								<td>'.$produit->image.'</td>
+								<td>'.$produit->nomProduit.'</td>
+								<td>'.$produit->prixProduit.'</td>
+								<td>'.$article_acheté['qte'].'</td>
+								<td>'.$produit->prixProduit*$article_acheté['qte'].'</td>						
+							</tr>';
+					}
+					
+				echo '</table>
+			</div>
+		  </div>';
+}
 ?>

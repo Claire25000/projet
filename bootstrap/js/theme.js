@@ -46,3 +46,11 @@ function redirection(id){
 function supp(id){
   document.location.href="?suppPanier&id="+id; 
 }
+
+function panier(){
+  document.location.href="panier.php"; 
+}
+
+function commander(){
+  document.location.href="panier.php?comm"; 
+}

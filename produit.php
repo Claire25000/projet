@@ -49,7 +49,7 @@ if(isset($_GET['ajouterPanier']))
 				$req->setFetchMode(PDO::FETCH_OBJ);
 				$res = $req->fetch();
 				
-				echo '<div align="right"><a href="produit.php?ajouterPanier&id='.$res->idProduit.'&qte=1" class="btn btn-default" role="button">Ajouter au panier</a></div>';
+				echo '<div style="text-align:right;"><a href="produit.php?ajouterPanier&id='.$res->idProduit.'&qte=1" class="btn btn-default" role="button">Ajouter au panier</a></div>';
 			
 				if(retourneParametre("afficherCommentaire"))
 				{
