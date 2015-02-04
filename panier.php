@@ -99,7 +99,12 @@ echo "</ul>";
 else
 {
 	$total_panier = 0;
-	echo '<div style="margin-top:50px;"><div class="panel panel-default">
+	$liste = array();
+	
+	if(!isset($_GET['valider']))
+	{
+	echo '<div style="margin-top:50px;">
+		<div class="panel panel-default">
 			<div class="panel-heading">Récapitulatif de commande</div>
 
 			<table class="table">
@@ -113,14 +118,11 @@ else
 	
 				foreach($_SESSION['panier'] as $id_article=>$article_acheté)
 					{
+						$liste[] = $id_article;
 						$produit = retourneProduit($id_article);
 						
 						echo '<tr>
-								<td><div class="row">
-									  <div class="col-xs-6 col-md-3">
-										<img src="'.$produit->image.'" alt="'.$produit->nomProduit.'"/></td>
-									</div>
-								</div>
+								<td><img src="'.$produit->image.'" alt="'.$produit->nomProduit.'"/></td>
 								<td>'.$produit->nomProduit.'</td>
 								<td>'.$produit->prixProduit.' €</td>
 								<td>'.$article_acheté['qte'].'</td>
@@ -132,7 +134,14 @@ else
 				echo '</table>
 			</div>
 		  </div>';
-		  echo '<hr><div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</div>'; // Affiche le total du panier
+		  echo '<hr><div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</div>
+		  <form action="panier.php?valider" method="POST">
+			<label>Informations supplémentaires : <textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="500" rows="10"></textarea>'; 
+	}
+	else
+	{
+	
+	}
 }
 ?>
  </div>
