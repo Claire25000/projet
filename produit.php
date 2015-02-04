@@ -8,6 +8,7 @@ if(!isset($_GET['id']))
 require_once('inc/inc_top.php');
 require_once("fonctions/fonctionComm.php");
 require_once("fonctions/fonctionProd.php");
+require_once("fonctions/fonctionPanier.php");
 
 if(isset($_GET['supp']))
 {
@@ -39,6 +40,18 @@ if(isset($_GET['supp']))
 			
 			if(estConnecte() == true)
 			{
+				$req = $connexion->query("SET NAMES 'utf8'");	
+				$req = $connexion->query("Select produit.*, categorie.libelleCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
+				$req->setFetchMode(PDO::FETCH_OBJ);
+				$res = $req->fetch();
+				
+				echo '<a href="produit.php?ajouterPanier&id='.$res->idProduit.'&qte=1">Ajouter au panier</a>';
+				
+				if(isset($_GET['ajouterPanier']))
+				{
+					ajouterPanier($_GET['id'],$_GET['qte']);
+				}
+			
 				if(retourneParametre("afficherCommentaire"))
 				{
 					afficherCommentaire($_GET['id']);

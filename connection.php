@@ -3,7 +3,7 @@
 // 0 -> en local
 $online = 1;
 
-if($online == 1){
+if($online == 0){
 	try
 	{
 		$dns = 'mysql:host=mysql51-150.perso;dbname=webuzzer54gs9';

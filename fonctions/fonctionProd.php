@@ -3,6 +3,18 @@ require_once("fonctionCaracteristique.php");
 require_once("fonctionsUtilisateur.php");
 require_once("fonctionsSysteme.php");
 
+
+function retourneProduit($id)
+{
+	global $connexion;
+	
+	$req = $connexion->query("SET NAMES 'utf8'");
+	$req = $connexion->query("Select produit.* from produit where idProduit = ".$id);
+	$req->setFetchMode(PDO::FETCH_OBJ);
+	
+	return $req->fetch();
+}
+
 function afficherProduit($cat)
 {
 	global $connexion; // on définie la variable globale de connection dans la fonction
@@ -81,6 +93,7 @@ function afficherProduitDetails($id)
 		$req = $connexion->query("SET NAMES 'utf8'");	
 		$req = $connexion->query("Select produit.*, categorie.libelleCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$id);
 		$req->setFetchMode(PDO::FETCH_OBJ);
+		$res = $req->fetch();
 		 //on récupère le produit voulu
 		 
 		 echo"
@@ -101,7 +114,6 @@ function afficherProduitDetails($id)
 				<th>Prix du produit</th>
 				<th>Catégorie</th></tr>";
 				
-			$res = $req->fetch();
 			$sql = $connexion->query("SET NAMES 'utf8'"); 
 			$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$id);
 			$sql->setFetchMode(PDO::FETCH_OBJ);
