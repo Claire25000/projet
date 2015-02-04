@@ -33,6 +33,8 @@ if(!estConnecte()){
 		if(isset($_GET['titleCat'])){
 			if($_GET['titleCat'] == $enregistrement->libelleCategorie){
 				$activ = 'class="active"';
+			}else{
+				$activ = '';
 			}
 		}
 		$menu .= '<li '.$activ.'><a href="categorie.php?id='.$enregistrement->idCategorie.'&titleCat='.$enregistrement->libelleCategorie.'">'.$enregistrement->libelleCategorie.'</a></li>';
