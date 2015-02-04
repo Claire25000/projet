@@ -40,8 +40,58 @@ if(isset($_GET['ajouterPanier']))
 		if(isset($message)){
 			echo $message;
 		}
-			afficherProduitDetails($_GET['id']);
+		$req = $connexion->query("SET NAMES 'utf8'");	
+		$req = $connexion->query("Select produit.*, categorie.libelleCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
+		$req->setFetchMode(PDO::FETCH_OBJ);
+		$res = $req->fetch();
+		 //on récupère le produit voulu
+
+		 
+		if(estConnecte() == true)
+		{
+			if(estAdmin(idUtilisateurConnecte()) == true)
+			{
+				echo "<a href='produit.php?modif&id=".$_GET['id']."'>Modifier le produit</a>";
+			}
+		}
+		echo "<table border='1'>
+				<tr>
+					<th>Numéro du produit</th>
+					<th>Nom du produit</th>
+					<th>Description du produit</th>
+					<th>Prix du produit</th>
+					<th>Catégorie</th>
+				</tr>";
+				
+			$sql = $connexion->query("SET NAMES 'utf8'"); 
+			$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
+			$sql->setFetchMode(PDO::FETCH_OBJ);
 			
+			echo "<tr>
+					<td>".$res->idProduit."</td>
+					<td>".$res->nomProduit."</td>
+					<td>".$res->descriptionProduit."</td>
+					<td>".$res->prixProduit."</td>
+					<td>".$res->libelleCategorie."</td>
+				 </tr>
+				</table>";
+			// ------------------------------------------------------------------------------ //
+			$sql = $connexion->query("SET NAMES 'utf8'"); 
+			$sql = $connexion->query("Select data.idNom, nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
+			$sql->setFetchMode(PDO::FETCH_OBJ);
+			
+			echo "<label>Caractéristiques : </label>
+			<ul>";
+			
+					while($resultat = $sql->fetch())
+					{
+						echo "<tr>
+						<li>".$resultat->nom." : ".$resultat->valeur."</li>";
+					}
+				echo "</ul><br/>";
+			echo '<div style="text-align:right;"><a href="produit.php?ajouterPanier&id='.$res->idProduit.'&qte=1" class="btn btn-default" role="button">Ajouter au panier</a></div>';
+		
+				// ------------------------------------------------------------------------------ //
 			if(estConnecte() == true)
 			{
 				$req = $connexion->query("SET NAMES 'utf8'");	
@@ -49,8 +99,6 @@ if(isset($_GET['ajouterPanier']))
 				$req->setFetchMode(PDO::FETCH_OBJ);
 				$res = $req->fetch();
 				
-				echo '<div style="text-align:right;"><a href="produit.php?ajouterPanier&id='.$res->idProduit.'&qte=1" class="btn btn-default" role="button">Ajouter au panier</a></div>';
-		
 				if(retourneParametre("afficherCommentaire"))
 				{
 					afficherCommentaire($_GET['id']);
