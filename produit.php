@@ -15,6 +15,11 @@ if(isset($_GET['supp']))
 	supprimerCommentaire($_GET['id']);
 }
 
+if(isset($_GET['ajouterPanier']))
+{
+	ajouterPanier($_GET['id'],$_GET['qte']);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -45,12 +50,7 @@ if(isset($_GET['supp']))
 				$req->setFetchMode(PDO::FETCH_OBJ);
 				$res = $req->fetch();
 				
-				echo '<a href="produit.php?ajouterPanier&id='.$res->idProduit.'&qte=1">Ajouter au panier</a>';
-				
-				if(isset($_GET['ajouterPanier']))
-				{
-					ajouterPanier($_GET['id'],$_GET['qte']);
-				}
+				echo '<div align="right"><a href="produit.php?ajouterPanier&id='.$res->idProduit.'&qte=1" class="btn btn-default" role="button">Ajouter au panier</a></div>';
 			
 				if(retourneParametre("afficherCommentaire"))
 				{
