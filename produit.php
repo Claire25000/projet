@@ -50,7 +50,7 @@ if(isset($_GET['ajouterPanier']))
 				$res = $req->fetch();
 				
 				echo '<div style="text-align:right;"><a href="produit.php?ajouterPanier&id='.$res->idProduit.'&qte=1" class="btn btn-default" role="button">Ajouter au panier</a></div>';
-			
+		
 				if(retourneParametre("afficherCommentaire"))
 				{
 					afficherCommentaire($_GET['id']);
