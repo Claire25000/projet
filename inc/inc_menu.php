@@ -25,7 +25,8 @@ if(!estConnecte()){
 ?>
 <?php
 	$menu = '<ul style="margin-top: -20px;" id="nav">';
-
+	$activ = '';
+	
 	$requete = $connexion->query("SELECT * FROM categorie");
 	$requete->setFetchMode(PDO::FETCH_OBJ);
 	while($enregistrement = $requete->fetch()){
@@ -34,11 +35,8 @@ if(!estConnecte()){
 			if($_GET['titleCat'] == $enregistrement->libelleCategorie){
 				$activ = 'class="active"';
 			}
-			else{
-				$activ = '';
-			}
-			$menu .= '<li '.$activ.'><a href="categorie.php?id='.$enregistrement->idCategorie.'&titleCat='.$enregistrement->libelleCategorie.'">'.$enregistrement->libelleCategorie.'</a></li>';
 		}
+		$menu .= '<li '.$activ.'><a href="categorie.php?id='.$enregistrement->idCategorie.'&titleCat='.$enregistrement->libelleCategorie.'">'.$enregistrement->libelleCategorie.'</a></li>';
 	}
 	$menu .= '  </ul>
 			  ';
