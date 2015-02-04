@@ -39,7 +39,7 @@ require_once("fonctions/fonctionProd.php");
 				echo '
 				
 				  <div class="col-sm-6 col-md-3">
-					<div class="thumbnail">
+					<div style="min-height: 410px" class="thumbnail">
 					  <img src="'.$res->image.'" alt="">
 					  <div class="caption">
 						<h3>Thumbnail label</h3>
