@@ -87,11 +87,9 @@ elseif(isset($_POST['supprimer']))
 									
 									// Calcule le prix total du panier 
 									$total_panier += $produit->prixProduit * $article_acheté['qte'];
-							}
 					}
 					echo '<hr><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €'; // Affiche le total du panier
 			}
-			echo '<hr><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €'; // Affiche le total du panier
 	}
 else { echo 'Votre panier est vide'; } // Message si le panier est vide
 echo "</ul>";
@@ -137,7 +135,7 @@ else
 						echo '</tbody></table>
 					</div>
 				  </div>';
-				  echo '<hr><div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</div>'; // Affiche le total du panier
+				  echo '<hr><div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</div>
 		  <form action="panier.php?valider" method="POST">
 			<label>Informations supplémentaires : <textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="500" rows="10"></textarea>'; 
 	}
