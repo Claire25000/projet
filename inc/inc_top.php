@@ -16,7 +16,6 @@ if(isset($_GET['deco'])){
 	}
 }
 if(isset($_POST['email']) && isset($_POST['password'])){
-	echo "ok";
 	if(connecteUtilisateur($_POST['email'],$_POST['password']))
 		{
 			$message = "Connexion réussie<br/>";

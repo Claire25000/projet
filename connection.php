@@ -1,7 +1,7 @@
 <?php
 // 1 -> en ligne
 // 0 -> en local
-$online = 0;
+$online = 1;
 
 if($online == 1){
 	try

@@ -1,6 +1,5 @@
 <?php
 require_once('inc/inc_top.php');
-
 if(isset($_POST['login']) && isset($_POST['pass1']) && isset($_POST['pass2']) && isset($_POST['prenom']) && isset($_POST['nom']) && isset($_POST['email']) && isset($_POST['adresse'])){
 	if($_POST['pass1'] == $_POST['pass2']){
 		if(ajouterClient($_POST['login'],$_POST['pass1'],$_POST['nom'],$_POST['prenom'],$_POST['adresse'],$_POST['email'])){
@@ -10,44 +9,110 @@ if(isset($_POST['login']) && isset($_POST['pass1']) && isset($_POST['pass2']) &&
 	
 }
 ?>
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>Inscription</title>
-	</head>
-	<body>
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+	<?php require_once("inc/inc_head.php");?>
+    <title>Accueil - </title>
+  </head>
+  
+  <body>
+	<!-- navbar -->
+	<?php require_once("inc/inc_navbar.php");?>
+	
+    <div class="container">
+      <div class="jumbotron">
 		<?php
-			require_once('inc/inc_menu.php');
-		
-			if(isset($message)){
-				echo $message;
-			}		
+		require_once('inc/inc_menu.php');
+	
+		if(isset($message)){
+			echo $message;
+		}		
 		?>
-		<form method="post" action="inscription.php">
-			<p>
-				<label for="login">Nom d'utilisateur</label>
-				<input type="text" name="login" id="login" /><br/>
-				
-				<label for="pass1">Mot de passe</label>
-				<input type="password" name="pass1" id="pass1" /><br/>
-				
-				<label for="pass2">Répéter le mot de passe</label>
-				<input type="password" name="pass2" id="pass2" /><br/>
-				
-				<label for="prenom">Prénom</label>
-				<input type="text" name="prenom" id="prenom" /><br/>
-				
-				<label for="nom">Nom</label>
-				<input type="text" name="nom" id="nom" /><br/>
-				
-				<label for="email">Email</label>
-				<input type="text" name="email" id="email" /><br/>
-				   
-				<label for="adresse">Adresse complète</label>
-				<input type="text" name="adresse" id="adresse" /><br/><br/>
-				
-				<input type="submit" value="S'inscrire" />
-			</p>
+
+		<h3> Inscription </h3>
+		<br/>
+		<?php
+		if(isset($message)){
+			echo $message;
+		}	
+		?>
+		<form method="post" action="inscription.php" class="form-horizontal">
+		<fieldset>
+
+
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="login">Nom d'utilisateur</label>  
+		  <div class="col-md-4">
+		  <input id="login" name="login" placeholder="Nom" class="form-control input-md" required="" type="text">
+			
+		  </div>
+		</div>
+
+		<!-- Password input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="pass1">Mot de passe</label>
+		  <div class="col-md-4">
+			<input id="pass1" name="pass1" placeholder="Mot de passe" class="form-control input-md" required="" type="password">
+			
+		  </div>
+		</div>
+
+		<!-- Password input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="pass2">Mot de passe (répeter)</label>
+		  <div class="col-md-4">
+			<input id="pass2" name="pass2" placeholder="Mot de passe (répéter)" class="form-control input-md" required="" type="password">
+			
+		  </div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="prenom">Prénom</label>  
+		  <div class="col-md-4">
+		  <input id="prenom" name="prenom" placeholder="Prénom" class="form-control input-md" required="" type="text">
+			
+		  </div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="nom">Nom</label>  
+		  <div class="col-md-4">
+		  <input id="nom" name="nom" placeholder="Nom" class="form-control input-md" required="" type="text">
+			
+		  </div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="email">Email</label>  
+		  <div class="col-md-4">
+		  <input id="email" name="email" placeholder="Email" class="form-control input-md" required="" type="email">
+			
+		  </div>
+		</div>
+
+		<!-- Textarea -->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="adresse">Adresse complète</label>
+		  <div class="col-md-4">                     
+			<textarea class="form-control" id="adresse" name="adresse"></textarea>
+		  </div>
+		</div>
+		
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="singlebutton"> </label>
+		  <div class="col-md-4">
+			<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">S'inscrire</button>
+		  </div>
+		</div>
+		</fieldset>
 		</form>
-	</body>
-</html
+      </div>
+    </div><!-- /container -->
+  <?php require_once("inc/inc_footer.php"); ?>
+  </body>
+</html>

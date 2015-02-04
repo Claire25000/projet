@@ -6,18 +6,27 @@ if(!isset($_GET['err'])){ // si aucun code d'erreur fourni
 	$codeErreur = ''.$_GET['err'].'';
 }
 ?>
-<html>
-	<head>
-		<title>404</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	</head>
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+	<?php require_once("inc/inc_head.php");?>
+    <title>Accueil - </title>
+  </head>
+  
+  <body>
+	<!-- navbar -->
+	<?php require_once("inc/inc_navbar.php");?>
 	
-	<body>
+    <div class="container">
+      <div class="jumbotron">
 		<?php
 			require_once('inc/inc_menu.php');
 		?>
 		<p>
 			<?php echo retourneErreur($codeErreur); ?><br/>
 		</p>
-	</body>
+      </div>
+    </div><!-- /container -->
+  <?php require_once("inc/inc_footer.php"); ?>
+  </body>
 </html>

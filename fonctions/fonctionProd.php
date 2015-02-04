@@ -1,4 +1,8 @@
 <?php
+require_once("fonctionCaracteristique.php");
+require_once("fonctionsUtilisateur.php");
+require_once("fonctionsSysteme.php");
+
 function afficherProduit($cat)
 {
 	global $connexion; // on définie la variable globale de connection dans la fonction
@@ -80,7 +84,16 @@ function afficherProduitDetails($id)
 		 //on récupère le produit voulu
 		 
 		 echo"
-		<table border='1'>
+		 <br/>";
+		 
+		if(estConnecte() == true)
+		{
+			if(estAdmin(idUtilisateurConnecte()) == true)
+			{
+				echo "<a href='produit.php?modif&id=".$id."'>Modifier le produit</a>";
+			}
+		}
+		echo "<table border='1'>
 			<tr>
 				<th>Numéro du produit</th>
 				<th>Nom du produit</th>
@@ -101,34 +114,41 @@ function afficherProduitDetails($id)
 				<td>".$res->libelleCategorie."</td></tr>
 				</table><br/>";
 				
-				//afficherCaracteristique($id);
+				afficherCaracteristique($id);
 }
 
-function formAjouterProduit()
+function formAjouterProduit($idCat)
 {
 	global $connexion; // on définie la variable globale de connection dans la fonction
 	
 		
-			echo "<form action='produit.php?ajout' method='POST'>
+			echo "<form action='produit.php?ajout&idCat=".$idCat."' method='POST'>
 					<label>Nom du produit : </label><input type='text' name='nom'></input><br/>
 					<label>Description du produit : </label><br/><textarea name='desc' rows='10' cols='50'></textarea><br/>
 					<label>Prix du produit : </label><input type='text' name='prix'></input><br/>
-					<label>Catégorie du produit : </label>
-					<select name='cat'>";
-					
-					$sql = $connexion->query("SET NAMES 'utf8'"); 
-					$sql = $connexion->query("Select idCategorie, libelleCategorie from categorie");
-					$sql->setFetchMode(PDO::FETCH_OBJ);
-				
-					while($resultat = $sql->fetch())
+					";
+					if($idCat == 'null')
 					{
-						echo "<option value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
+						echo "<label>Catégorie du produit : </label>
+						<select name='cat'>";
+						
+						$sql = $connexion->query("SET NAMES 'utf8'"); 
+						$sql = $connexion->query("Select idCategorie, libelleCategorie from categorie");
+						$sql->setFetchMode(PDO::FETCH_OBJ);
+					
+						while($resultat = $sql->fetch())
+						{
+							echo "<option value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
+						}
+						echo "
+						</select>";
 					}
-					echo "
-					</select>
-					<br/>";
-			
-			echo "</br><input type='submit' name='oka' value='Ajouter'></input>
+					else
+					{
+						echo "<input type='hidden' name='cat' value=".$idCat."></input>";
+					}
+			echo "<br/><label>Image du produit : </label><input type='text' name='img'></input><br/>
+			</br><input type='submit' name='oka' value='Ajouter'></input>
 			</form>";
 			
 		
@@ -136,10 +156,10 @@ function formAjouterProduit()
 		{
 			$prix = $_POST['prix'];
 			//$prix  = number_format($_POST['prix'], 2, '.', ',');
-			ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat']);
+			ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$_POST['img']);
 			$id = getIdProduit($_POST['nom']);
-			//echo $id;
-			header("Location:produit.php?id=".$id);
+
+			header("Location:produit.php?modif&id=".$id);
 		}
 }
 
@@ -155,50 +175,125 @@ function getIdProduit($nom)
 	return $res->idProduit;
 }
 
-function formAjouterCaracteristiques()
+function formAjouterCaracteristiquesNom($cat)
 {
 	global $connexion;
 	
-			echo "<br/><form action='produit.php?id=".$_GET['id']."' method='POST'><label>Nom : </label><select name='carNom'>
-				<option value=null> </option>";
-					
-			$nom = $connexion->query("Select * from data_nom");
-			$nom->setFetchMode(PDO::FETCH_OBJ);
-				
-			while($resNom = $nom->fetch())
+			if(!isset($_POST['okc']))
 			{
-				echo "<option value='".$resNom->idNom."'>".$resNom->nom."</option>";
-			}
-			echo "
-			</select>
-			<label>Valeur : </label><select name='carVal'>
-			<option value=null> </option>";
-			$valeur = $connexion->query("Select * from data_valeur");
-			$valeur->setFetchMode(PDO::FETCH_OBJ);
-			while($resVal = $valeur->fetch())
-			{
-				echo "<option value='".$resVal->idValeur."'>".$resVal->valeur."</option>";
-			}
-			echo "
-			</select>
-			</br><input type='submit' name='okc' value='Ajouter'></input>
-			</form>";
+				echo "<br/><form action='produit.php?modif&id=".$_GET['id']."' method='POST'><label>Nom : </label><select name='carNom'>
+					<option value=null> </option>";
+						
+				$nom = $connexion->query("Select * from data_nom");
+				$nom->setFetchMode(PDO::FETCH_OBJ);
 			
-			if(isset($_POST['okc']))
+				
+				$noms = genererNomCategorie($cat);
+				
+				
+				if($noms == null)
+				{
+					while($res = $nom->fetch())
+					{
+						echo "<option value='".$res->idNom."'>".$res->nom."</option>";
+					}
+				}
+				else
+				{
+					foreach($noms as $element) // retourne un array des noms
+					{
+						echo "<option value='".$element->idNom."'>".$element->nom."</option>";
+					}
+				}
+				echo "
+				</select> ou <input type='text' name='nom' style='width:100px; height:20px;'></input><br/>
+				<input type='submit' name='okc' value='Ajouter'></input>			
+				</form>";
+			}else
 			{
-				ajouterData($_GET['id'],$_POST['carNom'],$_POST['carVal']);
-				header("Location:produit.php?id=".$_GET['id']);
+				if($_POST['carNom'] == 'null')
+				{
+					$e = ifNomExist($_POST['nom']);
+					
+					if($e == 0)
+					{
+						ajouterNom($_POST['nom']);
+					}
+					
+					$idNom = getIdNom($_POST['nom']);
+					header("Location:produit.php?modif&id=".$_GET['id']."&idNom=".$idNom);
+				}
+				else
+				{
+					header("Location:produit.php?modif&id=".$_GET['id']."&idNom=".$_POST['carNom']);
+				}
 			}
 }
 
-function ajouterProduit($nom,$desc,$prix,$cat)
+function formAjouterCaracteristiquesValeur($nom)
+{
+	global $connexion;
+	
+			if(!isset($_POST['okc2']))
+			{
+				echo "<br/><form action='produit.php?modif&id=".$_GET['id']."&idNom=".$nom."' method='POST'><label>Valeur : </label><select name='carVal'>
+					<option value=null> </option>";
+						
+				$val = $connexion->query("Select * from data_valeur");
+				$val->setFetchMode(PDO::FETCH_OBJ);
+			
+				
+				$valeur = genererValeurNom($nom);
+				
+				if($valeur == null)
+				{
+					while($res = $val->fetch())
+					{
+						echo "<option value='".$res->idValeur."'>".$res->valeur."</option>";
+					}
+				}
+				else
+				{
+					foreach($valeur as $element) // retourne un array des valeurs
+					{
+						echo "<option value='".$element->idValeur."'>".$element->valeur."</option>";
+					}
+				}
+				echo "
+				</select> ou <input type='text' name='val' style='width:100px; height:20px;'></input><br/>
+				<input type='submit' name='okc2' value='Ajouter'></input>";
+			}else
+			{
+				if($_POST['carVal'] == 'null')
+				{				
+					$e = ifValeurExist($_POST['val']);
+					echo $e;
+					if($e == 0)
+					{
+						echo 'ok';
+						ajouterValeur($_POST['val']);
+					}
+					
+					$idValeur = getIdValeur($_POST['val']);
+					ajouterData($_GET['id'],$nom,$idValeur);
+					header("Location:produit.php?id=".$_GET['id']);
+				}
+				else
+				{
+					ajouterData($_GET['id'],$nom,$_POST['carVal']);
+					header("Location:produit.php?id=".$_GET['id']);
+				}
+			}
+}
+
+function ajouterProduit($nom,$desc,$prix,$cat,$img)
 {
 	global $connexion; // on définie la variable globale de connection dans la fonction
 	
 	try
 		{
 			$requete = $connexion->query("SET NAMES 'utf8'");
-			$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`produit`(`idProduit`,`nomProduit`,`descriptionProduit`,`prixProduit`,`idCategorie`) values (DEFAULT,'".$nom."','".$desc."',".$prix.",".$cat.");"); //on insère le produit dans la base
+			$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`produit` values (DEFAULT,'".$nom."','".$desc."',".$prix.",".$cat.",'".$img."');"); //on insère le produit dans la base
 			$requete->execute();
 			echo'Insertion effectuée avec succès';
 			return true;
@@ -235,7 +330,7 @@ function formSupprimerProduit($id,$idCat)
 	global $connexion; // on définie la variable globale de connection dans la fonction
 	
 	echo '
-	<form name="frm" action="produit.php?supp&id='.$id.'" method="post">
+	<form name="frm" action="produit.php?supp&id='.$id.'&idCat='.$idCat.'" method="post">
 				<h3>Etes-vous sûre de vouloir supprimer ce produit ?</h3>
 				<br/>
 				<input type="hidden" name="no" value="'.$id.'">
@@ -256,7 +351,7 @@ function formSupprimerProduit($id,$idCat)
 	 if($rep == "oui")
 		{
 			supprimerProduit($num);
-			header("Location:categorie.php?id=".$cat);
+			header("Location:produit.php?idCat=".$cat);
 		}
 }
 
@@ -308,19 +403,20 @@ function formModifierProduit($id)
 			}
 			echo "
 			</select><br/>
+			<label>Image du produit : </label><input type='text' name='img' value='".$res->image."'></input><br/>
 			<input type='submit' name='okm' value='Modifier'></input>
 			</form>";	
 			
-			afficherCaracteristiqueAdmin($id);
+			afficherModifCaracteristique($id);
 	}		
 	else
 	{
-		modifierProduit($_POST['no'],$_POST['nom'],$_POST['desc'],$_POST['prix'],$_POST['cat']);
-		header("Location:produit.php?id=".$id);
+		modifierProduit($_POST['no'],$_POST['nom'],$_POST['desc'],$_POST['prix'],$_POST['cat'],$_POST['img']);
+		header("Location:produit.php?modif&id=".$id);
 	}
 }
 
-function afficherCaracteristiqueAdmin($id)
+function afficherModifCaracteristique($id)
 {
 	global $connexion;
 	
@@ -339,8 +435,8 @@ function afficherCaracteristiqueAdmin($id)
 					{
 						echo "<tr>
 						<td>".$resultat->nom." : ".$resultat->valeur."</td>
-						<td><center><a href='produit.php?dm&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
-						<td><center><a href='produit.php?ds&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
+						<td><center><a href='produit.php?modif&dm&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
+						<td><center><a href='produit.php?modif&ds&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
 						</tr>";
 					}
 				echo "</table><br/>
@@ -348,11 +444,7 @@ function afficherCaracteristiqueAdmin($id)
 			if(isset($_GET['dm']))
 			{
 				formModifierData($_GET['idNom'],$id);
-			}
-			else
-			{
-				formAjouterCaracteristiques();
-			}		
+			}	
 			
 			if(isset($_GET['ds']))
 			{
@@ -383,34 +475,55 @@ function formModifierData($idNom,$id)
 {
 	global $connexion;
 	
-			echo "<br/><form action='produit.php?dm&id=".$id."&idNom=".$idNom."' method='POST'><label>Nom : </label>";
+			echo "<br/><form action='produit.php?modif&id=".$_GET['id']."' method='POST'><label>Valeur : </label><select name='carValeur'>
+				<option value=null> </option>";
+					
+			$val = $connexion->query("Select * from data_valeur");
+			$val->setFetchMode(PDO::FETCH_OBJ);
+		
 			
-			$nom = $connexion->query("SET NAMES 'utf8'");
-			$nom = $connexion->query("Select * from data_nom where idNom=".$idNom);
-			$nom->setFetchMode(PDO::FETCH_OBJ);
-			$resNom = $nom->fetch();
+			$valeur = genererValeurNom($nom);
 			
-			echo $resNom->nom;
-			
-			echo "
-			</select>
-			<label>Valeur : </label><select name='carVal'>
-			<option value=null> </option>";
-			$valeur = $connexion->query("Select * from data_valeur");
-			$valeur->setFetchMode(PDO::FETCH_OBJ);
-			while($resVal = $valeur->fetch())
+			if($valeur == null)
 			{
-				echo "<option value='".$resVal->idValeur."'>".$resVal->valeur."</option>";
+				while($res = $val->fetch())
+				{
+					echo "<option value='".$res->idValeur."'>".$res->valeur."</option>";
+				}
+			}
+			else
+			{
+				foreach($valeur as $element) // retourne un array des valeurs
+				{
+					echo "<option value='".$element->idValeur."'>".$element->valeur."</option>";
+				}
 			}
 			echo "
-			</select>
-			</br><input type='submit' name='okm' value='Modifier'></input>
+			</select>&nbsp;<input type='text' name='val' style='width:100px; height:20px;'></input><br/>
+			<input type='submit' name='okm' value='Ajouter'></input>
 			</form>";
 			
 			if(isset($_POST['okm']))
 			{
-				modifierData($id,$idNom,$_POST['carVal']);
-				header("Location:produit.php?id=".$id);
+				if($_POST['carNom'] == null)
+				{
+					$e = ifValeurExist($_POST['val']);
+					
+					if($e == null)
+					{
+						ajouterValeur($_POST['val']);
+					}
+					
+					$idValeur = getIdValeur($_POST['val']);
+					ajouterData($_GET['id'],$nom,$idValeur);
+					header("Location:produit.php?modif&id=".$_GET['id']);
+				}
+				
+				if(isset($_POST['okm']))
+				{
+					modifierData($id,$idNom,$_POST['carVal']);
+					header("Location:produit.php?modif&id=".$_GET['id']);
+				}
 			}
 }
 
@@ -432,14 +545,14 @@ function modifierData($id,$idNom,$idVal)
 		}
 }
 
-function modifierProduit($id,$nom,$desc,$prix,$cat)
+function modifierProduit($id,$nom,$desc,$prix,$cat,$img)
 {
 	global $connexion;
 	
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare("update produit set nomProduit = '".$nom."',descriptionProduit = '".$desc."',prixProduit = ".$prix.",idCategorie = ".$cat." where idProduit = ".$id."");
+			$query = $connexion->prepare("update produit set nomProduit = '".$nom."',descriptionProduit = '".$desc."',prixProduit = ".$prix.",idCategorie = ".$cat.",image = '".$img."' where idProduit = ".$id."");
 			$query->execute();
 			return true;
 		}
@@ -522,14 +635,12 @@ function genererCategorieProduit(){
 		echo "</select>
 			<input type='submit' name='ok' value='Rechercher'></input>
 			</form>
-			<br/>
-			<a href='produit.php?ajout'>Ajouter un produit</a><br/>";
+			<br/>";
 
 	}
 	else
 	{
-		header("Location:categorie.php?id=".$_POST['cat']);
+		header("Location:produit.php?idCat=".$_POST['cat']);
 	}
-	
 }
 ?>	
