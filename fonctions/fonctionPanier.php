@@ -14,7 +14,22 @@ function modifierQte($idProd,$qte)
 	$_SESSION['panier'][$idProd]['qte'] = $qte;	// Modifier la quantité achetée
 }
 
-function SupprimerArticle($id)
+function supprimerArticle($id)
 {
 	unset($_SESSION['panier'][$id]); // Supprimer un article du panier
+}
+
+function retournePanier()
+{
+	$liste = array();
+	if (isset($_SESSION['panier']))
+	{
+        foreach($_SESSION['panier'] as $id_article=>$article_acheté)
+		{
+
+			$liste[] = $article_acheté;
+		}
+	}
+	
+	return $liste;
 }

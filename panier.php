@@ -3,7 +3,32 @@ require_once('inc/inc_top.php');
 require_once("fonctions/fonctionProd.php");
 require_once("fonctions/fonctionPanier.php");
 
-// Voici les donnÈes externes utilisÈes par le panier
+if(!estConnecte()){ // si non connect√©
+	header('Location: 404.php?err=1');
+}
+
+?>
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+	<?php require_once("inc/inc_head.php");?>
+    <title>Panier</title>
+  </head>
+  
+  <body>
+	<!-- navbar -->
+	<?php require_once("inc/inc_navbar.php");?>
+	
+    <div class="container">
+      <div class="jumbotron">
+		<?php
+			require_once('inc/inc_menu.php');
+			if(isset($message))
+			{
+				echo $message;
+			}
+
+// Voici les donn√©es externes utilis√©es par le panier
 $id_article = null;
 $qte_article = 1;
 
@@ -19,7 +44,7 @@ elseif(isset($_POST['id']))
 }
 
 // Voici les traitements du panier
-if ($id_article == null) echo 'Veuillez sÈlectionner un article pour le mettre dans le panier!'; // Message si pas d'acticle sÈlectionnÈ
+if ($id_article == null) echo 'Veuillez s√©lectionner un article pour le mettre dans le panier!'; // Message si pas d'acticle s√©lectionn√©
 else
 if (isset($_GET['ajouter']))
 {
@@ -38,15 +63,15 @@ elseif(isset($_POST['supprimer']))
 echo '<h2>Contenu de votre panier</h2><ul>';
 if (isset($_SESSION['panier']) && count($_SESSION['panier'])>0){
         $total_panier = 0;
-        foreach($_SESSION['panier'] as $id_article=>$article_achetÈ){
-                // On affiche chaque ligne du panier : nom, prix et quantitÈ modifiable + 2 boutons : modifier la qtÈ et supprimer l'article
+        foreach($_SESSION['panier'] as $id_article=>$article_achet√©){
+                // On affiche chaque ligne du panier : nom, prix et quantit√© modifiable + 2 boutons : modifier la qt√© et supprimer l'article
 				
 				$produit = retourneProduit($id_article);		
 				
-                if (isset($article_achetÈ['qte'])){
-                        echo '<li><form action="panier.php" method="POST">', $_SESSION['panier'][$id_article]['qte'],' ',$produit->nomProduit, ' (', number_format($produit->prixProduit, 2, ',', ' '), ' Ä) ',
+                if (isset($article_achet√©['qte'])){
+                        echo '<li><form action="panier.php" method="POST">', $_SESSION['panier'][$id_article]['qte'],' ',$produit->nomProduit, ' (', number_format($produit->prixProduit, 2, ',', ' '), ' ‚Ç¨) ',
                          '<input type="hidden" name="id" value='.$id_article.' />
-                          <br />QtÈ: <select name="qte">
+                          <br />Qt√©: <select name="qte">
 								<option selected="selected" value="1">1</option>
 								<option value="2">2</option>
 								<option value="3">3</option>
@@ -58,17 +83,16 @@ if (isset($_SESSION['panier']) && count($_SESSION['panier'])>0){
 								<option value="9">9</option>
 								<option value="10">10</option>
 							</select>
-							<input type="text" name="" value=""></input>
-                          <input type="submit" name="modifier" value="Modifier la quantitÈ" />
+                          <input type="submit" name="modifier" value="Modifier la quantit√©" />
                           <input type="submit" name="supprimer" value="Supprimer" />
                         </form>
                         </li>';
 						
                         // Calcule le prix total du panier 
-                        $total_panier += $produit->prixProduit * $article_achetÈ['qte'];
+                        $total_panier += $produit->prixProduit * $article_achet√©['qte'];
                 }
         }
-        echo '<hr><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' Ä'; // Affiche le total du panier
+        echo '<hr><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' ‚Ç¨'; // Affiche le total du panier
 }
 else { echo 'Votre panier est vide'; } // Message si le panier est vide
 echo "</ul>";

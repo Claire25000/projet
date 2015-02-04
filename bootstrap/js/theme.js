@@ -38,3 +38,11 @@ $(function(){
 		
 	});
 });
+
+function redirection(id){
+  document.location.href="produit.php?id="+id; 
+}
+
+function supp(id){
+  document.location.href="?suppPanier&id="+id; 
+}
