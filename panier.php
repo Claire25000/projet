@@ -116,7 +116,11 @@ else
 						$produit = retourneProduit($id_article);
 						
 						echo '<tr>
-								<td><img src="'.$produit->image.'" alt="'.$produit->nomProduit.'"/></td>
+								<td><div class="row">
+									  <div class="col-xs-6 col-md-3">
+										<img src="'.$produit->image.'" alt="'.$produit->nomProduit.'"/></td>
+									</div>
+								</div>
 								<td>'.$produit->nomProduit.'</td>
 								<td>'.$produit->prixProduit.' €</td>
 								<td>'.$article_acheté['qte'].'</td>
