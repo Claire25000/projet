@@ -41,7 +41,7 @@ else
 	echo '<li class="dropdown"><!-- panier -->
 					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 						<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAN1wAADdcBQiibeAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAEwSURBVEiJtZYxTsNAEEXfgJRESgVVDgA3iPYmKD2XiXIPego3SClc0FNFtOQACIIQFYah8DhZx5F3bdYjfckaz/4/Hu3ftagqQ8bZoOxdBERkIiJrwyRaQVWjAKwANayi10WSO6AAPgwF4JIIAGPg2Tq/NajlxikElkaYebnMcst/CQBzG8crMPPyM8sVwLyXADACNtbp4sT7hb3bAKNWAeDB2yEp8FvttErgPbGAArmq7o2Wt7ulV+RwcPJ6AIGS00Z0RfiTHykN5+y5rXYHnNd2EfASWOS8Wheova9q/cMu5ZgOXF5XN4GuuozoumE04BL4CSyMwdY32n5EqvoGPCUdD80LJ0sgUOc4Ol+mlAbpM5pv4O74LBIjroWIXFDeA13iS1U/G1ynBFLG4H8Vf/hXPMQ3HehcAAAAAElFTkSuQmCCd47bef6222a6338574288a0548844d88"/>
-						<span class="badge">'.$nb.'</span>
+						<span class="badge">0</span>
 					</a>
 					<ul style="padding: 15px;min-width: 280px;" class="dropdown-menu">
 					<li  style="margin-top:1px">
