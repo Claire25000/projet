@@ -43,9 +43,6 @@ elseif(isset($_POST['id']))
 	$qte_article = $_POST['qte'];
 }
 
-// Voici les traitements du panier
-if ($id_article == null) echo 'Veuillez sélectionner un article pour le mettre dans le panier!'; // Message si pas d'acticle sélectionné
-else
 if (isset($_GET['ajouter']))
 {
 	ajouterPanier($id_article,$qte_article);
@@ -57,8 +54,10 @@ elseif(isset($_POST['modifier']))
 elseif(isset($_POST['supprimer']))
 {
 	supprimerArticle($_POST['id']);
-}elseif(!isset($_GET['comm']))
+}
+if(!isset($_GET['comm']))
 {
+	echo '<div style="text-align:right;"><a href="panier.php?comm" class="btn btn-default" role="button">Confirmer la commande</a></div>';
 	// Voici l'affichage du panier
 	echo '<h2>Contenu de votre panier</h2><ul>';
 	if (isset($_SESSION['panier']) && count($_SESSION['panier'])>0){
@@ -99,7 +98,8 @@ echo "</ul>";
 }
 else
 {
-	echo '<div class="panel panel-default">
+	$total_panier = 0;
+	echo '<div style="margin-top:50px;"><div class="panel panel-default">
 			<div class="panel-heading">Récapitulatif de commande</div>
 
 			<table class="table">
@@ -118,14 +118,21 @@ else
 						echo '<tr>
 								<td>'.$produit->image.'</td>
 								<td>'.$produit->nomProduit.'</td>
-								<td>'.$produit->prixProduit.'</td>
+								<td>'.$produit->prixProduit.' €</td>
 								<td>'.$article_acheté['qte'].'</td>
-								<td>'.$produit->prixProduit*$article_acheté['qte'].'</td>						
+								<td>'.$produit->prixProduit*$article_acheté['qte'].' €</td>						
 							</tr>';
+							$total_panier += $produit->prixProduit*$article_acheté['qte'];
 					}
 					
 				echo '</table>
 			</div>
 		  </div>';
+		  echo '<hr><div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</div>'; // Affiche le total du panier
 }
 ?>
+ </div>
+</div><!-- /container -->
+<?php require_once("inc/inc_footer.php"); ?>
+</body>
+</html>
