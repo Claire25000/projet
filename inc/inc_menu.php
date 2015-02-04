@@ -30,7 +30,6 @@ if(!estConnecte()){
 	$requete = $connexion->query("SELECT * FROM categorie");
 	$requete->setFetchMode(PDO::FETCH_OBJ);
 	while($enregistrement = $requete->fetch()){
-	
 		if(isset($_GET['titleCat'])){
 			if($_GET['titleCat'] == $enregistrement->libelleCategorie){
 				$activ = 'class="active"';
