@@ -17,7 +17,7 @@ if(isset($_GET['supp']))
 
 if(isset($_GET['ajouterPanier']))
 {
-	ajouterPanier($_GET['id'],$_GET['qte']);
+	ajouterPanier($_GET['id'],1);
 }
 ?>
 <!DOCTYPE html>
@@ -89,7 +89,7 @@ if(isset($_GET['ajouterPanier']))
 						<li>".$resultat->nom." : ".$resultat->valeur."</li>";
 					}
 				echo "</ul><br/>";
-			echo '<div style="text-align:right;"><a href="produit.php?ajouterPanier&id='.$res->idProduit.'&qte=1" class="btn btn-default" role="button">Ajouter au panier</a></div>';
+			echo '<div style="text-align:right;"><a href="produit.php?ajouterPanier&id='.$res->idProduit.'" class="btn btn-default" role="button">Ajouter au panier</a></div>';
 		
 				// ------------------------------------------------------------------------------ //
 			if(estConnecte() == true)

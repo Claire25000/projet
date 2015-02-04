@@ -21,11 +21,7 @@ elseif(isset($_POST['id']))
 	$qte_article = $_POST['qte'];
 }
 
-if (isset($_GET['ajouter']))
-{
-	ajouterPanier($id_article,$qte_article);
-}
-elseif(isset($_POST['modifier']))  
+if(isset($_POST['modifier']))  
 {
 	modifierQte($id_article,$qte_article);
 } 
