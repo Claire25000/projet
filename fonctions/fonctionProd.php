@@ -388,7 +388,7 @@ function supprimerProduit($id)
 		}
 }
 
-function formModifierProduit($id)
+/*function formModifierProduit($id)
 {
 	global $connexion;
 	
@@ -399,25 +399,25 @@ function formModifierProduit($id)
 		$sql->setFetchMode(PDO::FETCH_OBJ);
 		$res = $sql->fetch();
 		
-	echo '<form action="produit.php?modif&id='.$id.'" method="POST">
-			<input type="hidden"  name="no" value="'.$id.'" ></input>
-			<label>Nom : </label><input type="text" name="nom" value="'.$res->nomProduit.'"></input><br/>
-			<label>Description du produit : </label><br/><textarea name="desc" rows="10" cols="50">'.$res->descriptionProduit.'</textarea><br/>
-			<label>Prix : </label><input type="text" name="prix" value="'.$res->prixProduit.'"></input><br/>
-			<label>Catégorie : </label><select name="cat">';
-			$req = $connexion->query("SET NAMES 'utf8'");
-			$req = $connexion->query("select * FROM categorie");
-			$req->setFetchMode(PDO::FETCH_OBJ);
-			
-			while($resultat = $req->fetch()){
-		 
-				echo '<option value="'.$resultat->idCategorie.'">'.$resultat->libelleCategorie.'</option>';
-			}
-			echo "
-			</select><br/>
-			<label>Image du produit : </label><input type='text' name='img' value='".$res->image."'></input><br/>
-			<input type='submit' name='okm' value='Modifier'></input>
-			</form>";	
+			echo '<form action="produit.php?modif&id='.$id.'" method="POST">
+					<input type="hidden"  name="no" value="'.$id.'" ></input>
+					<label>Nom : </label><input type="text" name="nom" value="'.$res->nomProduit.'"></input><br/>
+					<label>Description du produit : </label><br/><textarea name="desc" rows="10" cols="50">'.$res->descriptionProduit.'</textarea><br/>
+					<label>Prix : </label><input type="text" name="prix" value="'.$res->prixProduit.'"></input><br/>
+					<label>Catégorie : </label><select name="cat">';
+					$req = $connexion->query("SET NAMES 'utf8'");
+					$req = $connexion->query("select * FROM categorie");
+					$req->setFetchMode(PDO::FETCH_OBJ);
+					
+					while($resultat = $req->fetch()){
+				 
+						echo '<option value="'.$resultat->idCategorie.'">'.$resultat->libelleCategorie.'</option>';
+					}
+					echo "
+					</select><br/>
+					<label>Image du produit : </label><input type='text' name='img' value='".$res->image."'></input><br/>
+					<input type='submit' name='okm' value='Modifier'></input>
+			     </form>";	
 			
 			afficherModifCaracteristique($id);
 	}		
@@ -426,9 +426,9 @@ function formModifierProduit($id)
 		modifierProduit($_POST['no'],$_POST['nom'],$_POST['desc'],$_POST['prix'],$_POST['cat'],$_POST['img']);
 		header("Location:produit.php?modif&id=".$id);
 	}
-}
+}*/
 
-function afficherModifCaracteristique($id)
+/*function afficherModifCaracteristique($id)
 {
 	global $connexion;
 	
@@ -462,7 +462,7 @@ function afficherModifCaracteristique($id)
 			{
 				formSupprimerData($_GET['idNom'],$id);
 			}
-}
+}*/
 
 function afficherCaracteristique($id)
 {
@@ -556,7 +556,7 @@ function modifierData($id,$idNom,$idVal)
 			return false;
 		}
 }
-
+// fonction de modification d'un produit (avec le lien de l'image)
 function modifierProduit($id,$nom,$desc,$prix,$cat,$img)
 {
 	global $connexion;
@@ -574,7 +574,24 @@ function modifierProduit($id,$nom,$desc,$prix,$cat,$img)
 			return false;
 		}
 }
-
+// fonction de modification d'un produit (sans le lien de l'image)
+function modifierProduit2($id,$nom,$desc,$prix,$cat)
+{
+	global $connexion;
+	
+	try
+		{
+			$query = $connexion->query("SET NAMES 'utf8'"); 
+			$query = $connexion->prepare("update produit set nomProduit = '".$nom."',descriptionProduit = '".$desc."',prixProduit = ".$prix.",idCategorie = ".$cat." where idProduit = ".$id."");
+			$query->execute();
+			return true;
+		}
+		catch(Exception $e)
+		{
+			die('Erreur : '.$e->getMessage());
+			return false;
+		}
+}
 function formSupprimerData($idNom,$id)
 {
 	global $connexion; // on définie la variable globale de connection dans la fonction

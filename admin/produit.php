@@ -5,33 +5,53 @@ require_once("../fonctions/fonctionComm.php");
 require_once("../fonctions/fonctionProd.php");
 require_once("../fonctions/fonctionImage.php");
 
-//------------------------------------------------------------------------------------------------------------------------------ TRAITEMENT IMAGES 
-$up = new Telechargement("./upload",'oka','photo');
+if(isset($_POST['oka'])){ // ---------------------AJOUT D'UN PRODUIT
 
-/* paramétrage extensions autorisées */
-$extensions = array('jpg','jpeg','png'); 
-$up->Set_Extensions_accepte ($extensions);
-
-/* redimensionnement (si nécessaire) en maximum 100x100 */
-$up->Set_Redim ('250','250');
-
-/* message simplifié en retour pour le visiteur (par exemple) */
-$up->Set_Message_court(': téléchargement effectué');
-
-// suffixe unique
-$up->Set_Renomme_fichier(); 
-//------------------------------------------------------------------------------------------------------------------------------ fin TRAITEMENT IMAGES 
-if(isset($_POST['oka'])){ // AJOUT D'UN PRODUIT
+		$up = new Telechargement("./upload",'oka','photo');
+		$extensions = array('jpg','jpeg','png'); /* paramétrage extensions autorisées */
+		$up->Set_Extensions_accepte ($extensions);
+		$up->Set_Redim ('250','250');/* redimensionnement (si nécessaire) en maximum 100x100 */
+		$up->Set_Message_court(': téléchargement effectué');/* message simplifié en retour pour le visiteur (par exemple) */
+		$up->Set_Renomme_fichier(); // suffixe unique
 		$up->Upload();/* Upload du fichier */ 
 		$tab_result = $up->Get_Tab_upload(); /* Récupération du tableau des résultats d'upload */
 
 		// ------------- on ajoute le produit dans la base de données ------------- //
 		$prix = $_POST['prix'];
 		//$prix  = number_format($_POST['prix'], 2, '.', ',');
-		ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$tab_result['resultat']['0']["./upload"]['nom']); // image : tableau[premiere ligne][dossier desination][nom réel uploadé]
+		$nomPhoto = $tab_result['resultat']['0']["./upload"]['nom'];
+		ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$nomPhoto); // image : tableau[premiere ligne][dossier desination][nom réel uploadé]
 		$id = getIdProduit($_POST['nom']);
 		
 	header("Location:produit.php?modif&id=".$id);
+}
+
+if(isset($_POST['okm'])) //-------------------- MODIFICATION D'UN PRODUIT
+{
+	$up = new Telechargement("./upload",'okm','photo');
+	$extensions = array('jpg','jpeg','png'); /* paramétrage extensions autorisées */
+	$up->Set_Extensions_accepte ($extensions);
+	$up->Set_Redim ('250','250');/* redimensionnement (si nécessaire) en maximum 100x100 */
+	$up->Set_Message_court(': téléchargement effectué');/* message simplifié en retour pour le visiteur (par exemple) */
+	$up->Set_Renomme_fichier(); // suffixe unique
+	$up->Upload();/* Upload du fichier */ 
+	$tab_result = $up->Get_Tab_upload(); /* Récupération du tableau des résultats d'upload */
+	$nomPhoto = '';
+	$nomPhoto = $tab_result['resultat']['0']["./upload"]['nom'];
+			
+	if($nomPhoto != ''){
+		modifierProduit($_POST['no'],$_POST['nom'],$_POST['desc'],$_POST['prix'],$_POST['cat'],$nomPhoto);
+	}else{
+		modifierProduit2($_POST['no'],$_POST['nom'],$_POST['desc'],$_POST['prix'],$_POST['cat']);
+	}
+			
+			header("Location:produit.php?modif&id=".$_GET['id']);
+			echo '-> '.$nomPhoto;
+			
+	//}else{ // si la photo n'a pas été modifié
+	//	modifierProduit($_POST['no'],$_POST['nom'],$_POST['desc'],$_POST['prix'],$_POST['cat'],"");
+	//	header("Location:produit.php?modif&id=".$_GET['id']);
+	//}
 }
 
 if(isset($_GET['deco'])){
@@ -69,7 +89,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 		}
 		genererCategorieProduit();
 		echo 'page de présentation des produits <br/>';
-		if(isset($_GET['ajout'])) // On ajoute le produit
+		if(isset($_GET['ajout'])) // --------------------------------------------------- AJOUT PRODUIT ---------------------------------- //
 		{
 			//formAjouterProduit($_GET['idCat']);
 			?>
@@ -96,22 +116,88 @@ if(isset($_GET['supp'])) // on supprime le produit
 						}
 						echo "</select><br/>
 
-						Extensions autorisées ".implode(', ',$extensions)."
-						<label for='photo'>Image </label><input name='photo' id='image' type='file' />
-						<br/><br/>
-						<input type='submit' name='oka' value='Ajouter le produit'></input>
-						</form>";
+					
+					<label for='photo'>Image (Extensions autorisées ".implode(', ',$extensions).")</label><input name='photo' id='image' type='file' />
+					<br/><br/>
+					<input type='submit' name='oka' value='Ajouter le produit'></input>
+			</form>";
 						?>
 			<?php
 
 		}
-		elseif(isset($_GET['modif']))
+		elseif(isset($_GET['modif'])) // ------------------------------------------------------ MODIFICATION PRODUIT -------------------------//
 		{
-			formModifierProduit($_GET['id']);
+			//formModifierProduit($_GET['id']);
+			if(!isset($_POST['okm']))
+			{
+				$id = $_GET['id'];
+				$sql = $connexion->query("SET NAMES 'utf8'");
+				$sql = $connexion->query("select * FROM produit where idProduit=".$id);
+				$sql->setFetchMode(PDO::FETCH_OBJ);
+				$res = $sql->fetch();
+				
+				echo '<form enctype="multipart/form-data" action="produit.php?modif&id='.$id.'" method="POST">
+						<input type="hidden"  name="no" value="'.$id.'" ></input>
+						
+						<label>Nom : </label><input type="text" name="nom" value="'.$res->nomProduit.'"></input><br/>
+						<label>Description du produit : </label><br/><textarea name="desc" rows="10" cols="50">'.$res->descriptionProduit.'</textarea><br/>
+						<label>Prix : </label><input type="text" name="prix" value="'.$res->prixProduit.'"></input><br/>
+						<label>Catégorie : </label>
+							<select name="cat">';
+								$req = $connexion->query("SET NAMES 'utf8'");
+								$req = $connexion->query("select * FROM categorie");
+								$req->setFetchMode(PDO::FETCH_OBJ);
+								
+								while($resultat = $req->fetch()){
+							 
+									echo '<option value="'.$resultat->idCategorie.'">'.$resultat->libelleCategorie.'</option>';
+								}
+								echo "
+							</select><br/>
+						<label for='photo'>Image (Extensions autorisées ".implode(', ',$extensions).")</label><div><img src='../upload/".$res->image."' alt='[Aucune image]'/></div><input name='photo' id='image' type='file' />
+						<br/><br/>
+						<input type='submit' name='okm' value='Modifier'></input>
+					 </form>";
+					
+					//afficherModifCaracteristique($id);
+					// ------------------------------------------------------ MODIFICATION CARACTERISTIQUES ----------------------------------//
+					$sql = $connexion->query("SET NAMES 'utf8'"); 
+					$sql = $connexion->query("Select data.idNom, nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$id);
+					$sql->setFetchMode(PDO::FETCH_OBJ);
+					
+					echo "<table>
+							<tr>
+								<th>Caractéristiques</th>
+								<th>Modifier</th>
+								<th>Supprimer</th>
+							</tr>";
+					
+					while($resultat = $sql->fetch())
+					{
+						echo "<tr>
+								<td>".$resultat->nom." : ".$resultat->valeur."</td>
+								<td><center><a href='produit.php?modif&dm&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
+								<td><center><a href='produit.php?modif&ds&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
+							 </tr>";
+					}
+					echo "</table><br/>
+					<label>Ajouter de nouvelles caractéristiques : </label>";
+					if(isset($_GET['dm']))
+					{
+						formModifierData($_GET['idNom'],$id); //!!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE
+					}	
+					
+					if(isset($_GET['ds']))
+					{
+						formSupprimerData($_GET['idNom'],$id); //!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE
+					}
+			}
+
+			
+			
 			if(isset($_GET['idNom']))
 			{
-			
-				formAjouterCaracteristiquesValeur($_GET['idNom']);
+				formAjouterCaracteristiquesValeur($_GET['idNom']); //!!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE
 			}else
 			{
 				$sql = $connexion->query("SET NAMES 'utf8'"); 
@@ -119,18 +205,18 @@ if(isset($_GET['supp'])) // on supprime le produit
 				$sql->setFetchMode(PDO::FETCH_OBJ);
 				$res = $sql->fetch();
 				
-				formAjouterCaracteristiquesNom($res->idCategorie);
+				formAjouterCaracteristiquesNom($res->idCategorie); //!!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE
 			}
 		}
 		elseif(isset($_GET['id']))
 		{
-			afficherProduitDetails($_GET['id']);
+			afficherProduitDetails($_GET['id']); //!!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE??
 		}
 		elseif(isset($_GET['idCat']))
 		{
 			echo 'Catégorie : '.$_GET['idCat'].' <br/>
 			<a href="produit.php?ajout&idCat='.$_GET['idCat'].'">Ajouter un produit</a><br/>';
-			afficherProduitAdmin($_GET['idCat']);
+			afficherProduitAdmin($_GET['idCat']); //!!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE??
 		}
 		else
 		{
