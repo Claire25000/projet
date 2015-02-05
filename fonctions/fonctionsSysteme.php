@@ -40,4 +40,8 @@ function envoyeMail($sujet,$message,$destinataire){
 		echo "Une erreur c'est produite lors de l'envois de l'email.";
 	}
 }
+// --------------------------------- FONCTIONS IMAGE  --------------------------------- //
+
+
+
 ?>
