@@ -11,6 +11,7 @@ function chargerParametres(){
 	if(!isset($_SESSION['param_mailSite'])){$_SESSION['param_mailSite'] = 'mailEnvoye@mail.ru';}
 	if(!isset($_SESSION['param_nomSite'])){$_SESSION['param_nomSite'] = 'Le site internet des patates';}
 	if(!isset($_SESSION['param_afficherCommentaire'])){$_SESSION['param_afficherCommentaire'] = true;}
+	if(!isset($_SESSION['param_repertoireUpload'])){$_SESSION['param_repertoireUpload'] = './upload/';}
 }
 function retourneParametre($libelle){
 	if($_SESSION['param_'.$libelle.''] != null){

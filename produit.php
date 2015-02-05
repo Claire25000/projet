@@ -69,7 +69,7 @@ if(isset($_GET['ajouterPanier']))
 			
 			echo "<tr>
 					<td>
-						<img style='max-width: 130px;' src='".$res->image."' alt='".$res->nomProduit."'/>
+						<img style='max-width: 130px;' src='".retourneParametre("repertoireUpload")."".$res->image."' alt='".$res->nomProduit."'/>
 					</td>
 					<td>".$res->nomProduit."</td>
 					<td>".$res->descriptionProduit."</td>

@@ -40,7 +40,7 @@ require_once("fonctions/fonctionProd.php");
 				
 				  <div class="col-sm-6 col-md-3">
 					<div style="min-height: 410px" class="thumbnail">
-					  <img src="'.$res->image.'" alt="">
+					  <img src="'.retourneParametre("repertoireUpload").''.$res->image.'" alt="">
 					  <div class="caption">
 						<h3>'.$res->nomProduit.'</h3>
 						<p>'.number_format($res->prixProduit, 2, ',', ' ').' €</p>

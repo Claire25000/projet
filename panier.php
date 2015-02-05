@@ -118,7 +118,7 @@ else
 						
 						echo '<tr>
 								<td>
-									<img style="max-width: 130px;" src="'.$produit->image.'" alt="'.$produit->nomProduit.'"/>
+									<img style="max-width: 130px;" src="'.retourneParametre("repertoireUpload").''.$produit->image.'" alt="'.$produit->nomProduit.'"/>
 								</td>
 								<td>'.$produit->nomProduit.'</td>
 								<td>'.$produit->prixProduit.' €</td>
