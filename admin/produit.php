@@ -6,84 +6,59 @@ require_once("../fonctions/fonctionProd.php");
 require_once("../fonctions/fonctionImage.php");
 
 //------------------------------------------------------------------------------------------------------------------------------ TRAITEMENT IMAGES 
-$adresse_racine = rtrim($_SERVER['DOCUMENT_ROOT'],'/').'/';
-
-$adresse_dossier_test = substr(dirname(__FILE__),strlen($adresse_racine));
-
-// pour compatibilité window
-$adresse_dossier_test = str_replace('\\','/',$adresse_dossier_test);
-
-//echo $adresse_dossier_test;
-
-$dossier_photo = $adresse_dossier_test.'/PHOTO';
-$dossier_photo_GF = $adresse_dossier_test.'/PHOTO_GF';
-$dossier_photo_PF = $adresse_dossier_test.'/PHOTO_PF';
-$dossier_pdf = $adresse_dossier_test.'/PDF';
-
-$up = new Telechargement($dossier_photo,'form1','photo');
+$up = new Telechargement("./upload",'oka','photo');
 
 /* paramétrage extensions autorisées */
-$extensions = array('jpg','jpeg','png');
+$extensions = array('jpg','jpeg','png'); 
 $up->Set_Extensions_accepte ($extensions);
 
-// redimensionnements
-$up->Set_Redim ('200','150', array('_min'));
+/* redimensionnement (si nécessaire) en maximum 100x100 */
+$up->Set_Redim ('250','250');
 
-$up->Set_Redim ('1000','800',array('_max'));
+/* message simplifié en retour pour le visiteur (par exemple) */
+$up->Set_Message_court(': téléchargement effectué');
 
-// Renommage incrémentiel en cas de doublons (le contrôle se fera sur nomdufichier_min.jpg)
-$up->Set_Renomme_fichier('incr');
-
-
-$up->Upload('reload');
-
-
-$messages_upload = $up->Get_Tab_message();
-$messages_upload_html = null;
-foreach ($messages_upload as $num) foreach ($num as $value) $messages_upload_html .= '<p>- '.htmlspecialchars($value).'</p>';
-
-$tableau_resultat = $up->Get_Tab_result();
+// suffixe unique
+$up->Set_Renomme_fichier(); 
 //------------------------------------------------------------------------------------------------------------------------------ fin TRAITEMENT IMAGES 
+if(isset($_POST['oka'])){ // AJOUT D'UN PRODUIT
+		$up->Upload();/* Upload du fichier */ 
+		$tab_result = $up->Get_Tab_upload(); /* Récupération du tableau des résultats d'upload */
+
+		// ------------- on ajoute le produit dans la base de données ------------- //
+		$prix = $_POST['prix'];
+		//$prix  = number_format($_POST['prix'], 2, '.', ',');
+		ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$tab_result['resultat']['0']["./upload"]['nom']); // image : tableau[premiere ligne][dossier desination][nom réel uploadé]
+		$id = getIdProduit($_POST['nom']);
+		
+	header("Location:produit.php?modif&id=".$id);
+}
+
 if(isset($_GET['deco'])){
 	if(deconnecteUtilisateur()){ // si la fonction de déconnexion retourne true : utilisateur déconnecté
 		header('Location: index.php');
 	}
 }
-
-if(isset($_POST['oka'])){ // si form envoyé on ajoute le produit
+if(isset($_GET['supp'])) // on supprime le produit
+		{
+			formSupprimerProduit($_GET['id'],$_GET['idCat']);
+		}
+		
+/*if(isset($_POST['oka'])){ // si form envoyé on ajoute le produit
 	$prix = $_POST['prix'];
 	//$prix  = number_format($_POST['prix'], 2, '.', ',');
 	ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$_POST['img']);
 	$id = getIdProduit($_POST['nom']);
 
 	header("Location:produit.php?modif&id=".$id);
-}
+}*/
 
-if(isset($_GET['supp'])) // on supprime le produit
-		{
-			formSupprimerProduit($_GET['id'],$_GET['idCat']);
-		}
+
 ?>
 <html>
 	<head>
 		<title></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script type="text/javascript">
-		<!--
-		function Verif_attente(id_attente)
-		{              
-			var id_attente = document.getElementById(id_attente);
-			
-			if (id_attente)
-			{
-				id_attente.innerHTML = 'Patientez...';  
-			
-				id_attente.style.fontWeight="bold";
-				id_attente.style.fontSize="1.5em";         
-			}
-		}
-		-->
-		</script>
 	</head>
 	
 	<body>
@@ -98,7 +73,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 		{
 			//formAjouterProduit($_GET['idCat']);
 			?>
-			<form enctype='multipart/form-data' action='produit.php?ajout&idCat=<?php echo $_GET['idCat']; ?>' method='POST'>
+			<form enctype = "multipart/form-data" action='produit.php?ajout&idCat=<?php echo $_GET['idCat']; ?>' method='POST'>
 					<label>Nom du produit : </label><input type='text' name='nom'></input><br/>
 					<label>Description du produit : </label><br/><textarea name='desc' rows='10' cols='50'></textarea><br/>
 					<label>Prix du produit : </label><input type='text' name='prix'></input><br/>
@@ -120,31 +95,13 @@ if(isset($_GET['supp'])) // on supprime le produit
 							}
 						}
 						echo "</select><br/>
-						<label>Image du produit : </label><input type='text' name='img'></input><br/>	
-						<!--<input name = 'photo[]' type = 'file' multiple = 'multiple' size = '70' /><br /></br>-->
-						<input type='submit' name='oka' value='Ajouter'></input>
+
+						Extensions autorisées ".implode(', ',$extensions)."
+						<label for='photo'>Image </label><input name='photo' id='image' type='file' />
+						<br/><br/>
+						<input type='submit' name='oka' value='Ajouter le produit'></input>
 						</form>";
 						?>
-			<!--<form enctype = "multipart/form-data" action = "#" method = "post" onsubmit = "Verif_attente('message_tele')">		-->
-			<!--<input name = "photo[]" type = "file" multiple = "multiple" size = "70" /><br />-->	 
-			<!--<input  type="submit" value="Envoyer les images" id="envoyer" name = "form1"><br />
-			</form>-->
-		 
-			 <div id = "message_tele" style="margin-top:20px;">
-			<?= $messages_upload_html; ?>
-			</div>
-		   
-			
-			<div style="margin-top:50px">
-			<?php if(!empty($tableau_resultat))
-			{
-				echo 'tableau des résultats :';
-				echo '<pre>';
-				print_r($tableau_resultat);
-				echo '</pre>';
-			}
-			?>
-			</div>
 			<?php
 
 		}
