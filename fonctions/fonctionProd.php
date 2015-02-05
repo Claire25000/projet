@@ -129,12 +129,12 @@ function afficherProduitDetails($id)
 				afficherCaracteristique($id);
 }
 
-function formAjouterProduit($idCat)
+/*function formAjouterProduit($idCat) --> inutile ?
 {
 	global $connexion; // on définie la variable globale de connection dans la fonction
 	
 		
-			echo "<form action='produit.php?ajout&idCat=".$idCat."' method='POST'>
+			echo "<form enctype = 'multipart/form-data' action='produit.php?ajout&idCat=".$idCat."' method='POST'>
 					<label>Nom du produit : </label><input type='text' name='nom'></input><br/>
 					<label>Description du produit : </label><br/><textarea name='desc' rows='10' cols='50'></textarea><br/>
 					<label>Prix du produit : </label><input type='text' name='prix'></input><br/>
@@ -156,7 +156,10 @@ function formAjouterProduit($idCat)
 							}
 						}
 						echo "</select><br/><label>Image du produit : </label><input type='text' name='img'></input><br/>
-						</br><input type='submit' name='oka' value='Ajouter'></input>
+						
+						
+						<input name = 'photo[]' type = 'file' multiple = 'multiple' size = '70' /><br /></br>
+						<input type='submit' name='oka' value='Ajouter'></input>
 						</form>";
 							
 			
@@ -170,7 +173,7 @@ function formAjouterProduit($idCat)
 
 			header("Location:produit.php?modif&id=".$id);
 		}
-}
+}*/
 
 function getIdProduit($nom)
 {
