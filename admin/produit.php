@@ -19,11 +19,14 @@ if(isset($_GET['deco'])){
 	<body>
 		<?php
 		require_once('inc/inc_menu.php');
+		if(isset($message)){
+			echo $message;
+		}
 		genererCategorieProduit();
 		echo 'page de présentation des produits <br/>';
 		if(isset($_GET['ajout']))
 		{
-			formAjouterProduit();
+			formAjouterProduit($_GET['idCat']);
 		}
 		elseif(isset($_GET['supp']))
 		{
@@ -32,11 +35,32 @@ if(isset($_GET['deco'])){
 		elseif(isset($_GET['modif']))
 		{
 			formModifierProduit($_GET['id']);
+			if(isset($_GET['idNom']))
+			{
+				formAjouterCaracteristiquesValeur($_GET['idNom']);
+			}else
+			{
+				$sql = $connexion->query("SET NAMES 'utf8'"); 
+				$sql = $connexion->query("Select idCategorie from produit where idProduit = ".$_GET['id']);
+				$sql->setFetchMode(PDO::FETCH_OBJ);
+				$res = $sql->fetch();
+				
+				formAjouterCaracteristiquesNom($res->idCategorie);
+			}
 		}
 		elseif(isset($_GET['id']))
 		{
 			afficherProduitDetails($_GET['id']);
-			afficherCaracteristiqueAdmin($_GET['id']);
+		}
+		elseif(isset($_GET['idCat']))
+		{
+			echo 'Catégorie : '.$_GET['idCat'].' <br/>
+			<a href="produit.php?ajout&idCat='.$_GET['idCat'].'">Ajouter un produit</a><br/>';
+			afficherProduitAdmin($_GET['idCat']);
+		}
+		else
+		{
+			echo '<a href="produit.php?ajout&idCat=null">Ajouter un produit</a><br/>';
 		}
 	?>
 	</body>
