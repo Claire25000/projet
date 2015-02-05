@@ -14,6 +14,22 @@ if(isset($_GET['deco'])){
 	<head>
 		<title></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript">
+		<!--
+		function Verif_attente(id_attente)
+		{              
+			var id_attente = document.getElementById(id_attente);
+			
+			if (id_attente)
+			{
+				id_attente.innerHTML = 'Patientez...';  
+			
+				id_attente.style.fontWeight="bold";
+				id_attente.style.fontSize="1.5em";         
+			}
+		}
+		-->
+		</script>
 	</head>
 	
 	<body>
