@@ -157,7 +157,19 @@ function formAjouterProduit($idCat)
 					}
 					else
 					{
-						echo "<input type='hidden' name='cat' value=".$idCat."></input>";
+						echo "<label>Catégorie du produit : </label>
+						<select name='cat'>";
+						
+						$sql = $connexion->query("SET NAMES 'utf8'"); 
+						$sql = $connexion->query("Select idCategorie, libelleCategorie from categorie");
+						$sql->setFetchMode(PDO::FETCH_OBJ);
+					
+						while($resultat = $sql->fetch())
+						{
+							echo "<option selected value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
+						}
+						echo "
+						</select>";
 					}
 			echo "<br/><label>Image du produit : </label><input type='text' name='img'></input><br/>
 			</br><input type='submit' name='oka' value='Ajouter'></input>
@@ -635,7 +647,7 @@ function genererCategorieProduit(){
 		<select name='cat'>";
 		while($enregistrement = $requete->fetch())
 		{
-			if($_GET['id'] == $enregistrement->idCategorie)
+			if($_GET['idCat'] == $enregistrement->idCategorie)
 			{
 				echo "<option selected value='".$enregistrement->idCategorie."'>".$enregistrement->libelleCategorie."</option>";
 			}else
