@@ -42,8 +42,8 @@ require_once("fonctions/fonctionProd.php");
 					<div style="min-height: 410px" class="thumbnail">
 					  <img src="'.$res->image.'" alt="">
 					  <div class="caption">
-						<h3>Thumbnail label</h3>
-						<p>...</p>
+						<h3>'.$res->nomProduit.'</h3>
+						<p>'.number_format($res->prixProduit, 2, ',', ' ').' €</p>
 						<p><a href="produit.php?id='.$res->idProduit.'" class="btn btn-primary btn-lg btn-block" role="button">Fiche produit</a></p>
 						</div>
 					</div>
