@@ -138,10 +138,7 @@ function formAjouterProduit($idCat)
 					<label>Nom du produit : </label><input type='text' name='nom'></input><br/>
 					<label>Description du produit : </label><br/><textarea name='desc' rows='10' cols='50'></textarea><br/>
 					<label>Prix du produit : </label><input type='text' name='prix'></input><br/>
-					";
-					if($idCat == 'null')
-					{
-						echo "<label>Catégorie du produit : </label>
+					<label>Catégorie du produit : </label>
 						<select name='cat'>";
 						
 						$sql = $connexion->query("SET NAMES 'utf8'"); 
@@ -150,30 +147,18 @@ function formAjouterProduit($idCat)
 					
 						while($resultat = $sql->fetch())
 						{
-							echo "<option value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
+							if($_GET['idCat'] == $resultat->idCategorie)
+							{
+								echo "<option selected value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
+							}else
+							{
+								echo "<option value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
+							}
 						}
-						echo "
-						</select>";
-					}
-					else
-					{
-						echo "<label>Catégorie du produit : </label>
-						<select name='cat'>";
-						
-						$sql = $connexion->query("SET NAMES 'utf8'"); 
-						$sql = $connexion->query("Select idCategorie, libelleCategorie from categorie");
-						$sql->setFetchMode(PDO::FETCH_OBJ);
-					
-						while($resultat = $sql->fetch())
-						{
-							echo "<option selected value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
-						}
-						echo "
-						</select>";
-					}
-			echo "<br/><label>Image du produit : </label><input type='text' name='img'></input><br/>
-			</br><input type='submit' name='oka' value='Ajouter'></input>
-			</form>";
+						echo "</select><br/><label>Image du produit : </label><input type='text' name='img'></input><br/>
+						</br><input type='submit' name='oka' value='Ajouter'></input>
+						</form>";
+							
 			
 		
 		if(isset($_POST['oka']))
