@@ -3,6 +3,7 @@ require_once('inc/inc_top.php');
 
 require_once("../fonctions/fonctionComm.php");
 require_once("../fonctions/fonctionProd.php");
+require_once("../fonctions/fonctionImage.php");
 
 if(isset($_GET['deco'])){
 	if(deconnecteUtilisateur()){ // si la fonction de déconnexion retourne true : utilisateur déconnecté
