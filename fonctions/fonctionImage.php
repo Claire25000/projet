@@ -34,6 +34,7 @@ private $tab_mes = array(
 24 => 'Aucun fichier n\'a été téléchargé'// utilisé par Set_Max_nombreFichers()
 );
 
+
 private $extensions_autorisees = null;
 private $ses_mes;
 private $ses_etat;
