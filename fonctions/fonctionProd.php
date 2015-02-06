@@ -49,7 +49,9 @@ function afficherProduitAdmin($cat)
 		 //on récupère les produits voulus
 		 
 		echo"
-		<table border='1'>
+		<div class='panel panel-default'>
+				<div class='panel-heading'>Produits</div>
+		<table class='table' border='1'>
 			<tr>
 				<th>Numéro du produit</th>
 				<th>Nom du produit</th>
@@ -83,7 +85,7 @@ function afficherProduitAdmin($cat)
 					<td><a href='produit.php?supp&id=".$res->idProduit."&idCat=".$cat."'>X</a></td>";
 				}
 			echo "</tr>";
-				echo "</table>";
+				echo "</table></div>";
 }
 
 function afficherProduitDetails($id)
@@ -106,17 +108,20 @@ function afficherProduitDetails($id)
 				echo "<a href='produit.php?modif&id=".$id."'>Modifier le produit</a>";
 			}
 		}
-		echo "<table border='1'>
+		
+		$sql = $connexion->query("SET NAMES 'utf8'"); 
+		$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$id);
+		$sql->setFetchMode(PDO::FETCH_OBJ);
+		
+		echo "<div class='panel panel-default'>
+				<div class='panel-heading'>Produit ".$res->nomProduit."</div>
+		<table class='table' border='1'>
 			<tr>
 				<th>Numéro du produit</th>
 				<th>Nom du produit</th>
 				<th>Description du produit</th>
 				<th>Prix du produit</th>
 				<th>Catégorie</th></tr>";
-				
-			$sql = $connexion->query("SET NAMES 'utf8'"); 
-			$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$id);
-			$sql->setFetchMode(PDO::FETCH_OBJ);
 			
 			echo "<tr>
 				<td>".$id."</td>

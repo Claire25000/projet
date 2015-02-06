@@ -1,5 +1,7 @@
 <?php
 require_once("inc/inc_top.php");
+require_once('inc/inc_head.php');
+
 if(isset($_GET['deco'])){
 	if(deconnecteUtilisateur()){ // si la fonction de déconnexion retourne true : utilisateur déconnecté
 		header('Location: index.php');
@@ -27,7 +29,9 @@ require_once("../fonctions/fonctionsClient.php");
 		<?php
 		if(isset($_GET['id']))
 		{
-			echo '<table border="1">
+			echo '<div class="panel panel-default">
+		  <div class="panel-heading">Commande n°'.$_GET['id'].'</div>
+		  <table class="table" border="1">
 					<tr>
 						<th>Identifiant Commande</th>
 						<th>Date</th>
@@ -46,7 +50,7 @@ require_once("../fonctions/fonctionsClient.php");
 								<td>'.retournePaiement($com->modePaiement).'</td>
 								<td>'.retourneClient($com->idClient)->nomCli.'</td>								
 							</tr>';				
-				echo '</table><br/>
+				echo '</table></div><br/>
 				<a href="commande.php?modif&statut&id='.$com->idCommande.'">Modifier le statut de la commande</a><br/>
 				<a href="commande.php?modif&paiement&id='.$com->idCommande.'">Modifier le mode de paiement de la commande</a><br/>
 				<a href="commande.php?modif&livraison&id='.$com->idCommande.'">Modifier le mode de livraison de la commande</a><br/><br/>
@@ -158,7 +162,9 @@ require_once("../fonctions/fonctionsClient.php");
 		}
 		else
 		{?>
-			<table border="1">
+		<div class="panel panel-default">
+		  <div class="panel-heading">Commandes</div>
+			<table class="table" border="1">
 					<tr>
 						<th>Identifiant Commande</th>
 						<th>Date</th>
@@ -180,7 +186,7 @@ require_once("../fonctions/fonctionsClient.php");
 							</tr>';
 					}
 				?>
-				</table>
+			</table></div>
 		<?php } ?>
 	</body>
 </html>

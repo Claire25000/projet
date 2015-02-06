@@ -1,5 +1,6 @@
 <?php
 require_once("inc/inc_top.php");
+require_once('inc/inc_head.php');
 require_once("../fonctions/fonctionCategorie.php");
 
 if(isset($_GET['deco'])){
@@ -77,7 +78,9 @@ if(isset($_GET['deco'])){
 					<label>Nom de la catégorie : </label><input type='text' name='nom'></input><br/>
 					<input type='submit' name='ok' value='Ajouter'></input>
 					</form>
-					<table border='1'>
+				<div class='panel panel-default'>
+				<div class='panel-heading'>Catégories</div>
+		  <table class='table' border='1'>
 				<tr>
 					<th>Identifiant Catégorie</th>
 					<th>Libellé Catégorie</th>
@@ -93,7 +96,7 @@ if(isset($_GET['deco'])){
 								<td><a href="?supp&id='.$element->idCategorie.'">X</a></td>
 							</tr>';
 					}
-				echo '</table>';
+				echo '</table></div>';
 			}
 			else
 			{

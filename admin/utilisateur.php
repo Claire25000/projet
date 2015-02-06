@@ -1,5 +1,6 @@
 <?php
 require_once("inc/inc_top.php");
+require_once('inc/inc_head.php');
 require_once("../fonctions/fonctionsClient.php");
 require_once("../fonctions/fonctionsType.php");
 
@@ -83,17 +84,23 @@ if(isset($_GET['suprUtil'])){ // si une supression d'utilisateur est demandée
 		<h3>Liste des administrateurs</h3>';
 
 
-		echo '<table border="1"';
-		echo '<tr><td>Pseudo</td><td>Rang</td><td></td> </tr>';
+		echo '<div class="panel panel-default">
+		  <div class="panel-heading">Administrateurs</div>
+		  <table class="table" border="1">';
+		echo '<tr>
+				<th>Pseudo</th>
+				<th>Rang</th>
+				<th>Supprimer</th>
+			</tr>';
 		foreach(retourneListeAdministrateurs() as $element) // retourne un array d'utilisateurs
 			{
-				echo '<tr><td>'.$element->login . '</td>';
-				echo '    <td>'.retourneLibelleType($element->type). '</td>';
-				echo '<td><a href="?suprUtil='.$element->idUtilisateur.'"> [x]</a></td></tr>';
+				echo '<tr>
+						<td>'.$element->login .'</td>
+						<td>'.retourneLibelleType($element->type).'</td>
+						<td><a href="?suprUtil='.$element->idUtilisateur.'"> [x]</a></td>
+					</tr>';
 			}
-		echo '</table>';
-		
-		
+		echo '</table></div>';
 	}else{
 	echo '<p>
 			Vous devez être connecté en tant que Webmaster

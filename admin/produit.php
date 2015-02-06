@@ -1,5 +1,6 @@
 <?php
 require_once('inc/inc_top.php');
+require_once('inc/inc_head.php');
 
 require_once("../fonctions/fonctionComm.php");
 require_once("../fonctions/fonctionProd.php");
@@ -118,8 +119,15 @@ if(isset($_GET['supp'])) // on supprime le produit
 
 					
 					<label for='photo'>Image (Extensions autorisées ".implode(', ',$extensions).")</label><input name='photo' id='image' type='file' />
-					<br/><br/>
-					<input type='submit' name='oka' value='Ajouter le produit'></input>
+					<br/>";
+				echo '	<label>Produit en stock : </label><div class="onoffswitch">
+							<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+							<label class="onoffswitch-label" for="myonoffswitch">
+								<span class="onoffswitch-inner"></span>
+								<span class="onoffswitch-switch"></span>
+							</label>
+						</div><br/>';
+					echo "<input type='submit' name='oka' value='Ajouter le produit'></input>
 			</form>";
 						?>
 			<?php
