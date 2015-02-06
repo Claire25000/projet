@@ -46,84 +46,10 @@ if(isset($_GET['ajouterPanier']))
 		$res = $req->fetch();
 		 //on récupère le produit voulu
 		 
-<<<<<<< Updated upstream
-		if(estConnecte() == true)
-		{
-			if(estAdmin(idUtilisateurConnecte()) == true)
-			{
-				echo "<a href='produit.php?modif&id=".$_GET['id']."'>Modifier le produit</a>";
-			}
-		}
-		
-		$sql = $connexion->query("SET NAMES 'utf8'"); 
-		$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
-		$sql->setFetchMode(PDO::FETCH_OBJ);
-		
-		echo "<div class='panel panel-default'>
-				<div class='panel-heading'>Produit ".$res->nomProduit."</div>
-				<table class='table' border='1'>
-				<tr>
-					<th>Numéro du produit</th>
-					<th>Nom du produit</th>
-					<th>Description du produit</th>
-					<th>Prix du produit</th>
-					<th>Catégorie</th>
-				</tr>";
-			
-			echo "<tr>
-					<td>
-						<img style='max-width: 130px;' src='".retourneParametre("repertoireUpload")."".$res->image."' alt='".$res->nomProduit."'/>
-					</td>
-					<td>".$res->nomProduit."</td>
-					<td>".$res->descriptionProduit."</td>
-					<td>".$res->prixProduit."</td>
-					<td>".$res->libelleCategorie."</td>
-				 </tr>
-				</table></div>";
-			// ------------------------------------------------------------------------------ //
-			$sql = $connexion->query("SET NAMES 'utf8'"); 
-			$sql = $connexion->query("Select data.idNom, nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
-			$sql->setFetchMode(PDO::FETCH_OBJ);
-			
-			echo "<label>Caractéristiques : </label>
-			<ul>";
-			
-					while($resultat = $sql->fetch())
-					{
-						echo "<tr>
-						<li>".$resultat->nom." : ".$resultat->valeur."</li>";
-					}
-				echo "</ul><br/>";
-			echo '<div style="text-align:right;"><a href="produit.php?ajouterPanier&id='.$res->idProduit.'" class="btn btn-default" role="button">Ajouter au panier</a></div>';
-		
-				// ------------------------------------------------------------------------------ //
-			if(estConnecte() == true)
-			{
-				$req = $connexion->query("SET NAMES 'utf8'");	
-				$req = $connexion->query("Select produit.*, categorie.libelleCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
-				$req->setFetchMode(PDO::FETCH_OBJ);
-				$res = $req->fetch();
-				
-				if(retourneParametre("afficherCommentaire"))
-				{
-					afficherCommentaire($_GET['id']);
-					foreach(retourneListeCommentaire($_GET['id']) as $element)
-					{
-						$date = new DateTime($element->date);
-						echo '<br/>Par '.retourneUtilisateur($element->idUtilisateur)->login.' le '.$date->format('d/m/Y').' : '.$element->comm;
-						if($element->idUtilisateur == idUtilisateurConnecte())
-						{
-							echo "  <a href='produit.php?id=".$_GET['id']."&supp'>Supprimer</a>";
-						}
-					}
-				}
-			}
-=======
 		// --------------------------------- AFFICHAGE DU PRODUIT
 		$sql = $connexion->query("SET NAMES 'utf8'"); 
 		$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
 		$sql->setFetchMode(PDO::FETCH_OBJ);
->>>>>>> Stashed changes
 		?>
 		
 		<div class="content-wrapper">	
