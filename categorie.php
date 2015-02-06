@@ -39,13 +39,13 @@ require_once("fonctions/fonctionProd.php");
 				echo '
 				
 				  <div class="col-sm-6 col-md-3">
-					<div style="min-height: 410px" class="thumbnail">
+					<div style="min-height: 410px; position: relative;" class="thumbnail">
 					  <img src="'.retourneParametre("repertoireUpload").''.$res->image.'" alt="">
-					  <div class="caption">
+					  <div class="caption" style="position: absolute; bottom: 0px;">
 						<h3>'.$res->nomProduit.'</h3>
 						<p>'.number_format($res->prixProduit, 2, ',', ' ').' €</p>
-
-						<p><a href="produit.php?id='.$res->idProduit.'" class="btn btn-primary btn-lg btn-block" role="button">Fiche produit</a></p>
+						
+						<a href="produit.php?id='.$res->idProduit.'" class="btn btn-primary btn-lg btn-block" role="button">Fiche produit</a>
 						</div>
 					</div>
 				  </div>
