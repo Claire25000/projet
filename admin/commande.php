@@ -6,6 +6,7 @@ if(isset($_GET['deco'])){
 	}
 }
 require_once("../fonctions/fonctionsCommande.php");
+require_once("../fonctions/fonctionsClient.php");
 ?>
 <html>
 	<head>
@@ -43,7 +44,7 @@ require_once("../fonctions/fonctionsCommande.php");
 								<td>'.retourneStatut($com->statut).'</td>
 								<td>'.retourneLivraison($com->modeLivraison).'</td>
 								<td>'.retournePaiement($com->modePaiement).'</td>
-								<td>'.retourneClient($com->idClient).'</td>								
+								<td>'.retourneClient($com->idClient)->nomCli.'</td>								
 							</tr>';				
 				echo '</table><br/>
 				<a href="commande.php?modif&statut&id='.$com->idCommande.'">Modifier le statut de la commande</a><br/>
@@ -175,7 +176,7 @@ require_once("../fonctions/fonctionsCommande.php");
 								<td>'.retourneStatut($element->statut).'</td>
 								<td>'.retourneLivraison($element->modeLivraison).'</td>
 								<td>'.retournePaiement($element->modePaiement).'</td>
-								<td>'.retourneClient($element->idClient).'</td>								
+								<td>'.retourneClient($element->idClient)->nomCli.'</td>								
 							</tr>';
 					}
 				?>
