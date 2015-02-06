@@ -4,6 +4,13 @@ if(!estConnecte() || estAdmin()){ // si non connecté, on login en tant qu'admin
 	header('Location: 404.php?err=1');
 }
 require_once("fonctions/fonctionsCommande.php");
+
+if(isset($_GET['id']))
+{
+	changerStatutCommande($_GET['id'],2);
+	$message = '<div class="alert alert-success" role="alert">Commande payée.</div>';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -48,6 +55,7 @@ require_once("fonctions/fonctionsCommande.php");
 						<th>Statut</th>
 						<th>Mode de livraison</th>
 						<th>Mode de paiement</th>
+						<th></th>
 					</tr>
 				<?php
 				foreach(retourneListeCommandeEnCours($client->idUtilisateur) as $element) // retourne un array de commande pour un client
@@ -57,8 +65,15 @@ require_once("fonctions/fonctionsCommande.php");
 								<td>'.$element->date.'</td>
 								<td>'.retourneStatut($element->statut).'</td>
 								<td>'.retourneLivraison($element->modeLivraison).'</td>
-								<td>'.retournePaiement($element->modePaiement).'</td>						
-							</tr>';
+								<td>'.retournePaiement($element->modePaiement).'</td>';
+								if($element->statut == 1)
+								{
+									echo '<td><div style="text-align:right;"><a href="commande.php?id='.$element->idCommande.'" class="btn btn-default" role="button">Payer cette commande</a></div></td>';
+								}else
+								{
+									echo '<td> </td>';
+								}
+							echo '</tr>';
 					}
 				?>
 				</table>
