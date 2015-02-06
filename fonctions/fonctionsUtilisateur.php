@@ -163,5 +163,3 @@ function nombreUtilisateur(){
  	return $requete->rowCount();
 }
 ?>
-
-

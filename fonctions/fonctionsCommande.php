@@ -70,6 +70,18 @@ function ajouterCommande($date,$statut,$modePaiement,$modeLivraison,$idClient)
 
 	try {
 		$requete = $connexion->exec("INSERT INTO `webuzzer54gs9`.`commande` (`idCommande`, `date`, `statut`, `modePaiement`, `modeLivraison`, `idClient`) VALUES (NULL, '".$date."', '".$statut."', '".$modePaiement."', '".$modeLivraison."','".$idClient."');");
+		return $connexion->lastInsertId(); 
+	} catch ( Exception $e ) {
+		return false;
+	}
+}
+
+function ajouterLigneCommande($idCommande, $idProd, $qte)
+{
+	global $connexion; // on définie la variables globale de connection dans la fonction
+
+	try {
+		$requete = $connexion->exec("INSERT INTO `webuzzer54gs9`.`lignecommande` (`idProduit`, `idCommande`, `nombre`) VALUES (".$idProd.", ".$idCommande.", ".$qte.");");
 		return true; 
 	} catch ( Exception $e ) {
 		return false;
@@ -195,6 +207,24 @@ function retourneLivraison($idLivraison)
 	return $res->libelleModeLivraison;
 }
 
+
+function retourneListeLivraison()
+{
+	global $connexion;
+	
+	$liste = array();
+	$req = $connexion->query("SET NAMES 'utf8'");
+	$req = $connexion->query("Select modelivraison.* from modelivraison");
+	$req->setFetchMode(PDO::FETCH_OBJ);
+	
+	while($res = $req->fetch())
+	{
+		$liste[] = $res;
+	}
+	
+	return $liste;
+}
+
 function retournePaiement($idPaiement)
 {
 	global $connexion;
@@ -206,4 +236,22 @@ function retournePaiement($idPaiement)
 	
 	return $res->libelleModePaiement;
 }
+
+function retourneListePaiement()
+{
+	global $connexion;
+	
+	$liste = array();
+	$req = $connexion->query("SET NAMES 'utf8'");
+	$req = $connexion->query("Select modepaiement.* from modepaiement");
+	$req->setFetchMode(PDO::FETCH_OBJ);
+	
+	while($res = $req->fetch())
+	{
+		$liste[] = $res;
+	}
+	
+	return $liste;
+}
+
 ?>

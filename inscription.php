@@ -1,12 +1,24 @@
 <?php
 require_once('inc/inc_top.php');
+$new = 0;
+
 if(isset($_POST['login']) && isset($_POST['pass1']) && isset($_POST['pass2']) && isset($_POST['prenom']) && isset($_POST['nom']) && isset($_POST['email']) && isset($_POST['adresse'])){
 	if($_POST['pass1'] == $_POST['pass2']){
 		if(ajouterClient($_POST['login'],$_POST['pass1'],$_POST['nom'],$_POST['prenom'],$_POST['adresse'],$_POST['email'])){
 			$message = "Inscription effectuée avec succès";
+
+			if($_POST['ok'] == 1)
+			{
+				connecteUtilisateur($_POST['email'],$_POST['pass1']);
+				header("Location:panier.php?comm");
+			}
 		}
 	}
-	
+}
+if(isset($_POST['email2']))
+{
+	$mail = $_POST['email2'];
+	$new = 1;
 }
 ?>
 <!DOCTYPE html>
@@ -32,14 +44,11 @@ if(isset($_POST['login']) && isset($_POST['pass1']) && isset($_POST['pass2']) &&
 
 		<h3> Inscription </h3>
 		<br/>
-		<?php
-		if(isset($message)){
-			echo $message;
-		}	
-		?>
 		<form method="post" action="inscription.php" class="form-horizontal">
 		<fieldset>
-
+		<?php
+		echo '<input name="ok" type="hidden" value="'.$new.'"></input>';
+		?>
 
 		<!-- Text input-->
 		<div class="form-group">
@@ -90,8 +99,16 @@ if(isset($_POST['login']) && isset($_POST['pass1']) && isset($_POST['pass2']) &&
 		<div class="form-group">
 		  <label class="col-md-4 control-label" for="email">Email</label>  
 		  <div class="col-md-4">
-		  <input id="email" name="email" placeholder="Email" class="form-control input-md" required="" type="email">
-			
+		  <?php 
+		  if(isset($mail))
+		  {
+			echo '<input id="email" name="email" placeholder="Email" class="form-control input-md" required="" type="email" value="'.$mail.'">';
+		  }
+		  else
+		  {
+			echo '<input id="email" name="email" placeholder="Email" class="form-control input-md" required="" type="email">';
+		  }
+		  ?>
 		  </div>
 		</div>
 

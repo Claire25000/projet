@@ -24,6 +24,11 @@ function supprimerArticle($id)
 	unset($_SESSION['panier'][$id]); // Supprimer un article du panier
 }
 
+function viderPanier()
+{
+	unset($_SESSION['panier']); // Supprimer le panier
+}
+
 function retournePanier()
 {
 	$liste = array();
