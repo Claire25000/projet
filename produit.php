@@ -54,9 +54,9 @@ if(isset($_GET['ajouterPanier']))
 		
 		<div class="content-wrapper">	
 			<div style="padding:1%" class="item-container">	
-				<div class="container">	
+				<div class="container" style="padding-left:15px">	
 					
-						<div style="padding: 1%" class="product col-md-3 service-image-left">
+						<div style="padding: 1%" class="product col-md-4 service-image-left">
 							<img id="item-display" src="<?php echo "".retourneParametre("repertoireUpload")."".$res->image."";?>" alt=""></img>
 						</div>
 						
