@@ -7,11 +7,16 @@ function typeUtilisateurConnecte(){
 }
 
 function chargerParametres(){
-	// Devrons êtres chargés via la base de donnée en version finale
+	global $connexion; // on définie la variables globale de connection dans la fonction
+
+	$requete = $connexion->query("SELECT * FROM parametre WHERE cle LIKE 'param_%'");
+	$requete->setFetchMode(PDO::FETCH_OBJ);
+	while($enregistrement = $requete->fetch()){
+		if(!isset($_SESSION[''.$enregistrement->cle.''])){$_SESSION[''.$enregistrement->cle.''] = ''.$enregistrement->valeur.'';}
+	}
+	/*
 	if(!isset($_SESSION['param_mailSite'])){$_SESSION['param_mailSite'] = 'mailEnvoye@mail.ru';}
-	if(!isset($_SESSION['param_nomSite'])){$_SESSION['param_nomSite'] = 'Le site internet des patates';}
-	if(!isset($_SESSION['param_afficherCommentaire'])){$_SESSION['param_afficherCommentaire'] = 'true';}
-	if(!isset($_SESSION['param_repertoireUpload'])){$_SESSION['param_repertoireUpload'] = './upload/';}
+	*/
 }
 function retourneParametre($libelle){
 	if($_SESSION['param_'.$libelle.''] != null){
@@ -20,10 +25,16 @@ function retourneParametre($libelle){
 	return "PARAMETRE INCONNU";
 }
 function chargerErreurs(){
-	// Devrons êtres chargés via la base de donnée en version finale
+	global $connexion; // on définie la variables globale de connection dans la fonction
+
+	$requete = $connexion->query("SELECT * FROM parametre WHERE cle LIKE 'error_%'");
+	$requete->setFetchMode(PDO::FETCH_OBJ);
+	while($enregistrement = $requete->fetch()){
+		if(!isset($_SESSION[''.$enregistrement->cle.''])){$_SESSION[''.$enregistrement->cle.''] = ''.$enregistrement->valeur.'';}
+	}
+	/*
 	if(!isset($_SESSION['error_0'])){$_SESSION['error_0'] = 'Erreur inconue';}
-	if(!isset($_SESSION['error_1'])){$_SESSION['error_1'] = 'Vous n\'avez pas les privilèges nécéssaires';}
-	if(!isset($_SESSION['error_404'])){$_SESSION['error_404'] = 'Erreur 404 page non trouvée';}
+	*/
 }
 function retourneErreur($libelle){
 	if($_SESSION['error_'.$libelle.''] != null){
