@@ -8,9 +8,42 @@ if(isset($_GET['deco'])){
 	}
 }
 
-if(isset($_POST['valid_modif'])){
-
+if(isset($_POST['valid_modif']) || isset($_POST['valid_error'])){ // -------------------- MODIFICATION DES PARAMETRES ------------------ //
+	foreach($_POST as $key => $value) {
+	  	try
+		{
+			unset($_SESSION[$key]);
+			
+			$query = $connexion->query("SET NAMES 'utf8'"); 
+			$query = $connexion->prepare("UPDATE `parametre` SET `valeur` = '".addslashes($value)."' WHERE `parametre`.`cle` = '".addslashes($key)."'");
+			$query->execute();
+		}
+		catch(Exception $e)
+		{
+			die('Erreur : '.$e->getMessage());
+		}
+		chargerParametres();
+		chargerErreurs();
+	}
 }
+/*if(isset($_POST['valid_error'])){ // -------------------- MODIFICATION DES ERREURS ------------------ //
+	foreach($_POST as $key => $value) {
+	  	try
+		{
+			unset($_SESSION[$key]);
+			
+			$query = $connexion->query("SET NAMES 'utf8'"); 
+			$query = $connexion->prepare("UPDATE `parametre` SET `valeur` = '".$value."' WHERE `parametre`.`cle` = '".$key."'");
+			$query->execute();
+		}
+		catch(Exception $e)
+		{
+			die('Erreur : '.$e->getMessage());
+		}
+		chargerErreurs();
+	  
+	}
+}*/
 ?>
 <html>
 	<head>
@@ -41,7 +74,7 @@ if(isset($_POST['valid_modif'])){
 			</div>
 			<!-- Text input-->
 			<div class="form-group">
-			  <label class="col-md-4 control-label" for="param_">Nom du site</label>  
+			  <label class="col-md-4 control-label" for="param_nomSite">Nom du site</label>  
 			  <div class="col-md-6">
 			  <input value="<?php echo retourneParametre('nomSite'); ?>" id="param_nomSite" name="param_nomSite" placeholder="placeholder" class="form-control input-md" required="" type="text"/>
 			  </div>
@@ -63,13 +96,13 @@ if(isset($_POST['valid_modif'])){
 						else if(retourneParametre('afficherCommentaire') == 'false'){$false='';}; 
 					?>
 					<label for="param_repertoireUpload-0">
-					  <input <?php if(isset($true)){echo 'checked="checked"';}?> name="param_repertoireUpload" id="param_repertoireUpload-0" value="1" type="radio">
+					  <input <?php if(isset($true)){echo 'checked="checked"';}?> name="param_afficherCommentaire" id="param_repertoireUpload-0" value="true" type="radio">
 					  Activer
 					</label>
 				  </div>
 				  <div class="radio">
 					<label for="param_repertoireUpload-1">
-					  <input <?php if(isset($false)){echo 'checked="checked"';}?> name="param_repertoireUpload" id="param_repertoireUpload-1" value="2" type="radio">
+					  <input <?php if(isset($false)){echo 'checked="checked"';}?> name="param_afficherCommentaire" id="param_repertoireUpload-1" value="false" type="radio">
 					  Désactiver
 					</label>
 				  </div>
@@ -85,7 +118,9 @@ if(isset($_POST['valid_modif'])){
 			</fieldset>
 		</form>
 
-				<form class="form-horizontal">
+		
+		
+		<form action="parametre.php" method="POST" class="form-horizontal">
 			<fieldset>
 
 			<!-- Form Name -->
@@ -93,17 +128,30 @@ if(isset($_POST['valid_modif'])){
 
 			<!-- Text input-->
 			<div class="form-group">
-			  <label class="col-md-4 control-label" for="param_">Text Input</label>  
+			  <label class="col-md-4 control-label" for="error_0">Erreur 0</label>  
 			  <div class="col-md-6">
-			  <input id="param_" name="param_" placeholder="placeholder" class="form-control input-md" required="" type="text"/>
+			  <input value="<?php echo retourneErreur('0'); ?>" id="error_0" name="error_0" placeholder="placeholder" class="form-control input-md" required="" type="text"/>
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="error_1">Erreur 1</label>  
+			  <div class="col-md-6">
+			  <input value="<?php echo retourneErreur('1'); ?>" id="error_1" name="error_1" placeholder="placeholder" class="form-control input-md" required="" type="text"/>
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="error_404">Erreur 404</label>  
+			  <div class="col-md-6">
+			  <input value="<?php echo retourneErreur('404'); ?>" id="error_404" name="error_404" placeholder="placeholder" class="form-control input-md" required="" type="text"/>
 			  </div>
 			</div>
 
+			
 			<!-- Button -->
 			<div class="form-group">
-			  <label class="col-md-4 control-label" for="singlebutton"> </label>
+			  <label class="col-md-4 control-label" for="valid_error"> </label>
 			  <div class="col-md-4">
-				<button id="singlebutton" name="singlebutton" class="btn btn-primary">Button</button>
+				<button id="valid_error" name="valid_error" class="btn btn-primary">Modifier les erreurs</button>
 			  </div>
 			</div>
 
