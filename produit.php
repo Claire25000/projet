@@ -106,7 +106,7 @@ if(isset($_GET['ajouterPanier']))
 							
 							<li class="active"><a href="#service-one" data-toggle="tab">DESCRIPTION</a></li>
 							<li><a href="#service-two" data-toggle="tab">COMMENTAIRES</a></li>
-							<li><a href="#service-three" data-toggle="tab">?</a></li>
+							<!--<li><a href="#service-three" data-toggle="tab">?</a></li>-->
 							
 						</ul>
 					<div id="myTabContent" class="tab-content">
@@ -127,7 +127,7 @@ if(isset($_GET['ajouterPanier']))
 											$sql = $connexion->query("Select data.idNom, nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
 											$sql->setFetchMode(PDO::FETCH_OBJ);
 											
-											echo "<label>Caractéristiques : </label>
+											echo "<h3>Caractéristiques : </h3>
 											<ul>";
 											
 													while($resultat = $sql->fetch())
@@ -145,14 +145,14 @@ if(isset($_GET['ajouterPanier']))
 							<section class="container">
 								<?php
 									// ------------------------------------------------------------------------------ GESTION COMMENTAIRES//
-									if(estConnecte() == true)
+									if(estConnecte() == 'true')
 									{
 										$req = $connexion->query("SET NAMES 'utf8'");	
 										$req = $connexion->query("Select produit.*, categorie.libelleCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
 										$req->setFetchMode(PDO::FETCH_OBJ);
 										$res = $req->fetch();
 										
-										if(retourneParametre("afficherCommentaire"))
+										if(retourneParametre("afficherCommentaire") == 'true')
 										{
 											afficherCommentaire($_GET['id']);
 											foreach(retourneListeCommentaire($_GET['id']) as $element)

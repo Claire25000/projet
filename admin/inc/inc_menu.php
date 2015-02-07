@@ -4,6 +4,7 @@
 <a href="produit.php"> Gestion des produits </a> - 
 <a href="categorie.php"> Gestion des catégories </a> - 
 <a href="commande.php"> Gestion des commandes </a> - 
+<a href="parametre.php"> Gestion des parametres </a> - 
 <a href="?deco"> Déconnexion </a> - 
 <?php
 echo '[user : '.$_SESSION['idUtilisateur '].']';

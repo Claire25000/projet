@@ -11,7 +11,7 @@ if(isset($_POST['oka'])){ // ---------------------AJOUT D'UN PRODUIT
 		$up = new Telechargement("./upload",'oka','photo');
 		$extensions = array('jpg','jpeg','png'); /* paramétrage extensions autorisées */
 		$up->Set_Extensions_accepte ($extensions);
-		$up->Set_Redim ('250','250');/* redimensionnement (si nécessaire) en maximum 100x100 */
+		$up->Set_Redim ('250','200');/* redimensionnement (si nécessaire) en maximum 100x100 */
 		$up->Set_Message_court(': téléchargement effectué');/* message simplifié en retour pour le visiteur (par exemple) */
 		$up->Set_Renomme_fichier(); // suffixe unique
 		$up->Upload();/* Upload du fichier */ 
@@ -32,7 +32,7 @@ if(isset($_POST['okm'])) //-------------------- MODIFICATION D'UN PRODUIT
 	$up = new Telechargement("./upload",'okm','photo');
 	$extensions = array('jpg','jpeg','png'); /* paramétrage extensions autorisées */
 	$up->Set_Extensions_accepte ($extensions);
-	$up->Set_Redim ('250','250');/* redimensionnement (si nécessaire) en maximum 100x100 */
+	$up->Set_Redim ('250','200');/* redimensionnement (si nécessaire) en maximum 100x100 */
 	$up->Set_Message_court(': téléchargement effectué');/* message simplifié en retour pour le visiteur (par exemple) */
 	$up->Set_Renomme_fichier(); // suffixe unique
 	$up->Upload();/* Upload du fichier */ 

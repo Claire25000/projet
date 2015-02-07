@@ -38,7 +38,7 @@
 			<li class="dropdown"><!-- panier -->
 				<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 					<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYBAMAAAASWSDLAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAANSAAADUgEQACRKAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAACdQTFRF////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIpVOngAAAAx0Uk5TAAIFMTJtcKHP4e71mFbgRgAAAFZJREFUGNNjYKAyUIBQTCCCfSuEE10AJDjOJIDYbGcagCTzmmMgTs4pAxDlBZJiO7MErJgFJJVzygGiFSgFkwBLwSVAUnAJkBRCgoHBcwqSixgFGKgPAOicF+k9k1fCAAAAAElFTkSuQmCC59e0aed1ee129ae1c19ec5b5ffca85d1"/>
-					Se connecter
+					<?php if(!estConnecte()){ echo "Se connecter";}else{echo "Mon compte";}?>
 				</a>
 				<ul style="padding: 15px;min-width: 280px;" class="dropdown-menu">
 				<form id="login-nav" accept-charset="UTF-8" action="" method="post" role="form" class="form">
@@ -52,11 +52,13 @@
 					   <input type="password" required="" placeholder="Mot de passe" id="password" name="password" class="form-control">
 					</div>
 					<?php } // sinon on affiche le menu pour l'utilisateur ?>
-					<div class="form-group">
+					<div class="form-group" style="margin-bottom: 0px">
 					   <?php if(!estConnecte()){
 								echo '<button class="btn btn-success btn-block" type="submit">S\'enregistrer</button>';
-							 }else{
+							 }else if(!estAdmin()){
 								echo '<a class="btn btn-success btn-block" href="profil.php">Gestion profil </a>';
+								echo '<a class="btn btn-success btn-block" href="?deco">Déconnexion </a>';
+							 }else{
 								echo '<a class="btn btn-success btn-block" href="?deco">Déconnexion </a>';
 							 }
 					   ?>
