@@ -20,30 +20,17 @@ if(isset($_POST['valid_modif']) || isset($_POST['valid_error'])){ // -----------
 		}
 		catch(Exception $e)
 		{
-			die('Erreur : '.$e->getMessage());
+			$message = '<div class="alert alert-danger" role="alert">Erreur lors de la mise à jour des données</div>';
 		}
 		chargerParametres();
 		chargerErreurs();
 	}
-}
-/*if(isset($_POST['valid_error'])){ // -------------------- MODIFICATION DES ERREURS ------------------ //
-	foreach($_POST as $key => $value) {
-	  	try
-		{
-			unset($_SESSION[$key]);
-			
-			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare("UPDATE `parametre` SET `valeur` = '".$value."' WHERE `parametre`.`cle` = '".$key."'");
-			$query->execute();
-		}
-		catch(Exception $e)
-		{
-			die('Erreur : '.$e->getMessage());
-		}
-		chargerErreurs();
-	  
+	if(isset($_POST['valid_modif'])){
+		$message = '<div class="alert alert-success" role="alert">Les paramètres ont été mis à jour</div>';
+	}else if(isset($_POST['valid_error'])){
+		$message = '<div class="alert alert-success" role="alert">Les erreurs ont été mises à jour</div>';
 	}
-}*/
+}
 ?>
 <html>
 	<head>

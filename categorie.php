@@ -46,7 +46,7 @@ require_once("fonctions/fonctionProd.php");
 						<p>'.number_format($res->prixProduit, 2, ',', ' ').' €</p>
 						<p><a href="produit.php?id='.$res->idProduit.'" class="btn btn-primary btn-lg btn-block" role="button">Fiche produit</a></p>
 						</div>
-					</div>
+					</div><!--------------------------------------- ouvire topic sdz pour mise en forme css ------------------------------>
 				  </div>
 				
 				';

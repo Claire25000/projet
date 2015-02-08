@@ -37,7 +37,7 @@ if(isset($_GET['deco'])){
 			else
 			{
 				modifierCategorie($_POST['id'],$_POST['nom']);
-				header("Location:categorie.php");
+				header("Location:categorie.php"); // <!------------------------ SA EN PHP SA DEVRAIS PAS MARCHER (marche sur uWamp) TU FAIRE UNE REDIRECTION ALORS QU'ON ECRIS DU HTML AVANT !!!!!!! [sa se fait tout en haut de la page !]
 			}
 		}
 		elseif(isset($_GET['supp']))
