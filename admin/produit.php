@@ -301,8 +301,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 		}
 		elseif(isset($_GET['idCat']))
 		{
-			echo 'Catégorie : '.$_GET['idCat'].' <br/>
-			<a href="produit.php?ajout&idCat='.$_GET['idCat'].'">Ajouter un produit</a><br/>';
+			echo '<a href="produit.php?ajout&idCat='.$_GET['idCat'].'">Ajouter un produit</a><br/>';
 			afficherProduitAdmin($_GET['idCat']); //!!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE??
 		}
 		else
