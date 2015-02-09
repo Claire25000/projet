@@ -9,6 +9,7 @@ require_once('inc/inc_top.php');
 require_once("fonctions/fonctionComm.php");
 require_once("fonctions/fonctionProd.php");
 require_once("fonctions/fonctionPanier.php");
+require_once("fonctions/fonctionsNotation.php");
 
 if(isset($_GET['supp']))
 {
@@ -17,6 +18,7 @@ if(isset($_GET['supp']))
 
 if(isset($_GET['ajouterPanier']))
 {
+	ajouterNotation(73,1,5);
 	if(retourneStock($_GET['id']) - getQteProduit($_GET['id']) > 0){ // si la quantité du produit ajouté ne dépasse pas le stock du produit<
 		if(ajouterPanier($_GET['id'],1)){$message = '<div class="alert alert-success" role="alert">Le produit a été ajouté à votre panier.</div>';}
 	}else{
@@ -28,12 +30,6 @@ if(isset($_GET['ajouterPanier']))
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-	<link rel="stylesheet" href="jrating/jquery/jRating.jquery.css" type="text/css" />
-	<!-- jQuery files -->
-	<script type="text/javascript" src="jrating/jquery/jquery.js"></script>
-	<script type="text/javascript" src="jrating/jquery/jRating.jquery.js"></script>
-
-
 	<?php require_once("inc/inc_head.php");?>
     <title>Accueil - </title>
   </head>
@@ -94,7 +90,7 @@ if(isset($_GET['ajouterPanier']))
 							  if(estConnecte() && estAdmin(idUtilisateurConnecte())){echo " <a href='admin/produit.php?modif&id=".$_GET['id']."'>[Modifier]</a>";} // Si admin : Affiche un lien pour modifier le produit
 							?>
 						</div>
-						<div class="product-desc"></div>
+						<div class="product-desc"><?php echo retourneNote($_GET['id']); ?></div>
 						<div class="product-rating"><i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star-o"></i> </div>
 						<hr>
 						<div class="product-price"><?php echo $res->prixProduit; ?> €</div>
