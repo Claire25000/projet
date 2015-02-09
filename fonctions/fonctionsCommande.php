@@ -18,7 +18,7 @@ function retourneListeCommandeEnCours($idClient)
 	
 	$liste = array();
 	$req = $connexion->query("SET NAMES 'utf8'");
-	$req = $connexion->query("Select commande.* from commande where (statut = 1 or statut = 2) and idClient = ".$idClient);
+	$req = $connexion->query("Select commande.* from commande where (statut = 1 or statut = 2) and idClient = ".$idClient." order by commande.idCommande desc");
 	$req->setFetchMode(PDO::FETCH_OBJ);
 	
 	while($res = $req->fetch())
@@ -35,7 +35,7 @@ function retourneHistoriqueCommande($idClient)
 	
 	$liste = array();
 	$req = $connexion->query("SET NAMES 'utf8'");
-	$req = $connexion->query("Select commande.* from commande where idClient = ".$idClient);
+	$req = $connexion->query("Select commande.* from commande where idClient = ".$idClient." order by commande.idCommande desc");
 	$req->setFetchMode(PDO::FETCH_OBJ);
 	
 	while($res = $req->fetch())
@@ -52,7 +52,7 @@ function listeCommande()
 	
 	$liste = array();
 	$req = $connexion->query("SET NAMES 'utf8'");
-	$req = $connexion->query("Select commande.* from commande ");
+	$req = $connexion->query("Select commande.* from commande order by commande.idCommande desc");
 	$req->setFetchMode(PDO::FETCH_OBJ);
 	
 	while($res = $req->fetch())

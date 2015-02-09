@@ -96,7 +96,6 @@ if(isset($_GET['supp'])) // on supprime le produit
 	echo'<body>';
 
 		genererCategorieProduit();
-		echo 'page de présentation des produits <br/>';
 		if(isset($_GET['ajout'])) // --------------------------------------------------- AJOUT PRODUIT ---------------------------------- //
 		{
 			//formAjouterProduit($_GET['idCat']);
