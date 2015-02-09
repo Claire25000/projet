@@ -24,7 +24,6 @@ if(isset($_GET['ajouterPanier']))
 	}else{
 		$message = '<div class="alert alert-danger" role="alert">Le produit n\'est plus en stock suffisant, n\'hésitez pas à nous contacter !</div>';
 	}
-	
 }
 ?>
 <!DOCTYPE html>
