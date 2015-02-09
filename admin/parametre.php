@@ -51,7 +51,7 @@ if(isset($_POST['valid_modif']) || isset($_POST['valid_error'])){ // -----------
 
 			<!-- Form Name -->
 			<legend>Paramètres</legend>
-
+			<p></p>
 			<!-- Text input-->
 			<div class="form-group">
 			  <label class="col-md-4 control-label" for="param_mailSite">Mail de contact du site web</label>  
@@ -71,6 +71,13 @@ if(isset($_POST['valid_modif']) || isset($_POST['valid_error'])){ // -----------
 			  <label class="col-md-4 control-label" for="param_repertoireUpload">Repertoire d'upload des images</label>  
 			  <div class="col-md-6">
 			  <input value="<?php echo retourneParametre('repertoireUpload'); ?>" id="param_repertoireUpload" name="param_repertoireUpload" placeholder="placeholder" class="form-control input-md" required="" type="text"/>
+			  </div>
+			</div>
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="param_ordre">Ordre</label>  
+			  <div class="col-md-6">
+			  <input value="<?php echo retourneParametre('ordre'); ?>" id="param_ordre" name="param_ordre" placeholder="placeholder" class="form-control input-md" required="" type="text"/>
 			  </div>
 			</div>
 			<!-- Multiple Radios -->
