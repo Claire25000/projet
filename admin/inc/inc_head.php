@@ -6,3 +6,4 @@
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
 	<!-- Custom styles for this template -->
     <link href="../bootstrap/css/theme.css" rel="stylesheet">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

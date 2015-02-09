@@ -10,21 +10,21 @@ if(isset($_GET['deco'])){
 require_once("../fonctions/fonctionsCommande.php");
 require_once("../fonctions/fonctionsClient.php");
 ?>
-<html>
-	<head>
-		<title></title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	</head>
-	
-	<body>
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+	<?php require_once("inc/inc_head.php");?>
+    <title>Gestion des commandes</title>
+  </head>
+  <body>
+   <div class="container">
 		<?php
-			require_once('inc/inc_menu.php');
-			if(isset($message))
-			{
-				echo $message;
-			}
-		?>
-		<p> Liste des commandes </p>
+		require_once('inc/inc_menu.php');
+		if(isset($message)){
+			echo $message;
+		}
+		echo ' <div class="jumbotron">';
+		?><p> Liste des commandes </p>
 
 		<?php
 		if(isset($_GET['id']))
@@ -188,5 +188,7 @@ require_once("../fonctions/fonctionsClient.php");
 				?>
 			</table></div>
 		<?php } ?>
+	</div>
+	</div>
 	</body>
 </html>

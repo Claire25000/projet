@@ -4,7 +4,7 @@ require_once("fonctionsUtilisateur.php");
 require_once("fonctionsSysteme.php");
 
 
-function retourneProduit($id) // ???????????????????????????? ou est-ce que sa sert ? on travail en objet faut renvoyer des objets PHP
+function retourneProduit($id)
 {
 	global $connexion;
 	

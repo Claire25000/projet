@@ -100,9 +100,18 @@ if(isset($_GET['ajouterPanier']))
 							}
 						?>
 						<hr>
+						<?php if(estConnecte() && estAdmin(idUtilisateurConnecte()))
+						{
+						}
+						else
+						{
+						?>
 						<div class="btn-group cart">
 							<div style="text-align:right;"><a href="produit.php?ajouterPanier&id=<?php echo $res->idProduit; ?>" <?php if($stockActuel<1){echo 'class="btn btn-danger" disabled="disabled"';}else{echo 'class="btn btn-success"';} ?> role="button">Ajouter au panier</a></div>
 						</div>
+						<?php
+						}
+						?>
 						<!--<div class="btn-group wishlist">
 							<button type="button" class="btn btn-danger">
 								Add to wishlist 

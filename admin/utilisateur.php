@@ -1,5 +1,4 @@
 <?php
-require_once('inc/inc_head.php');
 require_once("inc/inc_top.php");
 require_once("../fonctions/fonctionsClient.php");
 require_once("../fonctions/fonctionsType.php");
@@ -34,17 +33,15 @@ echo $_POST['login'];
 }
 }
 ?>
-<html>
-	<head>
-		<?php require_once('inc/inc_head.php');?>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title></title>
-	</head>
-	<body>
-	<?php
-	//echo estConnecte();
-	//echo estWebmaster();
-	//echo "<pre>".print_r($_SESSION)."</pre>";
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+	<?php require_once("inc/inc_head.php");?>
+    <title>Gestion des utilisateurs</title>
+  </head>
+  <body>
+   <div class="container">
+		<?php
 	if(estConnecte() && estWebmaster()){
 		
 		require_once('inc/inc_menu.php');
@@ -52,10 +49,7 @@ echo $_POST['login'];
 			echo $message;
 		}
 	
-		echo '
-		
-		
-		<h3>Statistiques</h3>
+		echo '<h3>Statistiques</h3>
 		<p>
 			Nombre de client : '.nombreClient().'<br/>
 			Nombre d\'utilisateur : '.nombreUtilisateur().'<br/>
@@ -147,5 +141,7 @@ echo $_POST['login'];
 		 </p>';
 	}
 	?>
+	</div>
+	</div>
 	</body>
 </html>

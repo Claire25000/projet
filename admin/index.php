@@ -22,25 +22,24 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 		}
 }
 ?>
-<html>
-	<head>
-		<meta name="description" content="">
-		<meta name="author" content="">
-		<title>Accueil Administrateur</title>
-	</head>
-	<body>
-	<div class="container">
-		<?php
-		if(estConnecte() && estWebmaster()){
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+	<?php require_once("inc/inc_head.php");?>
+    <title>Accueil Administrateur</title>
+  </head>
+  <body>
+  <div class="container">
+  <?php
+  if(estConnecte() && estWebmaster()){
 			require_once('inc/inc_menu.php');
 		}
-		
 		if(isset($message)){
 			echo $message;
 		}
-		?>
 		
-		<?php if(!estConnecte()){ // si l'utilisateur n'est pas connecté on affiche le formulaire?>
+	echo '<div class="jumbotron">';
+	if(!estConnecte()){ // si l'utilisateur n'est pas connecté on affiche le formulaire?>
 		<div class="row" style="margin-top:20px">
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
 				<form method="post" role="form">
@@ -70,9 +69,10 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 			</div>
 		</div>
 		<?php }else{ // sinon, si il est connecté
-			echo 'Vous êtes connecté';
+			echo "Vous êtes connecté en tant qu'administrateur";
 		}
 		?>
+	</div>
 	</div>
 	</body>
 </html>

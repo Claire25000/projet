@@ -1,5 +1,4 @@
 <?php
-require_once('inc/inc_head.php');
 require_once("inc/inc_top.php");
 
 if(isset($_GET['deco'])){
@@ -32,19 +31,20 @@ if(isset($_POST['valid_modif']) || isset($_POST['valid_error'])){ // -----------
 	}
 }
 ?>
-<html>
-	<head>
-		<?php require_once('inc/inc_head.php');?>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>Gestion des paramètres/erreurs </title>
-	</head>
-	<body>
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+	<?php require_once("inc/inc_head.php");?>
+    <title>Gestion des paramètres/erreurs</title>
+  </head>
+  <body>
+   <div class="container">
 		<?php
-			require_once('inc/inc_menu.php');
-			if(isset($message))
-			{
-				echo $message;
-			}
+		require_once('inc/inc_menu.php');
+		if(isset($message)){
+			echo $message;
+		}
+		echo ' <div class="jumbotron">';
 		?>
 		<form action="parametre.php" method="POST" class="form-horizontal">
 			<fieldset>
@@ -151,6 +151,7 @@ if(isset($_POST['valid_modif']) || isset($_POST['valid_error'])){ // -----------
 
 			</fieldset>
 		</form>
-		
+		</div>
+	</div>
 	</body>
 </html>

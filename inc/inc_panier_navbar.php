@@ -36,14 +36,20 @@ if(isset($_SESSION['panier']))
 							</div>
 						</li>';
 					}
-					echo '<div style="text-align:center;margin-top:10px" class="row">
-							<div class="btn-group" role="group" aria-label="...">
-							  <button type="button" class="btn btn-default" onClick="panier();">Voir le panier</button>
-							  <button type="button" class="btn btn-default" onClick="commander();">Commander</button>
-							</div>
-						</div>
-					</ul>
-				</li>';
+					if(estConnecte() && estAdmin(idUtilisateurConnecte()))
+						{
+						}
+						else
+						{
+							echo '<div style="text-align:center;margin-top:10px" class="row">
+								<div class="btn-group" role="group" aria-label="...">
+								  <button type="button" class="btn btn-default" onClick="panier();">Voir le panier</button>
+								  <button type="button" class="btn btn-default" onClick="commander();">Commander</button>
+								</div>
+							</div>';
+						}
+						echo'</ul>
+							</li>';
 }
 else
 {

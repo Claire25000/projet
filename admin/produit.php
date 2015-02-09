@@ -76,19 +76,25 @@ if(isset($_GET['supp'])) // on supprime le produit
 
 
 ?>
-<html>
-	<head>
-		<title></title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script src="ckeditor/ckeditor.js"></script>
-	</head>
-	
-	<body>
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+	<?php require_once("inc/inc_head.php");?>
+    <title>Gestion des produits</title>
+	<script src="ckeditor/ckeditor.js"></script>
+  </head>
+  <body>
+   <div class="container">
 		<?php
 		require_once('inc/inc_menu.php');
 		if(isset($message)){
 			echo $message;
 		}
+		
+		echo ' <div class="jumbotron">';
+	
+	echo'<body>';
+
 		genererCategorieProduit();
 		echo 'page de présentation des produits <br/>';
 		if(isset($_GET['ajout'])) // --------------------------------------------------- AJOUT PRODUIT ---------------------------------- //
@@ -305,5 +311,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 			echo '<a href="produit.php?ajout&idCat=null">Ajouter un produit</a><br/>';
 		}
 	?>
+	</div>
+	</div>
 	</body>
 </html>

@@ -15,18 +15,20 @@ if(isset($_POST['ok']))
 	header("Location:categorie.php");
 }
 ?>
-<html>
-	<head>
-		<title></title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	</head>
-	
-	<body>
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+	<?php require_once("inc/inc_head.php");?>
+    <title>Gestion des catégories</title>
+  </head>
+  <body>
+   <div class="container">
 		<?php
-			require_once('inc/inc_menu.php');
-			if(isset($message)){
+		require_once('inc/inc_menu.php');
+		if(isset($message)){
 			echo $message;
 		}
+		echo ' <div class="jumbotron">';
 		
 		echo '<h3>Catégories</h3>';
 		
@@ -98,5 +100,7 @@ if(isset($_POST['ok']))
 			}			
 		}
 		?>
+	</div>
+	</div>
 	</body>
 </html>
