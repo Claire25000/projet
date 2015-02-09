@@ -202,12 +202,18 @@ else
 		}
 		else
 		{
-			$res ="";
 			if(!isset($_GET['payer']))
 			{
-				$res = ajouterCommande(date("Y-m-d H:i:s"),1,$_POST['paie'],$_POST['liv'],idUtilisateurConnecte());
-				
-				if($res != false)
+				if($_POST['message'] == null)
+				{
+					$info = " ";
+				}
+				else
+				{
+					$info = $_POST['message'];
+				}
+				$res = ajouterCommande(date("Y-m-d H:i:s"),1,$_POST['paie'],$_POST['liv'],idUtilisateurConnecte(),$info);
+				if($res != null)
 				{
 					foreach($_SESSION['panier'] as $id_article=>$article_acheté)
 					{
@@ -221,11 +227,21 @@ else
 			{				
 				if(isset($_GET['ok']))
 				{
-					changerStatutCommande($_GET['id'],2);
-					$message = '<div class="alert alert-success" role="alert">Commande payée.</div>';
-					echo $message;
-					viderPanier();
-					echo '<a href="commande.php" class="btn btn-default" role="button">Voir vos commandes</a>';
+					$commande = retourneCommande($_GET['id']);
+					if($commande->modePaiement == 1 || $commande->modePaiement == 2)
+					{
+						echo "Veuillez adresser votre paiement à l'adresse suivante : </br>".retourneParametre('ordre');
+						viderPanier();
+						echo '</br><a href="commande.php" class="btn btn-default" role="button">Voir vos commandes</a>';
+					}
+					else
+					{
+						changerStatutCommande($_GET['id'],2);
+						$message = '<div class="alert alert-success" role="alert">Commande payée.</div>';
+						echo $message;
+						viderPanier();
+						echo '<a href="commande.php" class="btn btn-default" role="button">Voir vos commandes</a>';
+					}
 				}
 			}
 		}

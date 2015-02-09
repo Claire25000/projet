@@ -1,9 +1,9 @@
 <?php
 // 1 -> en ligne
 // 0 -> en local
-$online = 1;
+$online = 0;
 
-if($online == 0){
+if($online == 1){
 	try
 	{
 		$dns = 'mysql:host=mysql51-150.perso;dbname=webuzzer54gs9';
