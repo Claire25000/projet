@@ -80,7 +80,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 	<head>
 		<title></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script source="ckeditor/ckeditor.js"></script>
+		<script src="ckeditor/ckeditor.js"></script>
 	</head>
 	
 	<body>
