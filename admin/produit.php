@@ -21,7 +21,7 @@ if(isset($_POST['oka'])){ // ---------------------AJOUT D'UN PRODUIT
 		$prix = $_POST['prix'];
 		//$prix  = number_format($_POST['prix'], 2, '.', ',');
 		$nomPhoto = $tab_result['resultat']['0']["./upload"]['nom'];
-		ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$nomPhoto); // image : tableau[premiere ligne][dossier desination][nom réel uploadé]
+		ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$nomPhoto,$_POST['stock']); // image : tableau[premiere ligne][dossier desination][nom réel uploadé]
 		$id = getIdProduit($_POST['nom']);
 		
 	header("Location:produit.php?modif&id=".$id);
@@ -41,7 +41,7 @@ if(isset($_POST['okm'])) //-------------------- MODIFICATION D'UN PRODUIT
 	$nomPhoto = $tab_result['resultat']['0']["./upload"]['nom'];
 			
 	if($nomPhoto != ''){
-		modifierProduit($_POST['no'],$_POST['nom'],$_POST['desc'],$_POST['prix'],$_POST['cat'],$nomPhoto);
+		modifierProduit($_POST['no'],$_POST['nom'],$_POST['desc'],$_POST['prix'],$_POST['cat'],$nomPhoto,$_POST['stock']);
 	}else{
 		modifierProduit2($_POST['no'],$_POST['nom'],$_POST['desc'],$_POST['prix'],$_POST['cat']);
 	}
@@ -99,6 +99,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 					<label>Nom du produit : </label><input type='text' name='nom'></input><br/>
 					<label>Description du produit : </label><br/><textarea name='desc' rows='10' class="ckeditor" cols='50'></textarea><br/>
 					<label>Prix du produit : </label><input type='text' name='prix'></input><br/>
+					<label>Stock du produit : </label><input type='text' name='stock'></input><br/>
 					<label>Catégorie du produit : </label>
 						<select name='cat'>";
 						<?php			
@@ -151,6 +152,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 						<label>Nom : </label><input type="text" name="nom" value="'.$res->nomProduit.'"></input><br/>
 						<label>Description du produit : </label><br/><textarea name="desc" class="ckeditor" rows="10" cols="50">'.$res->descriptionProduit.'</textarea><br/>
 						<label>Prix : </label><input type="text" name="prix" value="'.$res->prixProduit.'"></input><br/>
+						<label>Stock du produit : </label><input type="text" name="stock" value="'.$res->stockProduit.'"></input><br/>
 						<label>Catégorie : </label>
 							<select name="cat">';
 								$req = $connexion->query("SET NAMES 'utf8'");
