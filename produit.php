@@ -28,6 +28,12 @@ if(isset($_GET['ajouterPanier']))
 <!DOCTYPE html>
 <html lang="fr">
   <head>
+	<link rel="stylesheet" href="jrating/jquery/jRating.jquery.css" type="text/css" />
+	<!-- jQuery files -->
+	<script type="text/javascript" src="jrating/jquery/jquery.js"></script>
+	<script type="text/javascript" src="jrating/jquery/jRating.jquery.js"></script>
+
+
 	<?php require_once("inc/inc_head.php");?>
     <title>Accueil - </title>
   </head>
