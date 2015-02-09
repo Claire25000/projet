@@ -87,7 +87,7 @@ if(isset($_GET['ajouterPanier']))
 							  if(estConnecte() && estAdmin(idUtilisateurConnecte())){echo " <a href='admin/produit.php?modif&id=".$_GET['id']."&idCat=".$res->idCategorie."'>[Modifier]</a>";} // Si admin : Affiche un lien pour modifier le produit
 							?>
 						</div>
-						<div class="product-desc"><?php echo retourneNote($_GET['id']); ?></div>
+						<div class="product-desc"><?php echo number_format(retourneNote($_GET['id'])); ?></div>
 						<div class="product-rating"><i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star-o"></i> </div>
 						<hr>
 						<div class="product-price"><?php echo $res->prixProduit; ?> €</div>
