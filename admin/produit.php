@@ -46,7 +46,7 @@ if(isset($_POST['okm'])) //-------------------- MODIFICATION D'UN PRODUIT
 		modifierProduit2($_POST['no'],$_POST['nom'],$_POST['desc'],$_POST['prix'],$_POST['cat']);
 	}
 			
-			header("Location:produit.php?modif&id=".$_GET['id']);
+			header("Location:produit.php?modif&id=".$_GET['id']."&idCat=".$_GET['idCat']);
 			echo '-> '.$nomPhoto;
 			
 	//}else{ // si la photo n'a pas été modifié
@@ -146,7 +146,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 				$sql->setFetchMode(PDO::FETCH_OBJ);
 				$res = $sql->fetch();
 				
-				echo '<form enctype="multipart/form-data" action="produit.php?modif&id='.$id.'" method="POST">
+				echo '<form enctype="multipart/form-data" action="produit.php?modif&id='.$id.'&idCat='.$_GET['idCat'].'" method="POST">
 						<input type="hidden"  name="no" value="'.$id.'" ></input>
 						
 						<label>Nom : </label><input type="text" name="nom" value="'.$res->nomProduit.'"></input><br/>
@@ -160,8 +160,14 @@ if(isset($_GET['supp'])) // on supprime le produit
 								$req->setFetchMode(PDO::FETCH_OBJ);
 								
 								while($resultat = $req->fetch()){
-							 
-									echo '<option value="'.$resultat->idCategorie.'">'.$resultat->libelleCategorie.'</option>';
+									if($res->idCategorie == $resultat->idCategorie)
+									{
+										echo "<option selected value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
+									}
+									else
+									{
+										echo '<option value="'.$resultat->idCategorie.'">'.$resultat->libelleCategorie.'</option>';
+									}
 								}
 								echo "
 							</select><br/>

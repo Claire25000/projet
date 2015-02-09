@@ -76,7 +76,7 @@ function afficherProduitAdmin($cat)
 			
 			echo "<tr>
 				<td>".$res->idProduit."</td>
-				<td><a href='produit.php?id=".$res->idProduit."'>".$res->nomProduit."</a></td>
+				<td><a href='produit.php?id=".$res->idProduit."&idCat=".$_GET['idCat']."'>".$res->nomProduit."</a></td>
 				<td>".$res->descriptionProduit."</td>
 				<td>".$res->prixProduit."</td>
 				<td>
@@ -87,7 +87,7 @@ function afficherProduitAdmin($cat)
 					}
 				echo "</ul>
 				</td>
-					<td><a href='produit.php?modif&id=".$res->idProduit."'>X</a></td>
+					<td><a href='produit.php?modif&id=".$res->idProduit."&idCat=".$_GET['idCat']."'>X</a></td>
 					<td><a href='produit.php?supp&id=".$res->idProduit."&idCat=".$cat."'>X</a></td>";
 				}
 			echo "</tr>";
@@ -111,7 +111,7 @@ function afficherProduitDetails($id)
 		{
 			if(estAdmin(idUtilisateurConnecte()) == true)
 			{
-				echo "<a href='produit.php?modif&id=".$id."'>Modifier le produit</a>";
+				echo "<a href='produit.php?modif&id=".$id."&idCat=".$_GET['idCat']."'>Modifier le produit</a>";
 			}
 		}
 		
