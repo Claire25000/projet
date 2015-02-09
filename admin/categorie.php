@@ -8,6 +8,12 @@ if(isset($_GET['deco'])){
 		header('Location: index.php');
 	}
 }
+
+if(isset($_POST['ok']))
+{
+	modifierCategorie($_POST['id'],$_POST['nom']);
+	header("Location:categorie.php");
+}
 ?>
 <html>
 	<head>
@@ -26,19 +32,11 @@ if(isset($_GET['deco'])){
 		
 		if(isset($_GET['modif']))
 		{
-			if(!isset($_POST['ok']))
-			{
-				echo "<form action='categorie.php?modif&id=".$_GET['id']."' method='POST'>
-					<input type='hidden' name='id' value='".$_GET['id']."'></input>
-					<label>Nom de la catégorie : </label><input type='text' name='nom' value='".retourneLibelle($_GET['id'])."'></input><br/>
-					<input type='submit' name='ok' value='Modifier'></input>
-					</form>";
-			}
-			else
-			{
-				modifierCategorie($_POST['id'],$_POST['nom']);
-				header("Location:categorie.php"); // <!------------------------ SA EN PHP SA DEVRAIS PAS MARCHER (marche sur uWamp) TU FAIRE UNE REDIRECTION ALORS QU'ON ECRIS DU HTML AVANT !!!!!!! [sa se fait tout en haut de la page !]
-			}
+			echo "<form action='categorie.php?modif&id=".$_GET['id']."' method='POST'>
+				<input type='hidden' name='id' value='".$_GET['id']."'></input>
+				<label>Nom de la catégorie : </label><input type='text' name='nom' value='".retourneLibelle($_GET['id'])."'></input><br/>
+				<input type='submit' name='ok' value='Modifier'></input>
+				</form>";	
 		}
 		elseif(isset($_GET['supp']))
 		{
@@ -62,11 +60,6 @@ if(isset($_GET['deco'])){
 					 if($rep == "oui")
 						{
 							supprimerCategorie($_GET['id']);
-							header("Location:categorie.php");
-						}
-						
-						if($rep == "non")
-						{
 							header("Location:categorie.php");
 						}
 		}
@@ -102,11 +95,8 @@ if(isset($_GET['deco'])){
 			{
 				ajouterCategorie($_POST['nom']);
 				header("Location:categorie.php");
-			}
-			
-			
+			}			
 		}
-		
 		?>
 	</body>
 </html>
