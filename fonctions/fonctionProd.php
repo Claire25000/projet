@@ -328,11 +328,14 @@ function formSupprimerProduit($id,$idCat)
 				<input type="radio" name="rep" value="non" checked> Non
 				<input type="radio" name="rep" value="oui" > Oui
 				<br/><br/>
-				<input type="submit" value="Valider">
+				<input type="submit" name="supp" value="Valider">
 	</form>
 		 ';
 	
 	$rep = "non"; 
+	
+	if(isset($_POST['supp']))
+	{
 	if(isset($_POST['rep'])){$rep = $_POST['rep'];}
 	if(isset($_POST['no'])){$num = $_POST['no'];} 
 	if(isset($_POST['cat'])){$cat = $_POST['cat'];} 	
@@ -341,8 +344,11 @@ function formSupprimerProduit($id,$idCat)
 	 if($rep == "oui")
 		{
 			supprimerProduit($num);
-			header("Location:produit.php?idCat=".$cat);
 		}
+
+		header("Location:produit.php?idCat=".$cat);
+
+	}
 }
 
 function supprimerProduit($id)

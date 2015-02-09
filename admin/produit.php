@@ -60,11 +60,6 @@ if(isset($_GET['deco'])){
 		header('Location: index.php');
 	}
 }
-if(isset($_GET['supp'])) // on supprime le produit
-		{
-			formSupprimerProduit($_GET['id'],$_GET['idCat']);
-		}
-		
 /*if(isset($_POST['oka'])){ // si form envoyé on ajoute le produit
 	$prix = $_POST['prix'];
 	//$prix  = number_format($_POST['prix'], 2, '.', ',');
@@ -137,6 +132,10 @@ if(isset($_GET['supp'])) // on supprime le produit
 					echo "<input type='submit' name='oka' value='Ajouter le produit'></input>
 			</form>";
 		}
+		elseif(isset($_GET['supp'])) // on supprime le produit
+		{
+			formSupprimerProduit($_GET['id'],$_GET['idCat']);
+		}
 		elseif(isset($_GET['modif'])) // ------------------------------------------------------ MODIFICATION PRODUIT -------------------------//
 		{
 			//formModifierProduit($_GET['id']);
@@ -195,7 +194,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 					{
 						echo "<tr>
 								<td>".$resultat->nom." : ".$resultat->valeur."</td>
-								<td><center><a href='produit.php?modif&dm&id=".$id."&idName=".$resultat->idNom."'>X</a></center></td>
+								<td><center><a href='produit.php?modif&dm&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
 								<td><center><a href='produit.php?modif&ds&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
 							 </tr>";
 					}
@@ -203,13 +202,13 @@ if(isset($_GET['supp'])) // on supprime le produit
 					<label>Ajouter de nouvelles caractéristiques : </label>";
 					if(isset($_GET['dm']))
 					{
-						echo "<form action='produit.php?modif&dm&id=".$_GET['id']."&idName=".$_GET['idName']."' method='POST'><label>Valeur : </label><select name='carValeur'>
+						echo "<form action='produit.php?modif&dm&id=".$_GET['id']."&idNom=".$_GET['idNom']."' method='POST'><label>Valeur : </label><select name='carValeur'>
 							<option value=null> </option>";
 								
 						$val = $connexion->query("Select * from data_valeur");
 						$val->setFetchMode(PDO::FETCH_OBJ);
 						
-						$valeur = genererValeurNom($_GET['idName']);
+						$valeur = genererValeurNom($_GET['idNom']);
 						
 						if($valeur == null)
 						{
@@ -248,8 +247,8 @@ if(isset($_GET['supp'])) // on supprime le produit
 							
 							if(isset($_POST['okm']))
 							{
-								modifierData($_GET['id'],$_GET['idName'],$_POST['carVal']);
-								//header("Location:produit.php?modif&dm&id=".$_GET['id']."&idName=".$_GET['idName']);
+								modifierData($_GET['id'],$_GET['idNom'],$_POST['carVal']);
+								//header("Location:produit.php?modif&dm&id=".$_GET['id']."&idNom=".$_GET['idNom']);
 							}
 						}
 					}	

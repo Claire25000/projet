@@ -40,31 +40,6 @@ if(isset($_POST['ok']))
 				<input type='submit' name='ok' value='Modifier'></input>
 				</form>";	
 		}
-		elseif(isset($_GET['supp']))
-		{
-			echo '
-					<form name="frm" action="categorie.php?supp&id='.$_GET['id'].'" method="post">
-								<h3>Etes-vous sûre de vouloir supprimer cette catégorie ?</h3>
-								<br/>
-								<input type="hidden" name="no" value="'.$_GET['id'].'">
-								<input type="radio" name="rep" value="non" checked> Non
-								<input type="radio" name="rep" value="oui" > Oui
-								<br/><br/>
-								<input type="submit" value="Valider">
-					</form>
-						 ';
-					
-					$rep = "non"; 
-					if(isset($_POST['rep'])){$rep = $_POST['rep'];}
-					if(isset($_POST['no'])){$num = $_POST['no'];} 
-
-					 
-					 if($rep == "oui")
-						{
-							supprimerCategorie($_GET['id']);
-							header("Location:categorie.php");
-						}
-		}
 		else
 		{
 			if(!isset($_POST['ok']))
@@ -98,6 +73,32 @@ if(isset($_POST['ok']))
 				ajouterCategorie($_POST['nom']);
 				header("Location:categorie.php");
 			}			
+		}
+		if(isset($_GET['supp']))
+		{
+			echo '<form name="frm" action="categorie.php?supp&id='.$_GET['id'].'" method="post">
+					<h3>Etes-vous sûre de vouloir supprimer cette catégorie ?</h3>
+					<br/>
+					<input type="hidden" name="no" value="'.$_GET['id'].'">
+					<input type="radio" name="rep" value="non" checked> Non
+					<input type="radio" name="rep" value="oui" > Oui
+					<br/><br/>
+					<input type="submit" name="supp" value="Valider">
+				</form>';
+						
+			$rep = "non"; 
+			
+			if(isset($_POST['supp']))
+			{
+				if(isset($_POST['rep'])){$rep = $_POST['rep'];}
+				if(isset($_POST['no'])){$num = $_POST['no'];} 
+					 
+				if($rep == "oui")
+				{
+					supprimerCategorie($_GET['id']);
+				}
+				header("Location:categorie.php");
+			}
 		}
 		?>
 	</div>
