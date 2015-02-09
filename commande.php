@@ -55,7 +55,6 @@ if(isset($_GET['id']))
 						<th>Statut</th>
 						<th>Mode de livraison</th>
 						<th>Mode de paiement</th>
-						<th></th>
 					</tr>
 				<?php
 				foreach(retourneListeCommandeEnCours($client->idUtilisateur) as $element) // retourne un array de commande pour un client
@@ -66,13 +65,6 @@ if(isset($_GET['id']))
 								<td>'.retourneStatut($element->statut).'</td>
 								<td>'.retourneLivraison($element->modeLivraison).'</td>
 								<td>'.retournePaiement($element->modePaiement).'</td>';
-								if($element->statut == 1)
-								{
-									echo '<td><div style="text-align:right;"><a href="commande.php?id='.$element->idCommande.'" class="btn btn-default" role="button">Payer cette commande</a></div></td>';
-								}else
-								{
-									echo '<td> </td>';
-								}
 							echo '</tr>';
 					}
 				?>

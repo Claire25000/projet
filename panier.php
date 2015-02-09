@@ -214,7 +214,8 @@ else
 						ajouterLigneCommande($res,$id_article,$article_acheté['qte']);
 					}
 				}	
-				echo '<div style="text-align:right;"><a href="panier.php?comm&valider&payer&ok&id='.$res.'" class="btn btn-default" role="button">Payer cette commande</a></div>';
+				echo '<div class="alert alert-success" role="alert">Commande effectuée !</div>
+				<a href="panier.php?comm&valider&payer&ok&id='.$res.'" class="btn btn-default" role="button">Payer cette commande</a>';
 			}
 			else			
 			{				
@@ -222,6 +223,9 @@ else
 				{
 					changerStatutCommande($_GET['id'],2);
 					$message = '<div class="alert alert-success" role="alert">Commande payée.</div>';
+					echo $message;
+					viderPanier();
+					echo '<a href="commande.php" class="btn btn-default" role="button">Voir vos commandes</a>';
 				}
 			}
 		}

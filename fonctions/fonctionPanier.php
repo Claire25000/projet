@@ -13,7 +13,7 @@ function ajouterPanier($idProd,$qte)
 	}
 	
 	if(isset($_SESSION['panier'][$idProd])){ // si la session est définie a l'ID du produit
-		return $connexion->lastInsertId(); 
+		return true;
 	}
 	return false;
 }
