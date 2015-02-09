@@ -41,14 +41,11 @@ if(isset($_GET['ajouterPanier']))
       <div class="jumbotron">
 		<?php
 		require_once('inc/inc_menu.php');
-		?>
-		<?php
-		require_once('inc/inc_menu.php');
 		if(isset($message)){
 			echo $message;
 		}
 		$req = $connexion->query("SET NAMES 'utf8'");	
-		$req = $connexion->query("Select produit.*, categorie.libelleCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
+		$req = $connexion->query("Select produit.*, categorie.libelleCategorie, categorie.idCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
 		$req->setFetchMode(PDO::FETCH_OBJ);
 		$res = $req->fetch();
 		 //on récupère le produit voulu
@@ -87,7 +84,7 @@ if(isset($_GET['ajouterPanier']))
 						<div class="product-title">
 							<?php 
 							  echo $res->nomProduit; 
-							  if(estConnecte() && estAdmin(idUtilisateurConnecte())){echo " <a href='admin/produit.php?modif&id=".$_GET['id']."'>[Modifier]</a>";} // Si admin : Affiche un lien pour modifier le produit
+							  if(estConnecte() && estAdmin(idUtilisateurConnecte())){echo " <a href='admin/produit.php?modif&id=".$_GET['id']."&idCat=".$res->idCategorie."'>[Modifier]</a>";} // Si admin : Affiche un lien pour modifier le produit
 							?>
 						</div>
 						<div class="product-desc"><?php echo retourneNote($_GET['id']); ?></div>
@@ -159,20 +156,53 @@ if(isset($_GET['ajouterPanier']))
 							<section class="container">
 								<?php
 									// ------------------------------------------------------------------------------ GESTION COMMENTAIRES//
-									if(estConnecte() == 'true')
+									if(retourneParametre("afficherCommentaire") == 'true')
 									{
 										$req = $connexion->query("SET NAMES 'utf8'");	
 										$req = $connexion->query("Select produit.*, categorie.libelleCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
 										$req->setFetchMode(PDO::FETCH_OBJ);
 										$res = $req->fetch();
 										
-										if(retourneParametre("afficherCommentaire") == 'true')
+										if(estConnecte() == 'true')
 										{
-											afficherCommentaire($_GET['id']);
-											foreach(retourneListeCommentaire($_GET['id']) as $element)
+											if(!isset($_POST['btnSubmit']))
 											{
-												$date = new DateTime($element->date);
-												echo '<br/>Par '.retourneUtilisateur($element->idUtilisateur)->login.' le '.$date->format('d/m/Y').' : '.$element->comm;
+												$req = $connexion->query("Select idProduit, nomProduit from produit where idProduit = ".$res->idProduit);
+												$req->setFetchMode(PDO::FETCH_OBJ);
+												$res = $req->fetch(); //on récupère le produit voulu
+											
+												echo '
+												<div class="container">
+													<form action="produit.php?id='.$res->idProduit.'" method="POST">
+														<div>        
+															<br style="clear:both">
+																<div class="form-group col-md-4 ">                                
+																	<label id="messageLabel" for="message">Commentaire : </label>
+																	<textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="250" style="width: 574px; height: 87px;"></textarea>
+																		<span class="help-block"><p id="characterLeft" class="help-block ">You have reached the limit</p></span>                    
+																</div>
+															<br style="clear:both">
+															<div class="form-group col-md-2">
+															<button class="form-control input-sm btn btn-success disabled" id="btnSubmit" name="btnSubmit" type="submit" style="height:35px"> Envoyer</button>    
+														</div>
+													</form>
+												</div>
+												</br></br>';
+											}
+											else
+											{
+												ajouterCommentaire($res->idProduit,$_POST['message']);
+												echo '<div class="alert alert-success" role="alert">Commentaire ajouté !</div>';
+											}
+										}
+											
+										foreach(retourneListeCommentaire($_GET['id']) as $element)
+										{
+											$date = new DateTime($element->date);
+											echo '<br/><img src="crayon.png" alt="" width="30" height="30"></img> <u>Par '.retourneUtilisateur($element->idUtilisateur)->login.' le '.$date->format('d/m/Y').' :</u> '.$element->comm;
+											
+											if(estConnecte() == 'true')
+											{
 												if($element->idUtilisateur == idUtilisateurConnecte())
 												{
 													echo "  <a href='produit.php?id=".$_GET['id']."&supp'>Supprimer</a>";

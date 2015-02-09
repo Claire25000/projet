@@ -131,9 +131,6 @@ if(isset($_GET['supp'])) // on supprime le produit
 						</div><br/>';
 					echo "<input type='submit' name='oka' value='Ajouter le produit'></input>
 			</form>";
-						?>
-			<?php
-
 		}
 		elseif(isset($_GET['modif'])) // ------------------------------------------------------ MODIFICATION PRODUIT -------------------------//
 		{
@@ -241,7 +238,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 								
 								$idValeur = getIdValeur($_POST['val']);
 								ajouterData($_GET['id'],$nom,$idValeur);
-								header("Location:produit.php?modif&id=".$_GET['id']);
+								header("Location:produit.php?modif&id=".$_GET['id']."&idCat=".$_GET['idCat']);
 							}
 							
 							if(isset($_POST['okm']))
@@ -253,7 +250,30 @@ if(isset($_GET['supp'])) // on supprime le produit
 					}	
 					elseif(isset($_GET['ds']))
 					{
-						formSupprimerData($_GET['idNom'],$id); //!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE
+						$idNom = $_GET['idNom'];
+						echo '<form name="frm" action="produit.php?ds&id='.$id.'&idNom='.$idNom.'" method="post">
+						<h3>Etes-vous sûre de vouloir supprimer cette caractéristique ?</h3>
+						<br/>
+						<input type="hidden" name="no" value="'.$id.'">
+						<input type="hidden" name="nom" value="'.$idNom.'">
+						<input type="radio" name="rep" value="non" checked> Non
+						<input type="radio" name="rep" value="oui" > Oui
+						<br/><br/>
+						<input type="submit" value="Valider">
+						</form>
+							 ';
+						
+						$rep = "non"; 
+						if(isset($_POST['rep'])){$rep = $_POST['rep'];}
+						if(isset($_POST['no'])){$num = $_POST['no'];}
+						if(isset($_POST['nom'])){$nom = $_POST['nom'];} 	
+
+						 
+						 if($rep == "oui")
+							{
+								supprimerData($nom,$num);
+								header("Location:produit.php?id=".$id);
+							}
 					}
 					elseif(isset($_GET['idNom']))
 					{

@@ -87,7 +87,7 @@ function afficherProduitAdmin($cat)
 					}
 				echo "</ul>
 				</td>
-					<td><a href='produit.php?modif&id=".$res->idProduit."&idCat=".$_GET['idCat']."'>X</a></td>
+					<td><a href='produit.php?modif&id=".$res->idProduit."&idCat=".$cat."'>X</a></td>
 					<td><a href='produit.php?supp&id=".$res->idProduit."&idCat=".$cat."'>X</a></td>";
 				}
 			echo "</tr>";
@@ -141,52 +141,6 @@ function afficherProduitDetails($id)
 				
 				afficherCaracteristique($id);
 }
-
-/*function formAjouterProduit($idCat) --> inutile ?
-{
-	global $connexion; // on définie la variable globale de connection dans la fonction
-	
-		
-			echo "<form enctype = 'multipart/form-data' action='produit.php?ajout&idCat=".$idCat."' method='POST'>
-					<label>Nom du produit : </label><input type='text' name='nom'></input><br/>
-					<label>Description du produit : </label><br/><textarea name='desc' rows='10' cols='50'></textarea><br/>
-					<label>Prix du produit : </label><input type='text' name='prix'></input><br/>
-					<label>Catégorie du produit : </label>
-						<select name='cat'>";
-						
-						$sql = $connexion->query("SET NAMES 'utf8'"); 
-						$sql = $connexion->query("Select idCategorie, libelleCategorie from categorie");
-						$sql->setFetchMode(PDO::FETCH_OBJ);
-					
-						while($resultat = $sql->fetch())
-						{
-							if($_GET['idCat'] == $resultat->idCategorie)
-							{
-								echo "<option selected value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
-							}else
-							{
-								echo "<option value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
-							}
-						}
-						echo "</select><br/><label>Image du produit : </label><input type='text' name='img'></input><br/>
-						
-						
-						<input name = 'photo[]' type = 'file' multiple = 'multiple' size = '70' /><br /></br>
-						<input type='submit' name='oka' value='Ajouter'></input>
-						</form>";
-							
-			
-		
-		if(isset($_POST['oka']))
-		{
-			$prix = $_POST['prix'];
-			//$prix  = number_format($_POST['prix'], 2, '.', ',');
-			ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$_POST['img']);
-			$id = getIdProduit($_POST['nom']);
-
-			header("Location:produit.php?modif&id=".$id);
-		}
-}*/
 
 function getIdProduit($nom)
 {
