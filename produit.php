@@ -17,7 +17,13 @@ if(isset($_GET['supp']))
 
 if(isset($_GET['ajouterPanier']))
 {
-	if(ajouterPanier($_GET['id'],1)){$message = '<div class="alert alert-success" role="alert">Le produit a été ajouté à votre panier.</div>';}
+	if(retourneStock($_GET['id']) - getQteProduit($_GET['id']) > 0){ // si la quantité du produit ajouté ne dépasse pas le stock du produit<
+		if(ajouterPanier($_GET['id'],1)){$message = '<div class="alert alert-success" role="alert">Le produit a été ajouté à votre panier.</div>';}
+		
+	}else{
+		$message = '<div class="alert alert-danger" role="alert">Le produit n\'est plus en stock suffisant, n\'hésitez pas à nous contacter !</div>';
+	}
+	
 }
 ?>
 <!DOCTYPE html>
@@ -87,10 +93,17 @@ if(isset($_GET['ajouterPanier']))
 						<div class="product-rating"><i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star-o"></i> </div>
 						<hr>
 						<div class="product-price"><?php echo $res->prixProduit; ?> €</div>
-						<div class="product-stock">En Stock</div>
+						<?php 
+							$stockActuel = retourneStock($res->idProduit) - getQteProduit($res->idProduit);
+							if($stockActuel>0){
+								echo '<div class="product-stock">En Stock</div>';
+							}else{
+								echo '<div style="color:red" class="product-stock">En rupture de Stock</div>';
+							}
+						?>
 						<hr>
 						<div class="btn-group cart">
-							<div style="text-align:right;"><a href="produit.php?ajouterPanier&id=<?php echo $res->idProduit; ?>" class="btn btn-success" role="button">Ajouter au panier</a></div>
+							<div style="text-align:right;"><a href="produit.php?ajouterPanier&id=<?php echo $res->idProduit; ?>" <?php if($stockActuel<1){echo 'class="btn btn-danger" disabled="disabled"';}else{echo 'class="btn btn-success"';} ?> role="button">Ajouter au panier</a></div>
 						</div>
 						<!--<div class="btn-group wishlist">
 							<button type="button" class="btn btn-danger">

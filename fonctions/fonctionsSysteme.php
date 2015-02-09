@@ -9,6 +9,7 @@ function typeUtilisateurConnecte(){
 function chargerParametres(){
 	global $connexion; // on définie la variables globale de connection dans la fonction
 
+	$requete = $connexion->query("SET NAMES 'utf8'"); 
 	$requete = $connexion->query("SELECT * FROM parametre WHERE cle LIKE 'param_%'");
 	$requete->setFetchMode(PDO::FETCH_OBJ);
 	while($enregistrement = $requete->fetch()){
@@ -27,6 +28,7 @@ function retourneParametre($libelle){
 function chargerErreurs(){
 	global $connexion; // on définie la variables globale de connection dans la fonction
 
+	$requete = $connexion->query("SET NAMES 'utf8'"); 
 	$requete = $connexion->query("SELECT * FROM parametre WHERE cle LIKE 'error_%'");
 	$requete->setFetchMode(PDO::FETCH_OBJ);
 	while($enregistrement = $requete->fetch()){
@@ -53,7 +55,4 @@ function envoyeMail($sujet,$message,$destinataire){
 	}
 }
 // --------------------------------- FONCTIONS IMAGE  --------------------------------- //
-
-
-
 ?>

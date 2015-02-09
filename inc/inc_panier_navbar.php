@@ -6,7 +6,11 @@ require_once("fonctions/fonctionPanier.php");
 
 if(isset($_SESSION['panier']))
 {
-	$nb = count($_SESSION['panier']); 
+	$nb = 0;
+	foreach($_SESSION['panier'] as $id_article=>$article_acheté)
+	{
+		$nb = $nb+$_SESSION['panier'][$id_article]['qte'];
+	}
 
 			echo '<li class="dropdown"><!-- panier -->
 					<a data-toggle="dropdown" class="dropdown-toggle" href="#">

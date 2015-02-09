@@ -4,7 +4,7 @@ require_once("fonctionsUtilisateur.php");
 require_once("fonctionsSysteme.php");
 
 
-function retourneProduit($id)
+function retourneProduit($id) // ???????????????????????????? ou est-ce que sa sert ? on travail en objet faut renvoyer des objets PHP
 {
 	global $connexion;
 	
@@ -37,6 +37,12 @@ function afficherProduit($cat)
 				<td><a href='produit.php?id=".$res->idProduit."'>".$res->nomProduit."</a></td>
 				</tr>";
 		}
+}
+
+// retourne le stock du produit (int)
+function retourneStock($idProduit){
+	$produit = retourneProduit($idProduit);
+	return $produit->stockProduit;
 }
 
 function afficherProduitAdmin($cat)
@@ -117,10 +123,11 @@ function afficherProduitDetails($id)
 				<div class='panel-heading'>Produit ".$res->nomProduit."</div>
 		<table class='table' border='1'>
 			<tr>
-				<th>Numéro du produit</th>
-				<th>Nom du produit</th>
-				<th>Description du produit</th>
-				<th>Prix du produit</th>
+				<th>Numéro</th>
+				<th>Nom</th>
+				<th>Description</th>
+				<th>Prix</th>
+				<th>Stock</th>
 				<th>Catégorie</th></tr>";
 			
 			echo "<tr>
@@ -128,6 +135,7 @@ function afficherProduitDetails($id)
 				<td>".$res->nomProduit."</td>
 				<td>".$res->descriptionProduit."</td>
 				<td>".$res->prixProduit."</td>
+				<td>".$res->stockProduit."</td>
 				<td>".$res->libelleCategorie."</td></tr>
 				</table><br/>";
 				
@@ -303,14 +311,14 @@ function formAjouterCaracteristiquesValeur($nom)
 			}
 }
 
-function ajouterProduit($nom,$desc,$prix,$cat,$img)
+function ajouterProduit($nom,$desc,$prix,$cat,$img,$stock)
 {
 	global $connexion; // on définie la variable globale de connection dans la fonction
 	
 	try
 		{
 			$requete = $connexion->query("SET NAMES 'utf8'");
-			$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`produit` values (DEFAULT,'".$nom."','".$desc."',".$prix.",".$cat.",'".$img."');"); //on insère le produit dans la base
+			$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`produit` values (DEFAULT,'".$nom."','".$desc."',".$prix.",".$cat.",'".$img."','".$stock."');"); //on insère le produit dans la base
 			$requete->execute();
 			echo'Insertion effectuée avec succès';
 			return true;
@@ -562,14 +570,14 @@ function modifierData($id,$idNom,$idVal)
 		}
 }
 // fonction de modification d'un produit (avec le lien de l'image)
-function modifierProduit($id,$nom,$desc,$prix,$cat,$img)
+function modifierProduit($id,$nom,$desc,$prix,$cat,$img,$stock)
 {
 	global $connexion;
 	
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare("update produit set nomProduit = '".$nom."',descriptionProduit = '".$desc."',prixProduit = ".$prix.",idCategorie = ".$cat.",image = '".$img."' where idProduit = ".$id."");
+			$query = $connexion->prepare("update produit set nomProduit = '".$nom."',descriptionProduit = '".$desc."',prixProduit = ".$prix.",idCategorie = ".$cat.",image = '".$img."',stockProduit = '".$stock."' where idProduit = ".$id."");
 			$query->execute();
 			return true;
 		}
@@ -580,14 +588,14 @@ function modifierProduit($id,$nom,$desc,$prix,$cat,$img)
 		}
 }
 // fonction de modification d'un produit (sans le lien de l'image)
-function modifierProduit2($id,$nom,$desc,$prix,$cat)
+function modifierProduit2($id,$nom,$desc,$prix,$cat,$stock)
 {
 	global $connexion;
 	
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare("update produit set nomProduit = '".$nom."',descriptionProduit = '".$desc."',prixProduit = ".$prix.",idCategorie = ".$cat." where idProduit = ".$id."");
+			$query = $connexion->prepare("update produit set nomProduit = '".$nom."',descriptionProduit = '".$desc."',prixProduit = ".$prix.",idCategorie = ".$cat.",stockProduit = '".$stock."' where idProduit = ".$id."");
 			$query->execute();
 			return true;
 		}

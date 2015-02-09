@@ -6,7 +6,11 @@ function creationPanier()
 
 function ajouterPanier($idProd,$qte)
 {
-    $_SESSION['panier'][$idProd]['qte']  = $qte; // Ajouter un nouvel article
+	if(isset($_SESSION['panier'][$idProd])){
+		$_SESSION['panier'][$idProd]['qte'] = $_SESSION['panier'][$idProd]['qte']+1;
+	}else{
+		$_SESSION['panier'][$idProd]['qte']  = $qte;
+	}
 	
 	if(isset($_SESSION['panier'][$idProd])){ // si la session est définie a l'ID du produit
 		return true;
@@ -17,6 +21,14 @@ function ajouterPanier($idProd,$qte)
 function modifierQte($idProd,$qte)
 {
 	$_SESSION['panier'][$idProd]['qte'] = $qte;	// Modifier la quantité achetée
+}
+
+// retourne la quantité de produit qui se trouve dans le panier 
+function getQteProduit($idProduit){
+	if(isset($_SESSION['panier'][$idProduit]['qte'])){
+		return $_SESSION['panier'][$idProduit]['qte'];
+	}
+	return 0;
 }
 
 function supprimerArticle($id)
