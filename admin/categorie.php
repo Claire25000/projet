@@ -1,6 +1,6 @@
 <?php
-require_once("inc/inc_top.php");
 require_once('inc/inc_head.php');
+require_once("inc/inc_top.php");
 require_once("../fonctions/fonctionCategorie.php");
 
 if(isset($_GET['deco'])){

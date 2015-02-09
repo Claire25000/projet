@@ -1,4 +1,5 @@
 <?php
+require_once('inc/inc_head.php');
 require_once("inc/inc_top.php");
 
 if(isset($_GET['deco'])){
@@ -23,7 +24,6 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 ?>
 <html>
 	<head>
-		<?php require_once('inc/inc_head.php');?>
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<title>Accueil Administrateur</title>

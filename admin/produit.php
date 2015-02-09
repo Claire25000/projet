@@ -1,6 +1,6 @@
 <?php
-require_once('inc/inc_top.php');
 require_once('inc/inc_head.php');
+require_once('inc/inc_top.php');
 
 require_once("../fonctions/fonctionComm.php");
 require_once("../fonctions/fonctionProd.php");
@@ -80,6 +80,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 	<head>
 		<title></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script source="ckeditor/ckeditor.js"></script>
 	</head>
 	
 	<body>
@@ -96,7 +97,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 			?>
 			<form enctype = "multipart/form-data" action='produit.php?ajout&idCat=<?php echo $_GET['idCat']; ?>' method='POST'>
 					<label>Nom du produit : </label><input type='text' name='nom'></input><br/>
-					<label>Description du produit : </label><br/><textarea name='desc' rows='10' cols='50'></textarea><br/>
+					<label>Description du produit : </label><br/><textarea name='desc' rows='10' class="ckeditor" cols='50'></textarea><br/>
 					<label>Prix du produit : </label><input type='text' name='prix'></input><br/>
 					<label>Catégorie du produit : </label>
 						<select name='cat'>";
@@ -148,7 +149,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 						<input type="hidden"  name="no" value="'.$id.'" ></input>
 						
 						<label>Nom : </label><input type="text" name="nom" value="'.$res->nomProduit.'"></input><br/>
-						<label>Description du produit : </label><br/><textarea name="desc" rows="10" cols="50">'.$res->descriptionProduit.'</textarea><br/>
+						<label>Description du produit : </label><br/><textarea name="desc" class="ckeditor" rows="10" cols="50">'.$res->descriptionProduit.'</textarea><br/>
 						<label>Prix : </label><input type="text" name="prix" value="'.$res->prixProduit.'"></input><br/>
 						<label>Catégorie : </label>
 							<select name="cat">';
@@ -184,7 +185,7 @@ if(isset($_GET['supp'])) // on supprime le produit
 					{
 						echo "<tr>
 								<td>".$resultat->nom." : ".$resultat->valeur."</td>
-								<td><center><a href='produit.php?modif&dm&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
+								<td><center><a href='produit.php?modif&dm&id=".$id."&idName=".$resultat->idNom."'>X</a></center></td>
 								<td><center><a href='produit.php?modif&ds&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
 							 </tr>";
 					}
@@ -192,21 +193,66 @@ if(isset($_GET['supp'])) // on supprime le produit
 					<label>Ajouter de nouvelles caractéristiques : </label>";
 					if(isset($_GET['dm']))
 					{
-						formModifierData($_GET['idNom'],$id); //!!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE
+						echo "<form action='produit.php?modif&dm&id=".$_GET['id']."&idName=".$_GET['idName']."' method='POST'><label>Valeur : </label><select name='carValeur'>
+							<option value=null> </option>";
+								
+						$val = $connexion->query("Select * from data_valeur");
+						$val->setFetchMode(PDO::FETCH_OBJ);
+						
+						$valeur = genererValeurNom($_GET['idName']);
+						
+						if($valeur == null)
+						{
+							while($res = $val->fetch())
+							{
+								echo "<option value='".$res->idValeur."'>".$res->valeur."</option>";
+							}
+						}
+						else
+						{
+							foreach($valeur as $element) // retourne un array des valeurs
+							{
+								echo "<option value='".$element->idValeur."'>".$element->valeur."</option>";
+							}
+						}
+						echo "
+						</select>&nbsp;<input type='text' name='val' style='width:100px; height:20px;'></input><br/>
+						<input type='submit' name='okm' value='Ajouter'></input>
+						</form>";
+						
+						if(isset($_POST['okm']))
+						{
+							if($_POST['carNom'] == null)
+							{
+								$e = ifValeurExist($_POST['val']);
+								
+								if($e == null)
+								{
+									ajouterValeur($_POST['val']);
+								}
+								
+								$idValeur = getIdValeur($_POST['val']);
+								ajouterData($_GET['id'],$nom,$idValeur);
+								header("Location:produit.php?modif&id=".$_GET['id']);
+							}
+							
+							if(isset($_POST['okm']))
+							{
+								modifierData($_GET['id'],$_GET['idName'],$_POST['carVal']);
+								//header("Location:produit.php?modif&dm&id=".$_GET['id']."&idName=".$_GET['idName']);
+							}
+						}
 					}	
-					
-					if(isset($_GET['ds']))
+					elseif(isset($_GET['ds']))
 					{
 						formSupprimerData($_GET['idNom'],$id); //!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE
 					}
+					elseif(isset($_GET['idNom']))
+					{
+						formAjouterCaracteristiquesValeur($_GET['idNom']); //!!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE
+					}
 			}
-
-			
-			
-			if(isset($_GET['idNom']))
-			{
-				formAjouterCaracteristiquesValeur($_GET['idNom']); //!!!!!!!!!!!!!!!!!!!!!!!!! A FAIRE
-			}else
+			else
 			{
 				$sql = $connexion->query("SET NAMES 'utf8'"); 
 				$sql = $connexion->query("Select idCategorie from produit where idProduit = ".$_GET['id']);

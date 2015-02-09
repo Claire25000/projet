@@ -1,6 +1,6 @@
 <?php
-require_once("inc/inc_top.php");
 require_once('inc/inc_head.php');
+require_once("inc/inc_top.php");
 
 if(isset($_GET['deco'])){
 	if(deconnecteUtilisateur()){ // si la fonction de déconnexion retourne true : utilisateur déconnecté
