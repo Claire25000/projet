@@ -1,4 +1,5 @@
 <?php
+require_once("inc/inc_head.php");
 require_once('inc/inc_top.php');
 require_once("fonctions/fonctionProd.php");
 require_once("fonctions/fonctionsCommande.php");
@@ -7,7 +8,7 @@ require_once("fonctions/fonctionsCommande.php");
 $id_article = null;
 $qte_article = 1;
 
-if(isset($_GET['id']))
+if(isset($_GET['id']) && isset($_GET['qte']))
 {
 	$id_article = $_GET['id'];
 	$qte_article = $_GET['qte'];
@@ -36,7 +37,6 @@ if(isset($_GET['vide']))
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-	<?php require_once("inc/inc_head.php");?>
     <title>Panier</title>
 	<style>
 		#formu{
@@ -182,7 +182,7 @@ else
 							echo '</tbody></table>
 						</div>';
 					  echo '<hr><div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</div>
-			  <form action="panier.php?comm&valider&vide" method="POST">
+			  <form action="panier.php?comm&valider" method="POST">
 				<label>Informations supplémentaires : <textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="500" rows="10" cols="50"></textarea>
 				<br/>
 				<label>Mode de livraison : </label><select name="liv">';
@@ -202,12 +202,26 @@ else
 		}
 		else
 		{
-			$res = ajouterCommande(date("Y-m-d H:i:s"),1,$_POST['paie'],$_POST['liv'],idUtilisateurConnecte());
-			if($res != false)
+			$res ="";
+			if(!isset($_GET['payer']))
 			{
-				foreach($_SESSION['panier'] as $id_article=>$article_acheté)
+				$res = ajouterCommande(date("Y-m-d H:i:s"),1,$_POST['paie'],$_POST['liv'],idUtilisateurConnecte());
+				
+				if($res != false)
 				{
-					ajouterLigneCommande($res,$id_article,$article_acheté['qte']);
+					foreach($_SESSION['panier'] as $id_article=>$article_acheté)
+					{
+						ajouterLigneCommande($res,$id_article,$article_acheté['qte']);
+					}
+				}	
+				echo '<div style="text-align:right;"><a href="panier.php?comm&valider&payer&ok&id='.$res.'" class="btn btn-default" role="button">Payer cette commande</a></div>';
+			}
+			else			
+			{				
+				if(isset($_GET['ok']))
+				{
+					changerStatutCommande($_GET['id'],2);
+					$message = '<div class="alert alert-success" role="alert">Commande payée.</div>';
 				}
 			}
 		}

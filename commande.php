@@ -1,4 +1,5 @@
 <?php
+require_once("inc/inc_head.php");
 require_once('inc/inc_top.php');
 if(!estConnecte() || estAdmin()){ // si non connecté, on login en tant qu'admin
 	header('Location: 404.php?err=1');
@@ -15,7 +16,6 @@ if(isset($_GET['id']))
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-	<?php require_once("inc/inc_head.php");?>
     <title>Accueil - </title>
   </head>
   
