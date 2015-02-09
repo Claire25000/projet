@@ -1,14 +1,31 @@
 <?php
 require_once('inc/inc_top.php');
+require_once("fonctions/fonctionProd.php");
 if(isset($_GET['q'])){
 	$recherche = $_GET['q'];
 }
+if(isset($recherche)) // si le champ recherche contient quelque chose
+{ 
+	$prod = rechercheProduit($recherche);
+	if($prod != null)
+	{
+		header("Location:produit.php?id=".$prod->idProduit);
+	}
+	else
+	{
+		echo '<p>Aucun produit ne correspond à votre recherche </p>';
+	}
+}
+else
+{
+	echo '<p>Veuillez saisir une recherche ! </p>';
+}
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
 	<?php require_once("inc/inc_head.php");?>
-    <title>recherche - </title>
+    <title>Recherche</title>
   </head>
   
   <body>
@@ -19,13 +36,6 @@ if(isset($_GET['q'])){
       <div class="jumbotron">
 		<?php
 		require_once('inc/inc_menu.php');
-		?>
-		<?php
-		if(isset($recherche)){ // si le champ recherche contiens quelque chose
-		echo '<p>Vous avez rechercher "'.$recherche.'".</p>';
-		}else{
-		echo '<p>Veuillez saisir une recherche. !!!!! </p>';
-		}
 		?>
       </div>
     </div><!-- /container -->

@@ -15,6 +15,17 @@ function retourneProduit($id)
 	return $req->fetch();
 }
 
+function rechercheProduit($nom)
+{
+	global $connexion;
+	
+	$req = $connexion->query("SET NAMES 'utf8'");
+	$req = $connexion->query("Select produit.* from produit where nomProduit = '".$nom."'");
+	$req->setFetchMode(PDO::FETCH_OBJ);
+	
+	return $req->fetch();
+}
+
 function afficherProduit($cat)
 {
 	global $connexion; // on définie la variable globale de connection dans la fonction
