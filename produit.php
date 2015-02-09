@@ -25,12 +25,18 @@ if(isset($_GET['ajouterPanier']))
 		$message = '<div class="alert alert-danger" role="alert">Le produit n\'est plus en stock suffisant, n\'hésitez pas à nous contacter !</div>';
 	}
 }
+
+ //on récupère le produit voulu
+$req = $connexion->query("SET NAMES 'utf8'");	
+$req = $connexion->query("Select produit.*, categorie.libelleCategorie, categorie.idCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
+$req->setFetchMode(PDO::FETCH_OBJ);
+$res = $req->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
+  <head>  
 	<?php require_once("inc/inc_head.php");?>
-    <title>Accueil - </title>
+    <title><?php echo $res->nomProduit; ?></title>
   </head>
   <body>
 	<!-- navbar -->
@@ -42,13 +48,7 @@ if(isset($_GET['ajouterPanier']))
 		require_once('inc/inc_menu.php');
 		if(isset($message)){
 			echo $message;
-		}
-		$req = $connexion->query("SET NAMES 'utf8'");	
-		$req = $connexion->query("Select produit.*, categorie.libelleCategorie, categorie.idCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
-		$req->setFetchMode(PDO::FETCH_OBJ);
-		$res = $req->fetch();
-		 //on récupère le produit voulu
-		 
+		}		 
 		// --------------------------------- AFFICHAGE DU PRODUIT
 		$sql = $connexion->query("SET NAMES 'utf8'"); 
 		$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
@@ -86,7 +86,16 @@ if(isset($_GET['ajouterPanier']))
 							  if(estConnecte() && estAdmin(idUtilisateurConnecte())){echo " <a href='admin/produit.php?modif&id=".$_GET['id']."&idCat=".$res->idCategorie."'>[Modifier]</a>";} // Si admin : Affiche un lien pour modifier le produit
 							?>
 						</div>
-						<div class="product-desc"><?php echo number_format(retourneNote($_GET['id'])); ?></div>
+						<div class="product-desc">
+							<?php printf("%.2f",retourneNote($_GET['id'])); // retourne la moyenne des notes du produit arondies x,xx?>
+							<?php 
+							if(aDejaNote(idUtilisateurConnecte(),$_GET['id'])){ // si l'utilisateur a déja noté
+								$dejaNote = true;
+							}else{
+								$dejaNote = false;
+							}
+							?>
+						</div>
 						<div class="product-rating"><i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star-o"></i> </div>
 						<hr>
 						<div class="product-price"><?php echo $res->prixProduit; ?> €</div>
