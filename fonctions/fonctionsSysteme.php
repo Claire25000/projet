@@ -44,15 +44,20 @@ function retourneErreur($libelle){
 	}
 	return "ERREUR INCONNUE";
 }
+
+/*function envoyeMail($sujet,$message,$destinataire){
+
+$expediteur = retourneParametre('mailSite');
+$reponse = $expediteur;
+
+mail($destinataire,$sujet,$message,
+     "From: $expediteur\r\n".
+        "Reply-To: $reponse\r\n".
+        "Content-Type: text/html; charset=\"iso-8859-1\"\r\n");
+}*/
 function envoyeMail($sujet,$message,$destinataire){
-	$headers = "From: \"expediteur moi\"<moi@domaine.com>\n";
-	$headers .= "Reply-To: moi@domaine.com\n";
-	$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
-	if(mail($destinataire,$sujet,$message,$headers)){
-		echo "L'email a bien été envoyé.";
-	}else{
-		echo "Une erreur c'est produite lors de l'envois de l'email.";
-	}
+	// rien
 }
+
 // --------------------------------- FONCTIONS IMAGE  --------------------------------- //
 ?>

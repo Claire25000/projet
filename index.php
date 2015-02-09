@@ -1,5 +1,9 @@
 <?php
 require_once('inc/inc_top.php');
+
+envoyeMail("ntm","ntm","dododu25@hotmail.fr");
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

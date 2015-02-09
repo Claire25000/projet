@@ -59,6 +59,7 @@ function ajouterUtilisateur($login,$password,$email,$type){
 	$password = md5("&4à[5s".$password); // on hash directement le password, et on y ajoute le salt : &4à[5s
 	try {
 		$requete = $connexion->exec("INSERT INTO `webuzzer54gs9`.`utilisateur` (`idUtilisateur` ,`login` ,`passwd`,`email` ,`type`)VALUES (NULL, '".$login."', '".$password."', '".$email."', '".$type."');");
+		envoyeMail('Votre compte client a été créé sur '.retourneParametre('nomSite').'.','Bienvenue sur '.retourneParametre('nomSite').' ! <br/> Votre compte a été créer sur notre plateforme, vous avez désormais accès à toutes les fonctionalitées. <br/> Votre email de connexion est '.$email.'.',$email);
 		return $connexion->lastInsertId(); 
 	} catch ( Exception $e ) {
 		return 0;
