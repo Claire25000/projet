@@ -88,6 +88,22 @@ function ajouterLigneCommande($idCommande, $idProd, $qte)
 	}
 }
 
+function retourneLigneCommande($id)
+{
+	global $connexion;
+	
+	$liste = array();
+	$req = $connexion->query("SET NAMES 'utf8'");
+	$req = $connexion->query("Select * from lignecommande where idCommande = ".$id);
+	$req->setFetchMode(PDO::FETCH_OBJ);
+	
+	while($res = $req->fetch())
+	{
+		$liste[] = $res;
+	}
+	
+	return $liste;
+}
 
 function supprimerCommande($idCommande)
 {
@@ -96,6 +112,24 @@ function supprimerCommande($idCommande)
 		try
 		{
 			$requete = $connexion->prepare("Delete from commande where idCommande = ".$idCommande); //on supprime les commandes dans la base
+			$requete->execute();
+			
+			return true;	
+		}
+		catch(Exception $e)
+		{
+				die('Erreur : '.$e->getMessage());
+				return false;
+		}
+}
+
+function supprimerLigneCommande($idCommande,$idProd)
+{
+	global $connexion; // on définie la variable globale de connection dans la fonction
+	
+		try
+		{
+			$requete = $connexion->prepare("Delete from lignecommande where idProduit = ".$idProd." and idCommande = ".$idCommande); //on supprime les lignes de commandes dans la base
 			$requete->execute();
 			
 			return true;	

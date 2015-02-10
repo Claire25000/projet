@@ -9,6 +9,7 @@ if(isset($_GET['deco'])){
 }
 require_once("../fonctions/fonctionsCommande.php");
 require_once("../fonctions/fonctionsClient.php");
+require_once("../fonctions/fonctionProd.php");
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -80,6 +81,12 @@ require_once("../fonctions/fonctionsClient.php");
 						 
 						 if($rep == "oui")
 							{
+								$liste = retourneLigneCommande($num);
+								foreach($liste as $element)
+								{
+									augmenterStock($element->idProduit,$element->nombre);
+									supprimerLigneCommande($num,$element->idProduit);
+								}
 								supprimerCommande($num);
 								header("Location:commande.php");
 							}
