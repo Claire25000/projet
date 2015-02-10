@@ -78,24 +78,32 @@ if(isset($_GET['vide']))
 						// On affiche chaque ligne du panier : nom, prix et quantité modifiable + 2 boutons : modifier la qté et supprimer l'article
 						
 						$produit = retourneProduit($id_article);		
+						$stockMax = retourneStock($id_article);
 						
 						if (isset($article_acheté['qte'])){
-								echo '<li><form action="panier.php" method="POST">', $_SESSION['panier'][$id_article]['qte'],' ',$produit->nomProduit, ' (', number_format($produit->prixProduit, 2, ',', ' '), ' €) ',
+								echo '<li>
+								<form action="panier.php" method="POST">
+								 ', $_SESSION['panier'][$id_article]['qte'],' ',$produit->nomProduit, ' (', number_format($produit->prixProduit, 2, ',', ' '), ' €) ',
 								 '<input type="hidden" name="id" value='.$id_article.' />
-								  <br />Qté: <select name="qte">
-										<option selected="selected" value="1">1</option>
-										<option value="2">2</option>
-										<option value="3">3</option>
-										<option value="4">4</option>
-										<option value="5">5</option>
-										<option value="6">6</option>
-										<option value="7">7</option>
-										<option value="8">8</option>
-										<option value="9">9</option>
-										<option value="10">10</option>
-									</select>
-								  <input type="submit" name="modifier" value="Modifier la quantité" />
-								  <input type="submit" name="supprimer" value="Supprimer" />
+								  <br />
+								  
+								qté:<select name="qte">';
+								
+								// ------------------------------------------------- AFFICHAGE ET PRESELECTION DE LA QUANTITE EN PANIER DU PRODUIT (<select>)--------------//
+								$qtePanierProduit = getQteProduit($id_article); // on recupere le nombre de produit actuel en panier
+								for ($i = 1; $i <= $stockMax; $i++) { // on boucle sur le stock du produit actuel
+								
+									if($qtePanierProduit != $i){ 
+										echo '<option value="'.$i.'">'.$i.'</option>';
+									}else{ // on préséléctionne la valeur qui est acutellement dans le panier de l'utilisateur
+										echo '<option selected="selected" value="'.$i.'">'.$i.'</option>';
+									}
+									
+								}
+
+							   echo '</select>
+									<input type="submit" name="modifier" value="Modifier la quantité" />
+									<input type="submit" name="supprimer" value="Supprimer" />
 								</form>
 								</li>';
 								

@@ -5,7 +5,7 @@ $new = 0;
 if(isset($_POST['login']) && isset($_POST['pass1']) && isset($_POST['pass2']) && isset($_POST['prenom']) && isset($_POST['nom']) && isset($_POST['email']) && isset($_POST['adresse'])){
 	if($_POST['pass1'] == $_POST['pass2']){
 		if(ajouterClient($_POST['login'],$_POST['pass1'],$_POST['nom'],$_POST['prenom'],$_POST['adresse'],$_POST['email'])){
-			$message = "Inscription effectuée avec succès";
+			$message = '<div class="alert alert-warning" role="alert">Inscription effectuée avec succès.</div>';
 
 			if($_POST['ok'] == 1)
 			{

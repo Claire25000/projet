@@ -1,9 +1,8 @@
 <?php
-require_once('inc/inc_top.php');
-
 if(isset($_GET['logout'])){
 	$message = '<div class="alert alert-danger" role="alert">Vous avez été déconnecté</div>';
 }
+require_once('inc/inc_top.php');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -26,8 +25,8 @@ if(isset($_GET['logout'])){
 		}	
 		?>
         <h1><?php echo retourneParametre('nomSite'); ?></h1>
-		<p>
-		
+		<p style="padding-top:3%">
+			<?php echo retourneParametre('textAccueil'); ?>
 		</p>
       </div>
     </div><!-- /container -->
