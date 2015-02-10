@@ -71,7 +71,7 @@ if(isset($_POST['ancienMdp']) && isset($_POST['nouveauMdp1']) && isset($_POST['n
 				<div class="form-group">
 				  <label class="col-md-2 control-label" for="singlebutton"></label>
 				  <div class="col-md-4">
-					<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">Modifier</button>
+					<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">Mettre à jour</button>
 				  </div>
 				</div>
 			</fieldset>
@@ -90,7 +90,7 @@ if(isset($_POST['ancienMdp']) && isset($_POST['nouveauMdp1']) && isset($_POST['n
 				<div class="form-group">
 				  <label class="col-md-2 control-label" for="singlebutton"></label>
 				  <div class="col-md-4">
-					<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">Modifier</button>
+					<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">Mettre à jour</button>
 				  </div>
 				</div>
 			</fieldset>
@@ -109,7 +109,7 @@ if(isset($_POST['ancienMdp']) && isset($_POST['nouveauMdp1']) && isset($_POST['n
 				<div class="form-group">
 				  <label class="col-md-2 control-label" for="singlebutton"></label>
 				  <div class="col-md-4">
-					<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">Modifier</button>
+					<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">Mettre à jour</button>
 				  </div>
 				</div>
 			</fieldset>
@@ -128,12 +128,12 @@ if(isset($_POST['ancienMdp']) && isset($_POST['nouveauMdp1']) && isset($_POST['n
 				<div class="form-group">
 				  <label class="col-md-2 control-label" for="singlebutton"></label>
 				  <div class="col-md-4">
-					<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">Modifier</button>
+					<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">Mettre à jour</button>
 				  </div>
 				</div>
 			</fieldset>
 		</form>
-		
+		<hr>
 		<form class="form-horizontal" method="post" action="profil.php">
 			<fieldset>
 				<!-- Text input-->
@@ -159,7 +159,7 @@ if(isset($_POST['ancienMdp']) && isset($_POST['nouveauMdp1']) && isset($_POST['n
 				<div class="form-group">
 				  <label class="col-md-2 control-label" for="singlebutton"></label>
 				  <div class="col-md-4">
-					<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">Modifier</button>
+					<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">Mettre à jour</button>
 				  </div>
 				</div>
 			</fieldset>
