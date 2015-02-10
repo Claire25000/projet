@@ -58,7 +58,7 @@ if(isset($_POST['oka'])){ // ---------------------AJOUT D'UN PRODUIT
 		ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$nomPhoto,$_POST['stock']); // image : tableau[premiere ligne][dossier desination][nom réel uploadé]
 		$id = getIdProduit($_POST['nom']);
 		
-	header("Location:produit.php?modif&id=".$id);
+	header("Location:produit.php?&idCat=".$_POST['cat']."&modif&id=".$id);
 }
 
 if(isset($_POST['okm'])) //-------------------- MODIFICATION D'UN PRODUIT
