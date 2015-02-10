@@ -49,4 +49,22 @@ function supprimerCommentaire($idProd)
 				die('Erreur : '.$e->getMessage());
 		}
 }
+
+function commentaireExiste($idProd,$idUtilisateur)
+{
+	global $connexion;
+	
+	$req = $connexion->query("SET NAMES 'utf8'");
+	$req = $connexion->query("Select commentaire.* from commentaire where idProduit = ".$idProd." and idUtilisateur =".$idUtilisateur);
+	$req->setFetchMode(PDO::FETCH_OBJ);
+	
+	if($req->fetch())
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
 ?>
