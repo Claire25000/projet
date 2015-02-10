@@ -150,7 +150,7 @@ $res = $req->fetch();
 							<li><a href="#service-two" data-toggle="tab">COMMENTAIRES</a></li>
 							<?php
 							if(aDejaNote(idUtilisateurConnecte(),$_GET['id'])){ // s'il a déja noter on affiche pas l'encart
-								//echo '<li><a href="#" data-toggle="tab">Vous avez noté</a></li>';
+								echo '<li><a href="#" data-toggle="tab">Vous avez noté</a></li>';
 							}else{
 								echo '<li><a href="#service-three" data-toggle="tab">NOTATION</a></li>';
 							}

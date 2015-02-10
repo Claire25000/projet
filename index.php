@@ -26,15 +26,9 @@ if(isset($_GET['logout'])){
 		}	
 		?>
         <h1><?php echo retourneParametre('nomSite'); ?></h1>
-        <p> <?php echo retourneParametre('nomSite'); ?> <br/><br/>
-		ADMIN : admin@admin.fr / admin<br/>
-		GESTIONAIRE : gestionaire@mail.ru / pass <br/>
-		CLIENT : mail@mail.fr / user1<br/>
+		<p>
+		
 		</p>
-		<p>To see the difference between static and fixed top navbars, just scroll.</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-        </p>
       </div>
     </div><!-- /container -->
   <?php require_once("inc/inc_footer.php"); ?>

@@ -1,6 +1,7 @@
 <?php
 require_once('inc/inc_head.php');
 require_once("inc/inc_top.php");
+require_once("../fonctions/fonctionsCommande.php");
 
 if(isset($_GET['deco'])){
 	if(deconnecteUtilisateur()){ // si la fonction de déconnexion retourne true : utilisateur déconnecté
@@ -12,7 +13,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 	if(connecteUtilisateur($_POST['email'],$_POST['password']))
 		{
 			if(estAdmin()){
-				$message = "Connexion réussie<br/>";
+				$message = '<div class="alert alert-success" role="alert">Connexion réussie</div>';
 			}else{
 				header('Location: ../404.php?err=1'); // // utilisateur connecté mais pas admin : on redirige
 			}
@@ -69,7 +70,18 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 			</div>
 		</div>
 		<?php }else{ // sinon, si il est connecté
-			echo "Vous êtes connecté en tant qu'administrateur";
+			?>
+			<p>
+			<?php 
+				if(nombreCommandeEnCoursTotal()>0){
+				 echo '<div class="alert alert-warning" role="alert">Vous avez  <a href="commande.php">'.nombreCommandeEnCoursTotal().' commandes en attente</a>.</div>';
+				}
+				?>
+			
+			
+			
+			</p>	
+			<?php
 		}
 		?>
 	</div>

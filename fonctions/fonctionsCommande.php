@@ -152,6 +152,17 @@ function nombreCommandeEnCours($idClient)
 	return $nb;
 }
 
+function nombreCommandeEnCoursTotal()
+{
+	global $connexion;
+	
+	$requete = $connexion->query("SELECT COUNT(*) AS nb FROM commande where (statut = 1 or statut = 2)");
+	$res = $requete->fetch();
+	$nb = $res['nb'];
+	
+	return $nb;
+}
+
 function nombreCommandeHistorique($idClient)
 {
 	global $connexion;
