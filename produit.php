@@ -35,6 +35,14 @@ if(isset($_POST['note'])){
 	}	
 }
 
+if(isset($_POST['commenter'])){
+	if(estConnecte()){
+		if(ajouterCommentaire($_GET['id'],$_POST['message'])){
+			$message = '<div class="alert alert-success" role="alert">Votre commentaire a été ajoutée, merci !</div>';
+		}
+	}	
+}
+
  //on récupère le produit voulu
 $req = $connexion->query("SET NAMES 'utf8'");	
 $req = $connexion->query("Select produit.*, categorie.libelleCategorie, categorie.idCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
@@ -117,16 +125,13 @@ $res = $req->fetch();
 							}
 						?>
 						<hr>
-						<?php if(estConnecte() && estAdmin(idUtilisateurConnecte()))
+						<?php if(!estConnecte() || !estAdmin(idUtilisateurConnecte()))
 						{
-						}
-						else
-						{
-						?>
-						<div class="btn-group cart">
-							<div style="text-align:right;"><a href="produit.php?ajouterPanier&id=<?php echo $res->idProduit; ?>" <?php if($stockActuel<1){echo 'class="btn btn-danger" disabled="disabled"';}else{echo 'class="btn btn-success"';} ?> role="button">Ajouter au panier</a></div>
-						</div>
-						<?php
+							?>
+							<div class="btn-group cart">
+								<div style="text-align:right;"><a href="produit.php?ajouterPanier&id=<?php echo $res->idProduit; ?>" <?php if($stockActuel<1){echo 'class="btn btn-danger" disabled="disabled"';}else{echo 'class="btn btn-success"';} ?> role="button">Ajouter au panier</a></div>
+							</div>
+							<?php
 						}
 						?>
 						<!--<div class="btn-group wishlist">
@@ -184,43 +189,26 @@ $res = $req->fetch();
 								<?php
 									// ------------------------------------------------------------------------------ GESTION COMMENTAIRES//
 									if(retourneParametre("afficherCommentaire") == 'true')
-									{
-										$req = $connexion->query("SET NAMES 'utf8'");	
-										$req = $connexion->query("Select produit.*, categorie.libelleCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
-										$req->setFetchMode(PDO::FETCH_OBJ);
-										$res = $req->fetch();
-										
+									{										
 										if(estConnecte() == 'true')
 										{
-											if(!isset($_POST['btnSubmit']))
-											{
-												$req = $connexion->query("Select idProduit, nomProduit from produit where idProduit = ".$res->idProduit);
-												$req->setFetchMode(PDO::FETCH_OBJ);
-												$res = $req->fetch(); //on récupère le produit voulu
-											
-												echo '
-												<div class="container">
-													<form action="produit.php?id='.$res->idProduit.'" method="POST">
-														<div>        
-															<br style="clear:both">
-																<div class="form-group col-md-4 ">                                
-																	<label id="messageLabel" for="message">Commentaire : </label>
-																	<textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="250" style="width: 574px; height: 87px;"></textarea>
-																		<span class="help-block"><p id="characterLeft" class="help-block ">You have reached the limit</p></span>                    
-																</div>
-															<br style="clear:both">
-															<div class="form-group col-md-2">
-															<button class="form-control input-sm btn btn-success disabled" id="btnSubmit" name="btnSubmit" type="submit" style="height:35px"> Envoyer</button>    
-														</div>
-													</form>
-												</div>
-												</br></br>';
-											}
-											else
-											{
-												ajouterCommentaire($res->idProduit,$_POST['message']);
-												echo '<div class="alert alert-success" role="alert">Commentaire ajouté !</div>';
-											}
+											echo '
+											<div class="container">
+												<form action="produit.php?id='.$_GET['id'].'" method="POST">
+													<div>        
+														<br style="clear:both">
+															<div class="form-group col-md-4 ">                                
+																<label id="messageLabel" for="message">Commentaire : </label>
+																<textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="250" style="width: 574px; height: 87px;"></textarea>
+																	<span class="help-block"><p id="characterLeft" class="help-block ">You have reached the limit</p></span>                    
+															</div>
+														<br style="clear:both">
+														<div class="form-group col-md-2">
+														<button class="form-control input-sm btn btn-success disabled" id="btnSubmit" name="commenter" type="submit" style="height:35px"> Envoyer</button>    
+													</div>
+												</form>
+											</div>
+											</br></br>';
 										}
 											
 										foreach(retourneListeCommentaire($_GET['id']) as $element)

@@ -213,13 +213,13 @@ else
 					$info = $_POST['message'];
 				}
 				$res = ajouterCommande(date("Y-m-d H:i:s"),1,$_POST['paie'],$_POST['liv'],idUtilisateurConnecte(),$info);
-				if($res != null)
+
+				foreach($_SESSION['panier'] as $id_article=>$article_acheté)
 				{
-					foreach($_SESSION['panier'] as $id_article=>$article_acheté)
-					{
-						ajouterLigneCommande($res,$id_article,$article_acheté['qte']);
-					}
-				}	
+					ajouterLigneCommande($res,$id_article,$article_acheté['qte']);
+					deduireStock($id_article,$article_acheté['qte']);
+				}
+				
 				echo '<div class="alert alert-success" role="alert">Commande effectuée !</div>
 				<a href="panier.php?comm&valider&payer&ok&id='.$res.'" class="btn btn-default" role="button">Payer cette commande</a>';
 			}

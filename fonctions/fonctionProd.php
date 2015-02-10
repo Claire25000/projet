@@ -656,4 +656,27 @@ function genererCategorieProduit(){
 		header("Location:produit.php?idCat=".$_POST['cat']);
 	}
 }
+
+function deduireStock($id,$qte)
+{
+	global $connexion; // on définie la variables globale de connection dans la fonction
+	
+	try
+		{
+			$requete = $connexion->query("SELECT * FROM produit where idProduit=".$id);
+			$requete->setFetchMode(PDO::FETCH_OBJ);
+			$res = $requete->fetch();
+			
+			$stock = ($res->stockProduit) - $qte;
+
+			$query = $connexion->prepare("update produit set stockProduit = ".$stock." where idProduit = ".$id);
+			$query->execute();
+			return true;
+		}
+		catch(Exception $e)
+		{
+			die('Erreur : '.$e->getMessage());
+			return false;
+		}
+}
 ?>	
