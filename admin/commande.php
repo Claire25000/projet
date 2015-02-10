@@ -25,7 +25,8 @@ require_once("../fonctions/fonctionProd.php");
 			echo $message;
 		}
 		echo ' <div class="jumbotron">';
-		?><p> Liste des commandes </p>
+		?><legend>Commandes</legend>
+			<p></p>
 
 		<?php
 		if(isset($_GET['id']))
