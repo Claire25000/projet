@@ -58,6 +58,7 @@ function listeCategorie()
 	global $connexion; // on définie la variables globale de connection dans la fonction
 	
 	$cat = array();
+	$requete = $connexion->query("SET NAMES 'utf8'");
 	$requete = $connexion->query("SELECT * FROM categorie");
 	$requete->setFetchMode(PDO::FETCH_OBJ);
 	while($c = $requete->fetch()){
