@@ -11,6 +11,7 @@ if(isset($_GET['ok']))
 	header("Location:produit.php?modif&idCat=".$_GET['idCat']."&id=".$_GET['id']);
 }
 
+
 if(isset($_POST['supp']))
 {
 	if(isset($_POST['rep'])){$rep = $_POST['rep'];}

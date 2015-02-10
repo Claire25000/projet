@@ -36,6 +36,7 @@ if(isset($_POST['valid_modif']) || isset($_POST['valid_error'])){ // -----------
   <head>
 	<?php require_once("inc/inc_head.php");?>
     <title>Gestion des paramètres/erreurs</title>
+	<script src="ckeditor/ckeditor.js"></script>
   </head>
   <body>
    <div class="container">
@@ -64,6 +65,15 @@ if(isset($_POST['valid_modif']) || isset($_POST['valid_error'])){ // -----------
 			  <label class="col-md-4 control-label" for="param_nomSite">Nom du site</label>  
 			  <div class="col-md-6">
 			  <input value="<?php echo retourneParametre('nomSite'); ?>" id="param_nomSite" name="param_nomSite" placeholder="placeholder" class="form-control input-md" required="" type="text"/>
+			  </div>
+			</div>
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="param_textAccueil">Texte d'accueil</label>  
+			  <div class="col-md-6">
+			  <textarea rows="4" cols="50" id="param_textAccueil" name="param_textAccueil" placeholder="placeholder" class="ckeditor" required="" type="text">
+				<?php echo retourneParametre('textAccueil'); ?>
+			  </textarea>
 			  </div>
 			</div>
 			<!-- Text input-->
