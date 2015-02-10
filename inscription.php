@@ -25,7 +25,7 @@ if(isset($_POST['email2']))
 <html lang="fr">
   <head>
 	<?php require_once("inc/inc_head.php");?>
-    <title>Accueil - </title>
+    <title>Inscription</title>
   </head>
   
   <body>

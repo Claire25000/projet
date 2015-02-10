@@ -16,7 +16,7 @@ if(isset($_GET['id']))
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <title>Accueil - </title>
+    <title>Mes commandes</title>
   </head>
   
   <body>

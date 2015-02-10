@@ -39,7 +39,7 @@ if(isset($_POST['ancienMdp']) && isset($_POST['nouveauMdp1']) && isset($_POST['n
 <html lang="fr">
   <head>
 	<?php require_once("inc/inc_head.php");?>
-    <title>Accueil - </title>
+    <title>Mon profil</title>
   </head>
   
   <body>
