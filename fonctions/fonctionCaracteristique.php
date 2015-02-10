@@ -22,7 +22,7 @@ function ifValeurExist($valeur)
 	global $connexion;
 	
 	$req = $connexion->query("SET NAMES 'utf8'");
-	$req = $connexion->query("Select valeur from data_valeur");
+	$req = $connexion->query("Select * from data_valeur");
 	$req->setFetchMode(PDO::FETCH_OBJ);
 	
 	while($res = $req->fetch())
