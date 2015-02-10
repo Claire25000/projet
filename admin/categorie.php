@@ -31,49 +31,7 @@ if(isset($_POST['ok']))
 		echo ' <div class="jumbotron">';
 		
 		echo '<h3>Catégories</h3>';
-		
-		if(isset($_GET['modif']))
-		{
-			echo "<form action='categorie.php?modif&id=".$_GET['id']."' method='POST'>
-				<input type='hidden' name='id' value='".$_GET['id']."'></input>
-				<label>Nom de la catégorie : </label><input type='text' name='nom' value='".retourneLibelle($_GET['id'])."'></input><br/>
-				<input type='submit' name='ok' value='Modifier'></input>
-				</form>";	
-		}
-		else
-		{
-			if(!isset($_POST['ok']))
-			{
-				echo "<form action='categorie.php' method='POST'>
-					<label>Nom de la catégorie : </label><input type='text' name='nom'></input><br/>
-					<input type='submit' name='ok' value='Ajouter'></input>
-					</form>
-				<div class='panel panel-default'>
-				<div class='panel-heading'>Catégories</div>
-		  <table class='table' border='1'>
-				<tr>
-					<th>Identifiant Catégorie</th>
-					<th>Libellé Catégorie</th>
-					<th>Modifier</th>
-					<th>Supprimer</th>
-				</tr>";
-				foreach(listeCategorie() as $element) // retourne un array de categorie
-					{
-						echo '<tr>
-								<td>'.$element->idCategorie.'</td>
-								<td><a href="produit.php?idCat='.$element->idCategorie.'">'.$element->libelleCategorie.'</a></td>
-								<td><a href="?modif&id='.$element->idCategorie.'">X</a></td>
-								<td><a href="?supp&id='.$element->idCategorie.'">X</a></td>
-							</tr>';
-					}
-				echo '</table></div>';
-			}
-			else
-			{
-				ajouterCategorie($_POST['nom']);
-				header("Location:categorie.php");
-			}			
-		}
+
 		if(isset($_GET['supp']))
 		{
 			echo '<form name="frm" action="categorie.php?supp&id='.$_GET['id'].'" method="post">
@@ -100,6 +58,46 @@ if(isset($_POST['ok']))
 				header("Location:categorie.php");
 			}
 		}
+		elseif(isset($_GET['modif']))
+		{
+			echo "<form action='categorie.php?modif&id=".$_GET['id']."' method='POST'>
+				<input type='hidden' name='id' value='".$_GET['id']."'></input>
+				<label>Nom de la catégorie : </label><input type='text' name='nom' value='".retourneLibelle($_GET['id'])."'></input><br/>
+				<input type='submit' name='ok' value='Modifier'></input>
+				</form>";	
+		}
+		else
+		{
+			echo "<form action='categorie.php' method='POST'>
+					<label>Nom de la catégorie : </label><input type='text' name='nom'></input><br/>
+					<input type='submit' name='ok' value='Ajouter'></input>
+					</form>";
+					
+			if(isset($_POST['ok']))
+			{
+				ajouterCategorie($_POST['nom']);
+				header("Location:categorie.php");
+			}
+		}
+			echo  "<div class='panel panel-default'>
+				<div class='panel-heading'>Catégories</div>
+			  <table class='table' border='1'>
+					<tr>
+						<th>Identifiant Catégorie</th>
+						<th>Libellé Catégorie</th>
+						<th>Modifier</th>
+						<th>Supprimer</th>
+					</tr>";
+				foreach(listeCategorie() as $element) // retourne un array de categorie
+					{
+						echo '<tr>
+								<td>'.$element->idCategorie.'</td>
+								<td><a href="produit.php?idCat='.$element->idCategorie.'">'.$element->libelleCategorie.'</a></td>
+								<td><a href="?modif&id='.$element->idCategorie.'">X</a></td>
+								<td><a href="?supp&id='.$element->idCategorie.'">X</a></td>
+							</tr>';
+					}
+				echo '</table></div>';
 		?>
 	</div>
 	</div>
