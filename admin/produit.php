@@ -438,54 +438,62 @@ if(isset($_GET['deco'])){
 			}
 		elseif(isset($_GET['idCat']))
 		{
-			echo '<a href="produit.php?ajout&idCat='.$_GET['idCat'].'">Ajouter un produit</a><br/>';
+			echo '<div style="text-align:right;"><a href="produit.php?ajout&idCat='.$_GET['idCat'].'" class="btn btn-default" role="button">Ajouter un produit</a></div></br>';
 			$req = $connexion->query("SET NAMES 'utf8'");	
 			$req = $connexion->query("Select * from produit where idCategorie=".$_GET['idCat']."");
 			$req->setFetchMode(PDO::FETCH_OBJ);
 			 //on récupère les produits voulus
 			 
-			echo"
-			<div class='panel panel-default'>
-					<div class='panel-heading'>Produits</div>
-			<table class='table' border='1'>
-				<tr>
-					<th>Numéro du produit</th>
-					<th>Nom du produit</th>
-					<th>Description du produit</th>
-					<th>Prix du produit</th>
-					<th>Caractéristiques supplémentaires</th>
-					<th>Modifier</th>
-					<th>Supprimer</th>
-				</tr>";
-				
-			while($res = $req->fetch())
+			$count = $req->rowCount();
+			
+			if($count == 0)
 			{
-				$sql = $connexion->query("SET NAMES 'utf8'"); 
-				$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$res->idProduit);
-				$sql->setFetchMode(PDO::FETCH_OBJ);
-				
-				echo "<tr>
-					<td>".$res->idProduit."</td>
-					<td><a href='produit.php?id=".$res->idProduit."&idCat=".$_GET['idCat']."'>".$res->nomProduit."</a></td>
-					<td>".$res->descriptionProduit."</td>
-					<td>".$res->prixProduit."</td>
-					<td>
-						<ul>";
-						while($resultat = $sql->fetch())
-						{
-							echo "<li>".$resultat->nom." : ".$resultat->valeur."</li>";
-						}
-					echo "</ul>
-					</td>
-						<td><a href='produit.php?modif&id=".$res->idProduit."&idCat=".$_GET['idCat']."'>X</a></td>
-						<td><a href='produit.php?supp&id=".$res->idProduit."&idCat=".$_GET['idCat']."'>X</a></td>";
-					}
-				echo "</tr>";
-					echo "</table></div>";
+				echo "<h3>Cette catégorie ne comporte aucun produit</h3>";
+			}
+			else
+			{
+				echo"
+				<div class='panel panel-default'>
+						<div class='panel-heading'>Produits</div>
+				<table class='table' border='1'>
+					<tr>
+						<th>Numéro du produit</th>
+						<th>Nom du produit</th>
+						<th>Description du produit</th>
+						<th>Prix du produit</th>
+						<th>Caractéristiques supplémentaires</th>
+						<th>Modifier</th>
+						<th>Supprimer</th>
+					</tr>";
+					
+				while($res = $req->fetch())
+				{
+					$sql = $connexion->query("SET NAMES 'utf8'"); 
+					$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$res->idProduit);
+					$sql->setFetchMode(PDO::FETCH_OBJ);
+					
+					echo "<tr>
+						<td>".$res->idProduit."</td>
+						<td><a href='produit.php?id=".$res->idProduit."&idCat=".$_GET['idCat']."'>".$res->nomProduit."</a></td>
+						<td>".$res->descriptionProduit."</td>
+						<td>".$res->prixProduit."</td>
+						<td>
+							<ul>";
+							while($resultat = $sql->fetch())
+							{
+								echo "<li>".$resultat->nom." : ".$resultat->valeur."</li>";
+							}
+						echo "</ul>
+						</td>
+							<td><a href='produit.php?modif&id=".$res->idProduit."&idCat=".$_GET['idCat']."'>X</a></td>
+							<td><a href='produit.php?supp&id=".$res->idProduit."&idCat=".$_GET['idCat']."'>X</a></td>";
+				}
+				echo "</tr></table></div>";
+			}
 		}
 		else
 		{
-			echo '<a href="produit.php?ajout&idCat=null">Ajouter un produit</a><br/>';
+			echo '<div style="text-align:right;"><a href="produit.php?ajout&idCat=null" class="btn btn-default" role="button">Ajouter un produit</a></div><br/>';
 		}
 	?>
 	</div>

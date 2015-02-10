@@ -30,18 +30,32 @@ if(isset($_POST['ok']))
 		}
 		echo ' <div class="jumbotron">';
 		
-		echo '<h3>Catégories</h3>';
+		echo '<legend>Catégories</legend>
+			<p></p>';
 
 		if(isset($_GET['supp']))
 		{
 			echo '<form name="frm" action="categorie.php?supp&id='.$_GET['id'].'" method="post">
-					<h3>Etes-vous sûre de vouloir supprimer cette catégorie ?</h3>
-					<br/>
+			<fieldset>
+					<h3>Êtes-vous sûre de vouloir supprimer cette catégorie ?</h3>
 					<input type="hidden" name="no" value="'.$_GET['id'].'">
-					<input type="radio" name="rep" value="non" checked> Non
-					<input type="radio" name="rep" value="oui" > Oui
+					<div class="col-lg-1">
+						<div class="input-group">
+							<span class="input-group-addon">
+								<input type="radio" name="rep" value="non" checked> Non
+							</span>
+							<span class="input-group-addon">
+								<input type="radio" name="rep" value="oui" > Oui
+							</span>
+						</div>
+					</div>
 					<br/><br/>
-					<input type="submit" name="supp" value="Valider">
+					<div class="form-group">
+					  <label class="col-md-0 control-label"> </label>
+					  <div class="col-md-4">
+					<input type="submit" name="supp" value="Valider" class="btn btn-primary" >
+					</div></div>
+					</fieldset>
 				</form>';
 						
 			$rep = "non"; 
@@ -60,18 +74,42 @@ if(isset($_POST['ok']))
 		}
 		elseif(isset($_GET['modif']))
 		{
-			echo "<form action='categorie.php?modif&id=".$_GET['id']."' method='POST'>
+			echo "<form action='categorie.php?modif&id=".$_GET['id']."' method='POST' class='form-horizontal'>
+			<fieldset>
 				<input type='hidden' name='id' value='".$_GET['id']."'></input>
-				<label>Nom de la catégorie : </label><input type='text' name='nom' value='".retourneLibelle($_GET['id'])."'></input><br/>
-				<input type='submit' name='ok' value='Modifier'></input>
+				<div class='form-group'>
+				  <label class='col-md-4 control-label'>Nom de la catégorie</label>  
+				  <div class='col-md-4'>
+				  <input type='text' name='nom' value='".retourneLibelle($_GET['id'])."' placeholder='placeholder' class='form-control input-md' required=''/>
+				  </div>
+				</div>
+				<div class='form-group'>
+				  <label class='col-md-4 control-label'> </label>
+				  <div class='col-md-4'>
+					<input type='submit' name='ok' class='btn btn-primary' value='Modifier'/>
+				  </div>
+				</div>
+				</fieldset>
 				</form>";	
 		}
 		else
 		{
-			echo "<form action='categorie.php' method='POST'>
-					<label>Nom de la catégorie : </label><input type='text' name='nom'></input><br/>
-					<input type='submit' name='ok' value='Ajouter'></input>
-					</form>";
+			echo "<form action='categorie.php' method='POST' class='form-horizontal'>
+			<fieldset>
+					<div class='form-group'>
+				  <label class='col-md-4 control-label'>Nom de la catégorie</label>  
+				  <div class='col-md-4'>
+				 <input type='text' name='nom' class='form-control input-md' required=''/>
+				  </div>
+				</div>
+				<div class='form-group'>
+				  <label class='col-md-4 control-label'> </label>
+				  <div class='col-md-4'>
+					<input type='submit' name='ok' class='btn btn-primary' value='Ajouter'/>
+				  </div>
+				</div>
+				</fieldset>
+				</form>";
 					
 			if(isset($_POST['ok']))
 			{

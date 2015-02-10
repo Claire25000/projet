@@ -184,23 +184,28 @@ function genererCategorieProduit(){
 		$requete->setFetchMode(PDO::FETCH_OBJ);
 		
 		echo "<form action='produit.php' method='POST'>
-		<select name='cat'>";
-		while($enregistrement = $requete->fetch())
-		{
-			if($_GET['idCat'] == $enregistrement->idCategorie)
-			{
-				echo "<option selected value='".$enregistrement->idCategorie."'>".$enregistrement->libelleCategorie."</option>";
-			}else
-			{
-				echo "<option value='".$enregistrement->idCategorie."'>".$enregistrement->libelleCategorie."</option>";
-			}
-			
-		}
-		echo "</select>
-			<input type='submit' name='ok' value='Rechercher'></input>
+		<div class='col-lg-4'>
+			<div class='input-group'> 
+				<select name='cat' class='form-control'>";
+				while($enregistrement = $requete->fetch())
+				{
+					if($_GET['idCat'] == $enregistrement->idCategorie)
+					{
+						echo "<option selected value='".$enregistrement->idCategorie."'>".$enregistrement->libelleCategorie."</option>";
+					}else
+					{
+						echo "<option value='".$enregistrement->idCategorie."'>".$enregistrement->libelleCategorie."</option>";
+					}
+					
+				}
+				echo "</select>
+				 <span class='input-group-btn'>
+					<input type='submit' name='ok' value='Rechercher' class='btn btn-default'></input>
+				</span>
+			    </div><!-- /input-group -->
+				</div><!-- /col-lg-4 -->
 			</form>
-			<br/>";
-
+			<br/><br/>";
 	}
 	else
 	{
