@@ -47,7 +47,7 @@ if(isset($_POST['ancienMdp']) && isset($_POST['nouveauMdp1']) && isset($_POST['n
 	<?php require_once("inc/inc_navbar.php");?>
 	
     <div class="container">
-      <div class="jumbotron">
+      <div class="jumbotron" style="min-height:700px">
 		<?php
 		require_once('inc/inc_menu.php');
 		?>

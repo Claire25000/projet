@@ -28,7 +28,8 @@
             <!--<li class="active"><a href="./">Static top <span class="sr-only">(current)</span></a></li>-->
 			<?php if(estAdmin()){ echo '<li><a href="/admin"> Administration </a></li>';
 				  }else if(estConnecte()){
-								  echo '<li><a href="commande.php"> Commande </a></li>';
+								  //echo '<li><a href="commande.php"> Commande </a></li>';
+								  echo '<li style="margin-top:2px;margin-bottom:2px"><a href="commande.php"> Commande </a></li>';
 				  }else{
 					echo '<li><a href="inscription.php"> S\'inscrire </a></li>';
 				  }

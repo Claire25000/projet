@@ -24,7 +24,7 @@ if(isset($_GET['id']))
 	<?php require_once("inc/inc_navbar.php");?>
 	
     <div class="container">
-      <div class="jumbotron">
+      <div class="jumbotron" style="min-height:700px">
 		<?php
 			require_once('inc/inc_menu.php');
 			if(isset($message))
