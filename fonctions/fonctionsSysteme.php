@@ -1,9 +1,15 @@
 <?php
 function idUtilisateurConnecte(){
-	return $_SESSION['idUtilisateur '];
+	if(isset($_SESSION['idUtilisateur '])){
+		return $_SESSION['idUtilisateur '];
+	}
+	return 0;
 }
 function typeUtilisateurConnecte(){
-	return $_SESSION['typeUtilisateur '];
+	if(isset($_SESSION['typeUtilisateur '])){
+		return $_SESSION['typeUtilisateur '];
+	}
+	return 0;
 }
 
 function chargerParametres(){

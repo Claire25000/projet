@@ -13,16 +13,17 @@ chargerErreurs(); // On charge toutes les erreurs du site
 
 if(isset($_GET['deco'])){
 	if(deconnecteUtilisateur()){
-		header('Location: index.php');
+		header('Location: index.php?logout');
+		exit;
 	}
 }
 if(isset($_POST['email']) && isset($_POST['password'])){
 	if(connecteUtilisateur($_POST['email'],$_POST['password']))
 		{
-			$message = "Connexion réussie<br/>";
+			$message = '<div class="alert alert-success" role="alert">Connexion réussie</div>';
 		}
 		else{
-			$message = "Echec de l'authentification.<br/>";
+			$message = '<div class="alert alert-danger" role="alert">Echec de la connexion</div>';
 		}
 }
 

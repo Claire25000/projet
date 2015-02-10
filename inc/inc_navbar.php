@@ -57,7 +57,7 @@
 								echo '<button class="btn btn-success btn-block" type="submit">S\'enregistrer</button>';
 							 }else if(!estAdmin()){
 								echo '<a class="btn btn-success btn-block" href="profil.php">Gestion profil </a>';
-								echo '<a class="btn btn-success btn-block" href="?deco">Déconnexion </a>';
+								echo '<a class="btn btn-success btn-block" href="?deco">Déconnexion </a>'; // erreur produit.php?id=x --> produit.php?déco
 							 }else{
 								echo '<a class="btn btn-success btn-block" href="?deco">Déconnexion </a>';
 							 }

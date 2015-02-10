@@ -1,11 +1,10 @@
 <?php
+require_once('inc/inc_top.php');
 if(!isset($_GET['id']))
 {
 	header("Location:404.php?err=202");
 	exit;
 }
-
-require_once('inc/inc_top.php');
 require_once("fonctions/fonctionComm.php");
 require_once("fonctions/fonctionProd.php");
 require_once("fonctions/fonctionPanier.php");
@@ -24,6 +23,16 @@ if(isset($_GET['ajouterPanier']))
 	}else{
 		$message = '<div class="alert alert-danger" role="alert">Le produit n\'est plus en stock suffisant, n\'hésitez pas à nous contacter !</div>';
 	}
+}
+
+if(isset($_POST['note'])){
+	if(estConnecte()){
+		if(ajouterNotation($_GET['id'],idUtilisateurConnecte(),$_POST['note'])){
+			$message = '<div class="alert alert-success" role="alert">Votre note a été ajoutée, merci !</div>';
+		}
+	}else{
+		$message = '<div class="alert alert-danger" role="alert">Vous devez êtres connecté pour noter ce produit.</div>';
+	}	
 }
 
  //on récupère le produit voulu
@@ -134,7 +143,14 @@ $res = $req->fetch();
 							
 							<li class="active"><a href="#service-one" data-toggle="tab">DESCRIPTION</a></li>
 							<li><a href="#service-two" data-toggle="tab">COMMENTAIRES</a></li>
-							<!--<li><a href="#service-three" data-toggle="tab">?</a></li>-->
+							<?php
+							if(aDejaNote(idUtilisateurConnecte(),$_GET['id'])){ // s'il a déja noter on affiche pas l'encart
+								//echo '<li><a href="#" data-toggle="tab">Vous avez noté</a></li>';
+							}else{
+								echo '<li><a href="#service-three" data-toggle="tab">NOTATION</a></li>';
+							}
+							?>
+							
 							
 						</ul>
 					<div id="myTabContent" class="tab-content">
@@ -143,12 +159,6 @@ $res = $req->fetch();
 									<p>
 										<?php echo $res->descriptionProduit; ?>
 									</p>
-									<!-- EXEMPLES D'AFFICHAGE NORMAL DES CARACTERISTIQUES (a adapter avec le systeme de data actuel 
-									<h3>Corsair Gaming Series GS600 Features:</h3>
-									<li>It supports the latest ATX12V v2.3 standard and is backward compatible with ATX12V 2.2 and ATX12V 2.01 systems</li>
-									<li>An ultra-quiet 140mm double ball-bearing fan delivers great airflow at an very low noise level by varying fan speed in response to temperature</li>
-									<li>80Plus certified to deliver 80% efficiency or higher at normal load conditions (20% to 100% load)</li>-->
-
 										<?php
 											// ------------------------------------------------------------------------------ AFFICHAGE CARACTERISTIQUES //
 											$sql = $connexion->query("SET NAMES 'utf8'"); 
@@ -232,7 +242,29 @@ $res = $req->fetch();
 						</div>
 						
 						<div class="tab-pane fade" id="service-three">
-							<!--*-->
+							<section style="padding-top:3%;" class="container">
+								<div class="col-lg-6">
+								<form action="produit.php?id=<?php echo $_GET['id'];?>" method="POST">
+								<div class="input-group">
+								  <select id="note" name="note" class="form-control">
+										          <option value="1">1</option>
+												  <option value="2">2</option>
+												  <option value="3">3</option>
+												  <option value="4">4</option>
+												  <option value="5">5</option>
+												  <option value="6">6</option>
+												  <option value="7">7</option>
+												  <option value="8">8</option>
+												  <option value="9">9</option>
+												  <option value="10">10</option>
+								  </select>
+								  <span class="input-group-btn">
+									<button class="btn btn-default" type="submit">Noter le produit</button>
+								  </span>
+								</div>
+								</form>
+							  </div>
+							</section>
 						</div>
 					</div>
 					<hr>

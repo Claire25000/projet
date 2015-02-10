@@ -1,9 +1,9 @@
 <?php
 require_once('inc/inc_top.php');
 
-envoyeMail("ntm","ntm","dododu25@hotmail.fr");
-
-
+if(isset($_GET['logout'])){
+	$message = '<div class="alert alert-danger" role="alert">Vous avez été déconnecté</div>';
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -20,6 +20,10 @@ envoyeMail("ntm","ntm","dododu25@hotmail.fr");
       <div class="jumbotron">
 		<?php
 		require_once('inc/inc_menu.php');
+
+		if(isset($message)){
+			echo $message;
+		}	
 		?>
         <h1><?php echo retourneParametre('nomSite'); ?></h1>
         <p> <?php echo retourneParametre('nomSite'); ?> <br/><br/>

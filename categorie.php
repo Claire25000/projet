@@ -3,12 +3,13 @@
 if(!isset($_GET['id'])){header('Location: ../404.php?err=404');} // si on a pas d'ID, on redirige immédiatement en erreur
 require_once('inc/inc_top.php');
 require_once("fonctions/fonctionProd.php");
+require_once("fonctions/fonctionCategorie.php");
 ?>
 <!DOCTYPE html>
 <html lang="fr">
   <head>
 	<?php require_once("inc/inc_head.php");?>
-    <title>Accueil - </title>
+    <title>Catégorie <?php echo retourneLibelle($_GET['id']); ?></title>
   </head>
   
   <body>
