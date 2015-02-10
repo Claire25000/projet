@@ -194,20 +194,20 @@ else
 				<label>Informations supplémentaires : <textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="500" rows="10" cols="50"></textarea>
 				<br/>
 				<label>Mode de livraison : </label><select name="liv">';
+					$res = retourneFrais(2);
 				foreach(retourneListeLivraison() as $element) // retourne un array de mode de livraison 
 						{
 							echo '<option value="'.$element->idModeLivraison.'">'.$element->libelleModeLivraison.'</option>'; 
 						}
-				echo '</select><br/>';
-				$res = retourneFrais(2);
+				echo '</select>(Frais supplémentaires pour envoi par colissimo : '.$res->frais.' €)<br/>';
 				
-				echo '<label>Mode de livraison : 
+				echo '<label>Mode de paiement : 
 				</label><select name="paie">';
 				foreach(retourneListePaiement() as $element) // retourne un array de mode de livraison 
 						{
 							echo '<option value="'.$element->idModePaiement.'">'.$element->libelleModePaiement.'</option>'; 
 						}
-				echo '</select>(Frais supplémentaires pour envoi par colissimo : '.$res->frais.' €)<br/>
+				echo '</select><br/>
 				<input type="hidden" name="prix" value="'.$total_panier.'"></input>
 				<input type="submit" name="valider"></input>
 				</form>';
