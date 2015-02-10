@@ -41,7 +41,6 @@ if(isset($_POST['ancienMdp']) && isset($_POST['nouveauMdp1']) && isset($_POST['n
 	<?php require_once("inc/inc_head.php");?>
     <title>Mon profil</title>
   </head>
-  
   <body>
 	<!-- navbar -->
 	<?php require_once("inc/inc_navbar.php");?>
