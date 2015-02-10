@@ -30,6 +30,7 @@ require_once("../fonctions/fonctionProd.php");
 		<?php
 		if(isset($_GET['id']))
 		{
+			$total = 0;
 			echo '<div class="panel panel-default">
 		  <div class="panel-heading">Commande n°'.$_GET['id'].'</div>
 		  <table class="table" border="1">
@@ -52,6 +53,40 @@ require_once("../fonctions/fonctionProd.php");
 								<td>'.retourneClient($com->idClient)->nomCli.'</td>								
 							</tr>';				
 				echo '</table></div><br/>
+				<div class="panel panel-default">
+				<div class="panel-heading">Contenu de la commande</div>
+				<table class="table" border="1">
+					<tr>
+						<th>Indentifiant du Produit</th>
+						<th>Nom du Produit</th>
+						<th>Quantité</th>
+						<th>Prix</th>
+					</tr>';
+				foreach(retourneLigneCommande($com->idCommande) as $element) // retourne un array de commande
+				{
+					$req = $connexion->query("SET NAMES 'utf8'");
+					$req = $connexion->query("Select * from produit where idProduit = ".$element->idProduit);
+					$req->setFetchMode(PDO::FETCH_OBJ);
+					
+					$res = $req->fetch();
+					
+					$total += $element->nombre*$res->prixProduit;
+					
+					echo '<tr>
+								<td>'.$element->idProduit.'</td>
+								<td>'.$res->nomProduit.'</td>
+								<td>'.$element->nombre.'</td>
+								<td>'.number_format(($element->nombre*$res->prixProduit), 2, ',', ' ').' €</td>						
+							</tr>';
+				}
+				echo '</table></div></br>';
+				if($com->modeLivraison == 2)
+				{
+					$res = retourneFrais($com->modeLivraison);
+					$total += $res->frais;
+				}
+				echo'
+				<h3 style="text-align:right">Prix total : '.number_format($total, 2, ',', ' ').' €</h3>
 				<a href="commande.php?modif&statut&id='.$com->idCommande.'">Modifier le statut de la commande</a><br/>
 				<a href="commande.php?modif&paiement&id='.$com->idCommande.'">Modifier le mode de paiement de la commande</a><br/>
 				<a href="commande.php?modif&livraison&id='.$com->idCommande.'">Modifier le mode de livraison de la commande</a><br/><br/>
@@ -192,7 +227,7 @@ require_once("../fonctions/fonctionProd.php");
 				foreach(listeCommande() as $element) // retourne un array de commande
 					{
 						echo '<tr>
-								<td><a href="commande.php?modif&id='.$element->idCommande.'">Commande n°'.$element->idCommande.'</a></td>
+								<td><a href="commande.php?id='.$element->idCommande.'">Commande n°'.$element->idCommande.'</a></td>
 								<td>'.$element->date.'</td>
 								<td>'.retourneStatut($element->statut).'</td>
 								<td>'.retourneLivraison($element->modeLivraison).'</td>

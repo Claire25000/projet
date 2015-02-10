@@ -252,6 +252,15 @@ function retourneLivraison($idLivraison)
 	return $res->libelleModeLivraison;
 }
 
+function retourneFrais($idLiv)
+{
+	global $connexion;
+	
+	$query = $connexion->query("SET NAMES 'utf8'"); 
+	$query = $connexion->query("select frais from modeLivraison where idModeLivraison =".$idLiv);
+	$query->setFetchMode(PDO::FETCH_OBJ);
+	return $query->fetch();
+}
 
 function retourneListeLivraison()
 {

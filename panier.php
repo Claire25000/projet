@@ -198,13 +198,17 @@ else
 						{
 							echo '<option value="'.$element->idModeLivraison.'">'.$element->libelleModeLivraison.'</option>'; 
 						}
-				echo '</select><br/>
-				<label>Mode de livraison : </label><select name="paie">';
+				echo '</select><br/>';
+				$res = retourneFrais(2);
+				
+				echo '<label>Mode de livraison : 
+				</label><select name="paie">';
 				foreach(retourneListePaiement() as $element) // retourne un array de mode de livraison 
 						{
 							echo '<option value="'.$element->idModePaiement.'">'.$element->libelleModePaiement.'</option>'; 
 						}
-				echo '</select><br/>
+				echo '</select>(Frais supplémentaires pour envoi par colissimo : '.$res->frais.' €)<br/>
+				<input type="hidden" name="prix" value="'.$total_panier.'"></input>
 				<input type="submit" name="valider"></input>
 				</form>';
 		}
@@ -220,6 +224,12 @@ else
 				{
 					$info = $_POST['message'];
 				}
+				
+				if($_POST['liv'] == 2)
+				{
+					$res = retourneFrais(2);
+					$total_panier += $_POST['prix'] + $res->frais;
+				}
 				$res = ajouterCommande(date("Y-m-d H:i:s"),1,$_POST['paie'],$_POST['liv'],idUtilisateurConnecte(),$info);
 
 				foreach($_SESSION['panier'] as $id_article=>$article_acheté)
@@ -228,7 +238,9 @@ else
 					deduireStock($id_article,$article_acheté['qte']);
 				}
 				
+				viderPanier();
 				echo '<div class="alert alert-success" role="alert">Commande effectuée !</div>
+				<h3>Prix total : '.number_format($total_panier, 2, ',', ' '), ' €</h3>
 				<a href="panier.php?comm&valider&payer&ok&id='.$res.'" class="btn btn-default" role="button">Payer cette commande</a>';
 			}
 			else			
@@ -239,7 +251,6 @@ else
 					if($commande->modePaiement == 1 || $commande->modePaiement == 2)
 					{
 						echo "Veuillez adresser votre paiement à l'adresse suivante : </br>".retourneParametre('ordre');
-						viderPanier();
 						echo '</br><a href="commande.php" class="btn btn-default" role="button">Voir vos commandes</a>';
 					}
 					else
@@ -247,7 +258,6 @@ else
 						changerStatutCommande($_GET['id'],2);
 						$message = '<div class="alert alert-success" role="alert">Commande payée.</div>';
 						echo $message;
-						viderPanier();
 						echo '<a href="commande.php" class="btn btn-default" role="button">Voir vos commandes</a>';
 					}
 				}
