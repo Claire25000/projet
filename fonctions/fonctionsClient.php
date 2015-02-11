@@ -39,7 +39,7 @@ function changerNomClient($idClient,$nomClient){
 	global $connexion; // on définie la variables globale de connection dans la fonction
 
 	try {
-		$requete = $connexion->exec("UPDATE `webuzzer54gs9`.`client` SET `nomCli` = '".$nomClient."' WHERE `client`.`idUtilisateur` =".$idClient.";");
+		$requete = $connexion->exec("UPDATE `webuzzer54gs9`.`client` SET `nomCli` = '".addslashes($nomClient)."' WHERE `client`.`idUtilisateur` =".$idClient.";");
 		return true; 
 	} catch ( Exception $e ) {
 		return false;
@@ -51,7 +51,7 @@ function changerPrenomClient($idClient,$prenomClient){
 	global $connexion; // on définie la variables globale de connection dans la fonction
 
 	try {
-		$requete = $connexion->exec("UPDATE `webuzzer54gs9`.`client` SET `prenomCli` = '".$prenomClient."' WHERE `client`.`idUtilisateur` =".$idClient.";");
+		$requete = $connexion->exec("UPDATE `webuzzer54gs9`.`client` SET `prenomCli` = '".addslashes($prenomClient)."' WHERE `client`.`idUtilisateur` =".$idClient.";");
 		return true; 
 	} catch ( Exception $e ) {
 		return false;
@@ -62,7 +62,7 @@ function changerAdresseClient($idClient,$adresse){
 	global $connexion; // on définie la variables globale de connection dans la fonction
 
 	try {
-		$requete = $connexion->exec("UPDATE `webuzzer54gs9`.`client` SET `adrCli` = '".$adresse."' WHERE `client`.`idUtilisateur` =".$idClient.";");
+		$requete = $connexion->exec("UPDATE `webuzzer54gs9`.`client` SET `adrCli` = '".addslashes($adresse)."' WHERE `client`.`idUtilisateur` =".$idClient.";");
 		return true; 
 	} catch ( Exception $e ) {
 		return false;

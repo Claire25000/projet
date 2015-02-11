@@ -34,14 +34,28 @@ function retourneStock($idProduit){
 
 function getIdProduit($nom)
 {
-	global $connexion;
+	/*global $connexion;
 	
 	$req = $connexion->query("SET NAMES 'utf8'");
 	$req = $connexion->query("Select idProduit from produit where nomProduit = '".$nom."'");
 	$req->setFetchMode(PDO::FETCH_OBJ);
 	$res = $req->fetch();
 	
-	return $res->idProduit;
+	return $res->idProduit;*/
+	global $connexion;
+	try
+		{
+			$req = $connexion->query("SET NAMES 'utf8'");
+			$req = $connexion->query("Select idProduit from produit where nomProduit = '".addslashes($nom)."'");
+			$req->setFetchMode(PDO::FETCH_OBJ);
+			$res = $req->fetch();
+			return $res->idProduit;
+		}
+		catch(Exception $e)
+		{
+				die('Erreur : '.$e->getMessage());
+				return false;
+		}
 }
 
 function ajouterProduit($nom,$desc,$prix,$cat,$img,$stock)
@@ -184,8 +198,7 @@ function genererCategorieProduit(){
 		$requete->setFetchMode(PDO::FETCH_OBJ);
 		
 		echo "<form action='produit.php' method='POST'>
-		<div class='col-lg-4'>
-			<div class='input-group'> 
+			<div class='col-lg-4 input-group'> 
 				<select name='cat' class='form-control'>";
 				while($enregistrement = $requete->fetch())
 				{
@@ -203,7 +216,6 @@ function genererCategorieProduit(){
 					<input type='submit' name='ok' value='Rechercher' class='btn btn-default'></input>
 				</span>
 			    </div><!-- /input-group -->
-				</div><!-- /col-lg-4 -->
 			</form>
 			<br/><br/>";
 	}

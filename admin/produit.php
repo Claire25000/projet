@@ -54,7 +54,7 @@ if(isset($_POST['oka'])){ // ---------------------AJOUT D'UN PRODUIT
 		// ------------- on ajoute le produit dans la base de données ------------- //
 		$prix = $_POST['prix'];
 		//$prix  = number_format($_POST['prix'], 2, '.', ',');
-		$nomPhoto = $tab_result['resultat']['0']["./upload"]['nom'];
+		if($nomPhoto = $tab_result['resultat']['0']["./upload"]['nom']){ /**/ }else{die;}
 		ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$nomPhoto,$_POST['stock']); // image : tableau[premiere ligne][dossier desination][nom réel uploadé]
 		$id = getIdProduit($_POST['nom']);
 		
@@ -96,6 +96,14 @@ if(isset($_GET['deco'])){
 	<?php require_once("inc/inc_head.php");?>
     <title>Gestion des produits</title>
 	<script src="ckeditor/ckeditor.js"></script>
+	<style>
+	label
+	{
+		display: block;
+		width: 150px;
+		float: left;
+	}
+	</style>
   </head>
   <body>
    <div class="container">
@@ -110,15 +118,22 @@ if(isset($_GET['deco'])){
 	echo'<body>';
 
 		genererCategorieProduit();
+		
+		if(isset($_GET['idCat'])){ // si on a l'id de la categorie on passe la categorie en parametre pour un ajout de produit
+			echo '<div style="text-align:left;"><a href="produit.php?ajout&idCat='.$_GET['idCat'].'" class="btn btn-default" role="button">Ajouter un produit</a></div></br>';
+		}else{	// sinon on passe avec la categorie null
+			echo '<div style="text-align:right;"><a href="produit.php?ajout&idCat=null" class="btn btn-default" role="button">Ajouter un produit</a></div><br/>';
+		}
+		
 		if(isset($_GET['ajout'])) // --------------------------------------------------- AJOUT PRODUIT ---------------------------------- //
 		{
 			?>
 			<form enctype = "multipart/form-data" action='produit.php?ajout&idCat=<?php echo $_GET['idCat']; ?>' method='POST'>
-					<label>Nom du produit : </label><input type='text' name='nom'></input><br/>
-					<label>Description du produit : </label><br/><textarea name='desc' rows='10' class="ckeditor" cols='50'></textarea><br/>
-					<label>Prix du produit : </label><input type='text' name='prix'></input><br/>
-					<label>Stock du produit : </label><input type='text' name='stock'></input><br/>
-					<label>Catégorie du produit : </label>
+					<label>Nom du produit</label><input type='text' name='nom'></input><br/>
+					<br/><p>Description</p><textarea name='desc' rows='10' class="ckeditor" cols='50'></textarea><br/>
+					<label>Prix</label><input type='text' name='prix'></input><br/>
+					<label>Stock</label><input type='text' name='stock'></input><br/>
+					<label>Catégorie</label>
 						<select name='cat'>";
 						<?php			
 						$sql = $connexion->query("SET NAMES 'utf8'"); 
@@ -135,10 +150,10 @@ if(isset($_GET['deco'])){
 								echo "<option value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
 							}
 						}
-						echo "</select><br/>
+						echo "</select><br/><br/>
 
 					
-					<label for='photo'>Image (Extensions autorisées ".implode(', ',$extensions).")</label><input name='photo' id='image' type='file' />
+					<label for='photo'>Image</label><input name='photo' id='image' type='file' />
 					<br/>";
 				echo "
 						<input type='submit' name='oka' value='Ajouter le produit'></input>
@@ -161,7 +176,7 @@ if(isset($_GET['deco'])){
 				$rep = "non"; 
 		}
 		elseif(isset($_GET['modif'])) // ------------------------------------------------------ MODIFICATION PRODUIT -------------------------//
-		{				
+		{
 				$id = $_GET['id'];
 				$sql = $connexion->query("SET NAMES 'utf8'");
 				$sql = $connexion->query("select * FROM produit where idProduit=".$id);
@@ -171,11 +186,11 @@ if(isset($_GET['deco'])){
 				echo '<form enctype="multipart/form-data" action="produit.php?modif&id='.$id.'&idCat='.$_GET['idCat'].'" method="POST">
 						<input type="hidden"  name="no" value="'.$id.'" ></input>
 						
-						<label>Nom : </label><input type="text" name="nom" value="'.$res->nomProduit.'"></input><br/>
-						<label>Description du produit : </label><br/><textarea name="desc" class="ckeditor" rows="10" cols="50">'.$res->descriptionProduit.'</textarea><br/>
-						<label>Prix : </label><input type="text" name="prix" value="'.$res->prixProduit.'"></input><br/>
-						<label>Stock du produit : </label><input type="text" name="stock" value="'.$res->stockProduit.'"></input><br/>
-						<label>Catégorie : </label>
+						<label>Nom du produit</label><input type="text" name="nom" value="'.$res->nomProduit.'"></input><br/>
+						<br/><p>Description</p><textarea name="desc" class="ckeditor" rows="10" cols="50">'.$res->descriptionProduit.'</textarea><br/>
+						<label>Prix </label><input type="text" name="prix" value="'.$res->prixProduit.'"></input><br/>
+						<label>Stock</label><input type="text" name="stock" value="'.$res->stockProduit.'"></input><br/>
+						<label>Catégorie</label>
 							<select name="cat">';
 								$req = $connexion->query("SET NAMES 'utf8'");
 								$req = $connexion->query("select * FROM categorie");
@@ -192,8 +207,11 @@ if(isset($_GET['deco'])){
 									}
 								}
 								echo "
-							</select><br/>
-						<label for='photo'>Image (Extensions autorisées ".implode(', ',$extensions).")</label><div><img src='../upload/".$res->image."' alt='[Aucune image]'/></div><input name='photo' id='image' type='file' />
+							</select><br/><br/>
+						<label for='photo'>Image</label><input name='photo' id='image' type='file' />
+						<br/><br/>
+						<img src='../upload/".$res->image."' alt='[Aucune image]'/>
+						
 						<br/><br/>
 						<input type='submit' name='okm' value='Modifier'></input>
 					 </form>";
@@ -438,7 +456,6 @@ if(isset($_GET['deco'])){
 			}
 		elseif(isset($_GET['idCat']))
 		{
-			echo '<div style="text-align:right;"><a href="produit.php?ajout&idCat='.$_GET['idCat'].'" class="btn btn-default" role="button">Ajouter un produit</a></div></br>';
 			$req = $connexion->query("SET NAMES 'utf8'");	
 			$req = $connexion->query("Select * from produit where idCategorie=".$_GET['idCat']."");
 			$req->setFetchMode(PDO::FETCH_OBJ);
@@ -490,10 +507,6 @@ if(isset($_GET['deco'])){
 				}
 				echo "</tr></table></div>";
 			}
-		}
-		else
-		{
-			echo '<div style="text-align:right;"><a href="produit.php?ajout&idCat=null" class="btn btn-default" role="button">Ajouter un produit</a></div><br/>';
 		}
 	?>
 	</div>
