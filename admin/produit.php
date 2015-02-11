@@ -103,7 +103,7 @@ if(isset($_GET['deco'])){
 		width: 150px;
 		float: left;
 	}
-	</style>
+</style>
   </head>
   <body>
    <div class="container">
@@ -128,13 +128,29 @@ if(isset($_GET['deco'])){
 		if(isset($_GET['ajout'])) // --------------------------------------------------- AJOUT PRODUIT ---------------------------------- //
 		{
 			?>
-			<form enctype = "multipart/form-data" action='produit.php?ajout&idCat=<?php echo $_GET['idCat']; ?>' method='POST'>
-					<label>Nom du produit</label><input type='text' name='nom'></input><br/>
-					<br/><p>Description</p><textarea name='desc' rows='10' class="ckeditor" cols='50'></textarea><br/>
-					<label>Prix</label><input type='text' name='prix'></input><br/>
-					<label>Stock</label><input type='text' name='stock'></input><br/>
-					<label>Catégorie</label>
-						<select name='cat'>";
+			<form enctype = "multipart/form-data" action='produit.php?ajout&idCat=<?php echo $_GET['idCat']; ?>' method='POST' class='form'>
+			<fieldset>
+				<div class='form-group'>
+				  <label class='col-md-2 control-label'>Nom du produit</label>  
+				  <div class='col-md-4'>
+				  <input type='text' name='nom' class='form-control input-md' required=''/>
+				  </div>
+				</div>
+				</br><br/>
+				<p>Description</p><textarea name='desc' rows='10' class="ckeditor" cols='50'></textarea></br>
+				<div class='form-group'>
+				  <label class='col-md-2 control-label'>Prix du produit</label>  
+				  <div class='col-md-4'><input type='text' name='prix' class='form-control input-md' required=''/>
+				  </div>
+				</div>
+					<div class='form-group'>
+				  <label class='col-md-2 control-label'>Stock du produit</label>  
+				  <div class='col-md-4'><input type='text' name='stock' class='form-control input-md' required=''/>
+				  </div>
+				</div>
+					<label class="col-md-2 control-label">Catégorie</label>  
+						<div class="col-lg-4 input-group"> 
+						<select name="cat" class="form-control">';
 						<?php			
 						$sql = $connexion->query("SET NAMES 'utf8'"); 
 						$sql = $connexion->query("Select idCategorie, libelleCategorie from categorie");
@@ -150,14 +166,14 @@ if(isset($_GET['deco'])){
 								echo "<option value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
 							}
 						}
-						echo "</select><br/><br/>
+						echo "</select></div></div>
 
 					
 					<label for='photo'>Image</label><input name='photo' id='image' type='file' />
 					<br/>";
 				echo "
 						<input type='submit' name='oka' value='Ajouter le produit'></input>
-			</form>";
+			</fieldset></form>";
 		}
 		elseif(isset($_GET['supp'])) // on supprime le produit
 		{
