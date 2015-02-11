@@ -219,7 +219,7 @@ $resProd = $req->fetch();
 										{
 											$date = new DateTime($element->date);
 											echo '<br/><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> <u>Par '.retourneUtilisateur($element->idUtilisateur)->login.' le '.$date->format('d/m/Y').' :</u> ';
-													if(aDejaNote(idUtilisateurConnecte(),$_GET['id']) == true)
+													if(aDejaNote($element->idUtilisateur,$_GET['id']) == true)
 													{
 														echo "<span class='label label-primary'>".intval(retourneNote($_GET['id']))."/10</span>";
 													}
