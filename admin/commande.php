@@ -91,21 +91,33 @@ require_once("../fonctions/fonctionProd.php");
 				<a href="commande.php?modif&statut&id='.$com->idCommande.'">Modifier le statut de la commande</a><br/>
 				<a href="commande.php?modif&paiement&id='.$com->idCommande.'">Modifier le mode de paiement de la commande</a><br/>
 				<a href="commande.php?modif&livraison&id='.$com->idCommande.'">Modifier le mode de livraison de la commande</a><br/><br/>
-				<a href="commande.php?supp&id='.$com->idCommande.'">Supprimer la commande</a>';
+				<a href="commande.php?supp&id='.$com->idCommande.'">Supprimer la commande</a></br>';
 				
 			if(isset($_GET['supp']))
 			{
 				echo '
 					<form name="frm" action="commande.php?supp&id='.$_GET['id'].'" method="post">
-								<h3>Etes-vous sûre de vouloir supprimer cette commande ?</h3>
-								<br/>
-								<input type="hidden" name="no" value="'.$_GET['id'].'">
-								<input type="radio" name="rep" value="non" checked> Non
-								<input type="radio" name="rep" value="oui" > Oui
-								<br/><br/>
-								<input type="submit" name="supp" value="Valider">
-					</form>
-						 ';
+				<fieldset>
+						<h3>Êtes-vous sûre de vouloir supprimer cette commande ?</h3>
+						<input type="hidden" name="no" value="'.$_GET['id'].'">
+						<div class="col-lg-1">
+							<div class="input-group">
+								<span class="input-group-addon">
+									<input type="radio" name="rep" value="non" checked> Non
+								</span>
+								<span class="input-group-addon">
+									<input type="radio" name="rep" value="oui" > Oui
+								</span>
+							</div>
+						</div>
+						<br/><br/>
+						<div class="form-group">
+						  <label class="col-md-0 control-label"> </label>
+						  <div class="col-md-4">
+						<input type="submit" name="supp" value="Valider" class="btn btn-primary" >
+						</div></div>
+						</fieldset>
+					</form>';
 					
 					$rep = "non"; 
 					
@@ -138,8 +150,14 @@ require_once("../fonctions/fonctionProd.php");
 				{
 					if(!isset($_POST['ok']))
 					{
-						echo "<form action='commande.php?modif&statut&id=".$_GET['id']."' method='POST'>
-							<label>Statut : </label><select name='statut'>
+						echo "</br><form action='commande.php?modif&statut&id=".$_GET['id']."' method='POST' class='form-horizontal'>
+						 <fieldset>
+						  <legend>Modification de statut</legend>
+							<p></p>
+							<div class='form-group'>
+							<label class='col-md-1 control-label'>Statut :</label>  
+							<div class='col-lg-3 input-group'> 
+							<select name='statut' class='form-control'>
 						<option value=null> </option>";
 								
 						$statut = $connexion->query("Select * from statut");
@@ -151,7 +169,13 @@ require_once("../fonctions/fonctionProd.php");
 						}
 						echo "
 						</select>
-						<input type='submit' name='ok' value='Modifier'></input>";
+						</div></div>
+						<div class='form-group'>
+					  <label class='col-md-1 control-label'> </label>
+					  <div class='col-md-4'>
+						<input type='submit' name='ok' value='Modifier' class='btn btn-primary'/>
+						</div></div>
+						</fieldset></form>";
 					}
 					else
 					{
@@ -163,8 +187,14 @@ require_once("../fonctions/fonctionProd.php");
 				{
 					if(!isset($_POST['ok']))
 					{
-						echo "<form action='commande.php?modif&paiement&id=".$_GET['id']."' method='POST'>
-							<label>Mode de paiement : </label><select name='paiement'>
+						echo "</br><form action='commande.php?modif&paiement&id=".$_GET['id']."' method='POST' class='form-horizontal'>
+							<fieldset>
+						  <legend>Modification de mode de paiement</legend>
+							<p></p>
+							<div class='form-group'>
+							<label class='col-md-1 control-label'>Paiement</label>  
+							<div class='col-lg-3 input-group'> 
+							<select name='paiement' class='form-control'>
 						<option value=null> </option>";
 								
 						$paiement = $connexion->query("Select * from modePaiement");
@@ -176,7 +206,13 @@ require_once("../fonctions/fonctionProd.php");
 						}
 						echo "
 						</select>
-						<input type='submit' name='ok' value='Modifier'></input>";
+						</div></div>
+						<div class='form-group'>
+						<label class='col-md-1 control-label'> </label>
+						<div class='col-md-4'>
+						<input type='submit' name='ok' value='Modifier' class='btn btn-primary'/>
+						</div></div>
+						</fieldset></form>";
 					}
 					else
 					{
@@ -188,8 +224,14 @@ require_once("../fonctions/fonctionProd.php");
 				{
 					if(!isset($_POST['ok']))
 					{
-						echo "<form action='commande.php?modif&livraison&id=".$_GET['id']."' method='POST'>
-							<label>Mode de livraison : </label><select name='livraison'>
+						echo "</br><form action='commande.php?modif&livraison&id=".$_GET['id']."' method='POST' class='form-horizontal'>
+							<fieldset>
+						  <legend>Modification de mode de livraison</legend>
+							<p></p>
+							<div class='form-group'>
+							<label class='col-md-1 control-label'>Livraison</label>  
+							<div class='col-lg-3 input-group'> 
+							<select name='livraison' class='form-control'>
 						<option value=null> </option>";
 								
 						$livraison = $connexion->query("Select * from modeLivraison");
@@ -201,7 +243,13 @@ require_once("../fonctions/fonctionProd.php");
 						}
 						echo "
 						</select>
-						<input type='submit' name='ok' value='Modifier'></input>";
+						</div></div>
+						<div class='form-group'>
+						<label class='col-md-1 control-label'> </label>
+						<div class='col-md-4'>
+						<input type='submit' name='ok' value='Modifier' class='btn btn-primary'/>
+						</div></div>
+						</fieldset></form>";
 					}
 					else
 					{

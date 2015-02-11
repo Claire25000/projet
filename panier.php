@@ -225,7 +225,7 @@ else
 				<div class="form-group">
 					  <label class="col-md-3 control-label"> </label>
 					  <div class="col-md-4">
-					<input type="submit" name="valider" value="Valider" class="btn btn-primary" >
+					<input type="submit" name="valider" value="Valider" class="btn btn-primary"/>
 					</div></div>
 					</fieldset>
 				</form>';
