@@ -59,7 +59,6 @@ function ajouterProduit($nom,$desc,$prix,$cat,$img,$stock)
 			$requete = $connexion->query("SET NAMES 'utf8'");
 			$requete = $connexion->prepare('INSERT INTO `webuzzer54gs9`.`produit` values (DEFAULT,"'.$nom.'","'.$desc.'",'.$prix.','.$cat.',"'.$img.'","'.$stock.'");'); //on insère le produit dans la base
 			$requete->execute();
-			echo'Insertion effectuée avec succès';
 			return true;
 		}
 		catch(Exception $e)

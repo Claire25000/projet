@@ -1,5 +1,4 @@
 <?php
-require_once("inc/inc_head.php");
 require_once('inc/inc_top.php');
 require_once("fonctions/fonctionProd.php");
 require_once("fonctions/fonctionsCommande.php");
@@ -25,27 +24,105 @@ if(isset($_POST['modifier']))
 } 
 elseif(isset($_POST['supprimer']))
 {
-	supprimerArticle($_POST['id']);
+	if(!isset($_POST['validSuprProdPanier'])){
+		$message = '<div class="alert alert-info" role="alert">
+					<form method="POST" action="panier.php" class="form-horizontal">
+					<fieldset>
+					<!-- Multiple Radios (inline) -->
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="validSuprProdPanier">Retirer l\'article du panier ?</label>
+					  <div class="col-md-4"> 
+						<label class="radio-inline" for="validSuprProdPanier-0">
+						  <input name="validSuprProdPanier" id="validSuprProdPanier-0" value="1" checked="checked" type="radio">
+						  Oui
+						</label> 
+						<label class="radio-inline" for="validSuprProdPanier-1">
+						  <input name="validSuprProdPanier" id="validSuprProdPanier-1" value="2" type="radio">
+						  Non
+						</label>
+					  </div>
+					</div>
+					<!-- Button -->
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="singlebutton"></label>
+					  <div class="col-md-4">
+						<input name="supprimer" id="supprimer" value="'.$_POST['id'].'" type="hidden">
+						<button id="singlebutton" name="singlebutton" type="submit" class="btn btn-primary">Valider</button>
+					  </div>
+					</div>
+
+					</fieldset>
+					</form>
+					</div>';
+	}else if(isset($_POST['validSuprProdPanier']) && $_POST['validSuprProdPanier'] == '1'){
+		supprimerArticle($_POST['supprimer']);
+		//echo 'ok';
+		//header("Location:panier.php");
+		$message = '<div class="alert alert-success" role="alert">L\'article a été supprimé</div>';
+	}else{
+		$message = '<div class="alert alert-success" role="alert">L\'article n\'a pas été supprimé</div>';
+		//echo 'nok';
+		//header("Location:panier.php");
+	}
 }
 if(isset($_GET['vide']))
 {
-	viderPanier();
-	header("Location:panier.php");
+	if(!isset($_POST['validViderPanier'])){
+		$message = '<div class="alert alert-info" role="alert">
+					<form method="POST" action="panier.php?vide" class="form-horizontal">
+					<fieldset>
+					<!-- Multiple Radios (inline) -->
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="validViderPanier">Confirmer la supression du panier ?</label>
+					  <div class="col-md-4"> 
+						<label class="radio-inline" for="validViderPanier-0">
+						  <input name="validViderPanier" id="validViderPanier-0" value="1" checked="checked" type="radio">
+						  Oui
+						</label> 
+						<label class="radio-inline" for="validViderPanier-1">
+						  <input name="validViderPanier" id="validViderPanier-1" value="2" type="radio">
+						  Non
+						</label>
+					  </div>
+					</div>
+					<!-- Button -->
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="singlebutton"></label>
+					  <div class="col-md-4">
+						<button id="singlebutton" name="singlebutton" type="submit" class="btn btn-primary">Valider</button>
+					  </div>
+					</div>
+
+					</fieldset>
+					</form>
+					</div>';
+	}else if(isset($_POST['validViderPanier']) && $_POST['validViderPanier'] == '1'){
+		viderPanier();
+		header("Location:panier.php");
+	}else{
+		header("Location:panier.php");
+	}
 }
 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
   <head>
+	<?php require_once("inc/inc_head.php"); ?>
     <title>Panier</title>
 	<style>
+	select{
+		display: block;
+		width: 150px;
+		float: left;
+	}
 	label
 	{
 		display: block;
 		width: 150px;
 		float: left;
 	}
-</style>
+	</style>
   </head>
   
   <body>
@@ -66,8 +143,8 @@ if(isset($_GET['vide']))
 			echo '<legend>Contenu de votre panier</legend>
 				<p></p><ul>';
 		if (isset($_SESSION['panier']) && count($_SESSION['panier'])>0){
-			echo '<div style="text-align:right;"><a href="panier.php?vide" class="btn btn-default" role="button">Vider le panier</a></div></br>';
-			echo '<div style="text-align:right;"><a href="panier.php?comm" class="btn btn-default" role="button">Confirmer la commande</a></div>';
+			echo '<div style="text-align:right;"><a href="panier.php?vide" class="btn btn-default" role="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Vider le panier</a></div></br>';
+			//echo '<div style="text-align:right;"><a href="panier.php?comm" class="btn btn-default" role="button">Confirmer la commande</a></div>';
 				$total_panier = 0;
 				foreach($_SESSION['panier'] as $id_article=>$article_acheté){
 						// On affiche chaque ligne du panier : nom, prix et quantité modifiable + 2 boutons : modifier la qté et supprimer l'article
@@ -83,7 +160,7 @@ if(isset($_GET['vide']))
 								 '<input type="hidden" name="id" value='.$id_article.' />								  
 								<div class="form-group">
 								<label class="col-md-1 control-label">Quantité</label>  
-								<div class="col-lg-4 input-group"> 
+								<div class="col-lg-1"> 
 								<select name="qte" class="form-control">';
 								
 								// ------------------------------------------------- AFFICHAGE ET PRESELECTION DE LA QUANTITE EN PANIER DU PRODUIT (<select>)--------------//
@@ -100,9 +177,9 @@ if(isset($_GET['vide']))
 							   echo '</select></div></div>
 							   <div class="form-group">
 								  <label class="col-md-1 control-label"> </label>
-								  <div class="col-md-4">
-									<input type="submit" name="modifier" value="Modifier la quantité" class="btn btn-primary"/>
-									<input type="submit" name="supprimer" value="Supprimer" class="btn btn-primary"/>
+								  <div class="col-md-12">
+									<input style="margin:1%" type="submit" name="modifier" value="Modifier la quantité" class="btn btn-primary"/>
+									<input style="margin:1%" type="submit" name="supprimer" value="Supprimer cet article" class="btn btn-primary"/>
 								  </div>
 								</div>
 								</fieldset>
@@ -112,8 +189,9 @@ if(isset($_GET['vide']))
 								// Calcule le prix total du panier 
 								$total_panier += $produit->prixProduit * $article_acheté['qte'];
 						}
-			echo '<div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</h3></div>'; // Affiche le total du panier
 		}
+		echo '<div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</h3></div>'; // Affiche le total du panier
+		echo '<div style="text-align:right;"><a href="panier.php?comm" class="btn btn-default" role="button">Confirmer la commande &rarr;</a></div>';
 	}
 else { echo 'Votre panier est vide'; } // Message si le panier est vide
 echo "</ul>";
@@ -121,7 +199,7 @@ echo "</ul>";
 else
 {
 	if(!estConnecte())
-	{ 		
+	{
 		?>
 		<h3>Vous avez dejà un compte</h3>
 		<form id="login-nav" accept-charset="UTF-8" action="" method="post" role="form" class="form">
@@ -192,43 +270,54 @@ else
 							echo '</tbody></table>
 						</div>';
 					  echo '<div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</div>
-			  <form action="panier.php?comm&valider" method="POST" class="form-horizontal">
-			  <fieldset>
-			  <legend>Confirmation</legend>
-				<p></p>
-				<div class="form-group">
-				  <label class="col-md-3 control-label">Informations supplémentaires : </label>  
-					  <div class="col-md-6">
-						<textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="500" rows="5"></textarea>
-					  </div>
-					</div>
-					<div class="form-group">
-				<label class="col-md-3 control-label">Mode de livraison :</label>  
-				<div class="col-lg-6 input-group"> 
-				<select name="liv" class="form-control">';
-					$res = retourneFrais(2);
-				foreach(retourneListeLivraison() as $element) // retourne un array de mode de livraison 
-						{
-							echo '<option value="'.$element->idModeLivraison.'">'.$element->libelleModeLivraison.'</option>'; 
-						}
-				echo '</select>(Frais supplémentaires pour envoi par colissimo : '.$res->frais.' €)</div></div>';
-				
-				echo '<label class="col-md-3 control-label">Mode de paiement :</label> 
-				<div class="col-lg-6 input-group"> 
-				<select name="paie" class="form-control">';
-				foreach(retourneListePaiement() as $element) // retourne un array de mode de livraison 
-						{
-							echo '<option value="'.$element->idModePaiement.'">'.$element->libelleModePaiement.'</option>'; 
-						}
-				echo '</select></div><br/>
-				<input type="hidden" name="prix" value="'.$total_panier.'"></input>
-				<div class="form-group">
-					  <label class="col-md-3 control-label"> </label>
-					  <div class="col-md-4">
-					<input type="submit" name="valider" value="Valider" class="btn btn-primary"/>
-					</div></div>
-					</fieldset>
-				</form>';
+								<form method="POST" action="panier.php?comm&valider" class="form-horizontal">
+								<fieldset>
+								<!-- Textarea -->
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="message">Informations supplémentaires</label>
+								  <div class="col-md-4">                     
+									<textarea class="form-control" id="message" placeholder="Informations diverses" name="message"></textarea>
+								  </div>
+								</div>
+
+								<!-- Select Basic -->
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="liv">Mode de livraison</label>
+								  <div class="col-md-4">
+									<select id="liv" name="liv" class="form-control">';
+												$res = retourneFrais(2);
+												foreach(retourneListeLivraison() as $element) // retourne un array de mode de livraison 
+														{
+															echo '<option value="'.$element->idModeLivraison.'">'.$element->libelleModeLivraison.'</option>'; 
+														}
+												echo '</select>(Frais supplémentaires pour envoi par colissimo : '.$res->frais.' €)
+								  </div>
+								</div>
+								<!-- Select Basic -->
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="selectbasic">Mode de paiement</label>
+								  <div class="col-md-4">
+									<select name="paie" id="paie" class="form-control">';
+									  foreach(retourneListePaiement() as $element) // retourne un array de mode de livraison 
+										{
+											echo '<option value="'.$element->idModePaiement.'">'.$element->libelleModePaiement.'</option>'; 
+										}
+							   echo '</select>
+								  </div>
+								</div>
+
+								<!-- Button -->
+								<div class="form-group">
+								  <label class="col-md-4 control-label" for="singlebutton"></label>
+								  <div class="col-md-4">
+									<button id="singlebutton" name="singlebutton" class="btn btn-primary">Je confirme ma commande </button>
+								  </div>
+								</div>
+
+								<input type="hidden" name="prix" value="'.$total_panier.'"></input>
+								
+								</fieldset>
+								</form>';
 		}
 		else
 		{
@@ -258,9 +347,16 @@ else
 				}
 				
 				viderPanier();
-				echo '<div class="alert alert-success" role="alert">Commande effectuée !</div>
-				<h3>Prix total : '.number_format($total_panier, 2, ',', ' '), ' €</h3>
-				<a href="panier.php?comm&valider&payer&ok&id='.$res.'" class="btn btn-default" role="button">Payer cette commande</a>';
+				echo '<div class="alert alert-success" role="alert">La commande a été effectuée avec succès</div>';
+				if($_POST['paie'] == 3 || $_POST['paie'] == 4){
+					echo '<a href="panier.php?comm&valider&payer&ok&id='.$res.'" class="btn btn-default" role="button">Payer cette commande [fictif]</a><br/><br/>';
+				}else{
+					echo "<div class='panel panel-default'><div class='panel-body'>Veuillez adresser votre paiement à l'adresse suivante : </br>".retourneParametre('ordre');
+					echo '</br>Indiquez la référence de la commande : <b>'.$res.'</b> <br/><a href="commande.php" class="btn btn-default" role="button">Voir vos commandes</a></div></div>';
+				}
+				
+				echo '<h3>Prix total de la commande <b>: '.number_format($total_panier, 2, ',', ' '), ' €</b></h3>';
+				
 			}
 			else			
 			{
@@ -269,8 +365,8 @@ else
 					$commande = retourneCommande($_GET['id']);
 					if($commande->modePaiement == 1 || $commande->modePaiement == 2)
 					{
-						echo "Veuillez adresser votre paiement à l'adresse suivante : </br>".retourneParametre('ordre');
-						echo '</br><a href="commande.php" class="btn btn-default" role="button">Voir vos commandes</a>';
+						//echo "Veuillez adresser votre paiement à l'adresse suivante : </br>".retourneParametre('ordre');
+						//echo '</br><a href="commande.php" class="btn btn-default" role="button">Voir vos commandes</a>';
 					}
 					else
 					{

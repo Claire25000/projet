@@ -31,8 +31,7 @@ if(isset($_SESSION['panier']))
 						$res = retourneProduit($id_article);
 						echo '<li  style="margin-top:1px">
 							<div class="btn-group-sm" role="group" aria-label="...">
-							<button method="?test3" style="border: 0 none;margin-left:1%" type="button" class="btn btn-default" onClick="supp('.$res->idProduit.');"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-							<button method="?test3" type="button" style="border: 0 none;width:83%" class="btn btn-default" onClick="redirection('.$res->idProduit.');">'.$res->nomProduit.'</button>
+							<button method="?test3" type="button" style="border: 0 none;width:100%" class="btn btn-default" onClick="redirection('.$res->idProduit.');">'.$res->nomProduit.'</button>
 							</div>
 						</li>';
 					}

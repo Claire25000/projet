@@ -69,7 +69,7 @@ function ajouterCommande($date,$statut,$modePaiement,$modeLivraison,$idClient,$i
 	global $connexion; // on définie la variables globale de connection dans la fonction
 
 	try {
-		$requete = $connexion->exec("INSERT INTO `webuzzer54gs9`.`commande` (`idCommande`, `date`, `statut`, `modePaiement`, `modeLivraison`, `idClient`, `info`) VALUES (NULL, '".$date."', '".$statut."', '".$modePaiement."', '".$modeLivraison."','".$idClient."','".$info."');");
+		$requete = $connexion->exec("INSERT INTO `webuzzer54gs9`.`commande` (`idCommande`, `date`, `statut`, `modePaiement`, `modeLivraison`, `idClient`, `info`) VALUES (NULL, '".$date."', '".$statut."', '".$modePaiement."', '".$modeLivraison."','".$idClient."','".addslashes($info)."');");
 		return $connexion->lastInsertId(); 
 	} catch ( Exception $e ) {
 		return false;

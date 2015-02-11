@@ -40,7 +40,9 @@ if(isset($_POST['suppP']))
 }
 
 if(isset($_POST['oka'])){ // ---------------------AJOUT D'UN PRODUIT
-
+		//if(){
+		if(isset($_POST['image'])){echo'image';}
+		if(isset($_POST['photo'])){echo'photo';}
 		$up = new Telechargement("./upload",'oka','photo');
 		$extensions = array('jpg','jpeg','png'); /* paramétrage extensions autorisées */
 		$up->Set_Extensions_accepte ($extensions);
@@ -53,11 +55,21 @@ if(isset($_POST['oka'])){ // ---------------------AJOUT D'UN PRODUIT
 		// ------------- on ajoute le produit dans la base de données ------------- //
 		$prix = $_POST['prix'];
 		//$prix  = number_format($_POST['prix'], 2, '.', ',');
-		if($nomPhoto = $tab_result['resultat']['0']["./upload"]['nom']){ /**/ }else{die;}
-		ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$nomPhoto,$_POST['stock']); // image : tableau[premiere ligne][dossier desination][nom réel uploadé]
-		$id = getIdProduit($_POST['nom']);
+		//$nomPhoto = 'NULL #001';
 		
-	header("Location:produit.php?&idCat=".$_POST['cat']."&modif&id=".$id);
+		if(isset($tab_result['resultat']['0']["./upload"]['nom'])){ // si on peut recuperer le nom de la photo (si elle est uploadé)
+			$nomPhoto = $tab_result['resultat']['0']["./upload"]['nom']; 
+		}else{
+			header("Location:produit.php?ajout&idCat=".$_POST['cat']."?noPic"); // on signale a l'utilisateur que l'image est obligatoire
+		}
+
+		if(isset($nomPhoto)){ // si on a la nom de la photo
+			ajouterProduit($_POST['nom'],$_POST['desc'],$prix,$_POST['cat'],$nomPhoto,$_POST['stock']); // image : tableau[premiere ligne][dossier desination][nom réel uploadé]
+			$id = getIdProduit($_POST['nom']);
+		
+			header("Location:produit.php?&idCat=".$_POST['cat']."&modif&id=".$id);
+		}
+
 }
 
 if(isset($_POST['okm'])) //-------------------- MODIFICATION D'UN PRODUIT
@@ -82,7 +94,9 @@ if(isset($_POST['okm'])) //-------------------- MODIFICATION D'UN PRODUIT
 			header("Location:produit.php?modif&id=".$_GET['id']."&idCat=".$_GET['idCat']);
 			echo '-> '.$nomPhoto;
 }
-
+if(isset($_GET['noPic'])){
+	$message = '<div class="alert alert-danger" role="alert">L\'image n\'a pas été uploadée correctement</div>';
+}
 if(isset($_GET['deco'])){
 	if(deconnecteUtilisateur()){ // si la fonction de déconnexion retourne true : utilisateur déconnecté
 		header('Location: index.php');
@@ -102,20 +116,17 @@ if(isset($_GET['deco'])){
 		width: 150px;
 		float: left;
 	}
-</style>
+	</style>
   </head>
   <body>
    <div class="container">
 		<?php
 		require_once('inc/inc_menu.php');
+		echo ' <div style="padding-top:5%" class="jumbotron">';
 		if(isset($message)){
 			echo $message;
 		}
 		
-		echo ' <div class="jumbotron">';
-	
-	echo'<body>';
-
 		genererCategorieProduit();
 		
 		if(isset($_GET['idCat'])){ // si on a l'id de la categorie on passe la categorie en parametre pour un ajout de produit
@@ -123,14 +134,14 @@ if(isset($_GET['deco'])){
 		}else{	// sinon on passe avec la categorie null
 			echo '<div style="text-align:right;"><a href="produit.php?ajout&idCat=null" class="btn btn-default" role="button">Ajouter un produit</a></div><br/>';
 		}
-		
+		echo '<hr>';
 		if(isset($_GET['ajout'])) // --------------------------------------------------- AJOUT PRODUIT ---------------------------------- //
 		{
 			?>
 			<form enctype = "multipart/form-data" action='produit.php?ajout&idCat=<?php echo $_GET['idCat']; ?>' method='POST' class='form'>
 			<fieldset>
 				<div class='form-group'>
-				  <label class='col-md-2 control-label'>Nom du produit</label>  
+				  <label class='control-label'>Nom du produit</label>  
 				  <div class='col-md-4'>
 				  <input type='text' name='nom' class='form-control input-md' required=''/>
 				  </div>
@@ -223,7 +234,7 @@ if(isset($_GET['deco'])){
 				<fieldset>
 				<input type='hidden' name='no' value='".$id."'/>
 				<div class='form-group'>
-				  <label class='col-md-2 control-label'>Nom du produit</label>  
+				  <label class='control-label'>Nom du produit</label>  
 				  <div class='col-md-4'>
 				  <input type='text' name='nom' class='form-control input-md' required='' value='".$res->nomProduit."'/>
 				  </div>
@@ -231,19 +242,19 @@ if(isset($_GET['deco'])){
 				</br><br/>
 				<p>Description</p><br/><textarea name='desc' rows='10' class='ckeditor' cols='50'>".$res->descriptionProduit."</textarea></br>
 				<div class='form-group'>
-				  <label class='col-md-2 control-label'>Prix</label>  
+				  <label class='control-label'>Prix</label>  
 				  <div class='col-md-4'><input type='text' name='prix' class='form-control input-md' required='' value='".$res->prixProduit."'/>
 				  </div>
 				</div>
 				<br/><br/>
 				<div class='form-group'>
-				  <label class='col-md-2 control-label'>Stock</label>  
+				  <label class='control-label'>Stock</label>  
 				  <div class='col-md-4'><input type='text' name='stock' class='form-control input-md' required='' value='".$res->stockProduit."'/>
 				  </div>
 				</div>
 				<br/><br/>
 				<div class='form-group'>
-					<label class='col-md-2 control-label'>Catégorie</label>  
+					<label class='control-label'>Catégorie</label>  
 						<div class='col-lg-4 input-group'> 
 						<select name='cat' class='form-control' style='margin-left:5%'>";
 						
@@ -265,13 +276,13 @@ if(isset($_GET['deco'])){
 						echo "</select></div></div>
 
 					<div class='form-group'>
-					  <label class='col-md-2 control-label'>Image du produit</label>  
+					  <label class='control-label'>Image du produit</label>  
 					  <div class='col-md-4'>
 				  <input name='photo' id='image' type='file' />
 				  </div>
 				  </div>
 				  <br/><br/>
-				  <img src='../upload/".$res->image."' alt='[Aucune image]'/>
+				  <img src='".retourneParametre("repertoireUpload")."".$res->image."' alt='[Aucune image]'/>
 					<br/></br>
 				  <div style='text-align:center'>
 					<input type='submit' name='okm' class='btn btn-primary' value='Modifier'/>
