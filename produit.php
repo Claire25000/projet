@@ -38,7 +38,7 @@ if(isset($_POST['note'])){
 if(isset($_POST['commenter'])){
 	if(estConnecte()){
 		if(ajouterCommentaire($_GET['id'],$_POST['message'])){
-			$message = '<div class="alert alert-success" role="alert">Votre commentaire a été ajoutée, merci !</div>';
+			$message = '<div class="alert alert-success" role="alert">Votre commentaire a été ajouté, merci !</div>';
 		}
 	}	
 }
@@ -188,33 +188,42 @@ $res = $req->fetch();
 							<section class="container">
 								<?php
 									// ------------------------------------------------------------------------------ GESTION COMMENTAIRES//
+									echo '<div class="container">';
 									if(retourneParametre("afficherCommentaire") == 'true')
-									{										
+									{					
 										if(estConnecte() == 'true')
 										{
-											echo '
-											<div class="container">
-												<form action="produit.php?id='.$_GET['id'].'" method="POST">
-													<div>        
-														<br style="clear:both">
-															<div class="form-group col-md-4 ">                                
-																<label id="messageLabel" for="message">Commentaire : </label>
-																<textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="250" style="width: 574px; height: 87px;"></textarea>
-																	<span class="help-block"><p id="characterLeft" class="help-block ">You have reached the limit</p></span>                    
-															</div>
-														<br style="clear:both">
-														<div class="form-group col-md-2">
-														<button class="form-control input-sm btn btn-success disabled" id="btnSubmit" name="commenter" type="submit" style="height:35px"> Envoyer</button>    
-													</div>
-												</form>
-											</div>
-											</br></br>';
+											if(commentaireExiste($_GET['id'],idUtilisateurConnecte()) == 1)
+											{
+												echo '</br><h4>Vous avez déjà saisi un commentaire pour ce produit !</h4>';
+											}
+											else{
+												echo '
+													<form action="produit.php?id='.$_GET['id'].'" method="POST">
+														<div>        
+															<br style="clear:both">
+																<div class="form-group col-md-4 ">                                
+																	<label id="messageLabel" for="message">Commentaire : </label>
+																	<textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="250" style="width: 574px; height: 87px;"></textarea>
+																		<span class="help-block"><p id="characterLeft" class="help-block ">You have reached the limit</p></span>                    
+																</div>
+															<br style="clear:both">
+															<div class="form-group col-md-2">
+															<button class="form-control input-sm btn btn-success disabled" id="btnSubmit" name="commenter" type="submit" style="height:35px"> Envoyer</button>    
+														</div>
+													</form>
+												</br></br>';
+											}
 										}
 											
 										foreach(retourneListeCommentaire($_GET['id']) as $element)
 										{
 											$date = new DateTime($element->date);
-											echo '<br/><img src="crayon.png" alt="" width="30" height="30"></img> <u>Par '.retourneUtilisateur($element->idUtilisateur)->login.' le '.$date->format('d/m/Y').' :</u> '.$element->comm;
+											echo '<br/><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> <u>Par '.retourneUtilisateur($element->idUtilisateur)->login.' le '.$date->format('d/m/Y').' :</u> ';
+													if(aDejaNote(idUtilisateurConnecte(),$_GET['id']) == true)
+													{
+														echo "<span class='label label-primary'>".intval(retourneNote($_GET['id']))."/10</span>";
+													}
 											
 											if(estConnecte() == 'true')
 											{
@@ -223,7 +232,10 @@ $res = $req->fetch();
 													echo "  <a href='produit.php?id=".$_GET['id']."&supp'>Supprimer</a>";
 												}
 											}
+											
+											echo '</br>'.$element->comm;
 										}
+										echo '</div>';
 									}
 								?>
 							</section>
