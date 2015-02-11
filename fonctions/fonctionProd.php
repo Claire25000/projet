@@ -34,14 +34,6 @@ function retourneStock($idProduit){
 
 function getIdProduit($nom)
 {
-	/*global $connexion;
-	
-	$req = $connexion->query("SET NAMES 'utf8'");
-	$req = $connexion->query("Select idProduit from produit where nomProduit = '".$nom."'");
-	$req->setFetchMode(PDO::FETCH_OBJ);
-	$res = $req->fetch();
-	
-	return $res->idProduit;*/
 	global $connexion;
 	try
 		{

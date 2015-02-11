@@ -39,18 +39,12 @@ if(isset($_GET['vide']))
   <head>
     <title>Panier</title>
 	<style>
-		#formu{
-		float:right;
-		position:relative;
-		right:10%;
-		margin: 0  5px 5px 0;
-		}
-		#formu2{
-		float:left;
-		position:relative;
-		left:10%;
-		margin: 0  5px 5px 0;
-		}
+	label
+	{
+		display: block;
+		width: 150px;
+		float: left;
+	}
 </style>
   </head>
   
@@ -69,7 +63,8 @@ if(isset($_GET['vide']))
 		if(!isset($_GET['comm']))
 		{
 			// Voici l'affichage du panier
-			echo '<h2>Contenu de votre panier</h2><ul>';
+			echo '<legend>Contenu de votre panier</legend>
+				<p></p><ul>';
 		if (isset($_SESSION['panier']) && count($_SESSION['panier'])>0){
 			echo '<div style="text-align:right;"><a href="panier.php?vide" class="btn btn-default" role="button">Vider le panier</a></div></br>';
 			echo '<div style="text-align:right;"><a href="panier.php?comm" class="btn btn-default" role="button">Confirmer la commande</a></div>';
@@ -82,12 +77,14 @@ if(isset($_GET['vide']))
 						
 						if (isset($article_acheté['qte'])){
 								echo '<li>
-								<form action="panier.php" method="POST">
-								 ', $_SESSION['panier'][$id_article]['qte'],' ',$produit->nomProduit, ' (', number_format($produit->prixProduit, 2, ',', ' '), ' €) ',
-								 '<input type="hidden" name="id" value='.$id_article.' />
-								  <br />
-								  
-								qté:<select name="qte">';
+								<form action="panier.php" method="POST" class="form-horizontal">
+								<fieldset><h4>
+								 ', $_SESSION['panier'][$id_article]['qte'],' ',$produit->nomProduit, ' (', number_format($produit->prixProduit, 2, ',', ' '), ' €)</h4>',
+								 '<input type="hidden" name="id" value='.$id_article.' />								  
+								<div class="form-group">
+								<label class="col-md-1 control-label">Quantité</label>  
+								<div class="col-lg-4 input-group"> 
+								<select name="qte" class="form-control">';
 								
 								// ------------------------------------------------- AFFICHAGE ET PRESELECTION DE LA QUANTITE EN PANIER DU PRODUIT (<select>)--------------//
 								$qtePanierProduit = getQteProduit($id_article); // on recupere le nombre de produit actuel en panier
@@ -100,17 +97,22 @@ if(isset($_GET['vide']))
 									}
 									
 								}
-
-							   echo '</select>
-									<input type="submit" name="modifier" value="Modifier la quantité" />
-									<input type="submit" name="supprimer" value="Supprimer" />
+							   echo '</select></div></div>
+							   <div class="form-group">
+								  <label class="col-md-1 control-label"> </label>
+								  <div class="col-md-4">
+									<input type="submit" name="modifier" value="Modifier la quantité" class="btn btn-primary"/>
+									<input type="submit" name="supprimer" value="Supprimer" class="btn btn-primary"/>
+								  </div>
+								</div>
+								</fieldset>
 								</form>
 								</li>';
 								
 								// Calcule le prix total du panier 
 								$total_panier += $produit->prixProduit * $article_acheté['qte'];
 						}
-			echo '<hr><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €'; // Affiche le total du panier
+			echo '<div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</h3></div>'; // Affiche le total du panier
 		}
 	}
 else { echo 'Votre panier est vide'; } // Message si le panier est vide
@@ -121,35 +123,35 @@ else
 	if(!estConnecte())
 	{ 		
 		?>
-		<div id="formu">
 		<h3>Vous avez dejà un compte</h3>
 		<form id="login-nav" accept-charset="UTF-8" action="" method="post" role="form" class="form">
+			<fieldset>
 			<div class="form-group">
 			   <label for="email" class="sr-only">Adresse email</label>
-			   <input type="email" required="" placeholder="Adresse email" id="email" name="email" class="form-control">
+			   <input type="email" required="" placeholder="Adresse email" id="email" name="email" class="form-control" style="width:50%;">
 			</div>
 			<div class="form-group">
 			   <label for="password" class="sr-only">Mot de passe</label>
-			   <input type="password" required="" placeholder="Mot de passe" id="password" name="password" class="form-control">
+			   <input type="password" required="" placeholder="Mot de passe" id="password" name="password" class="form-control" style="width:50%;">
 			</div>
-			<div style="text-align:center;">
+			<div style="text-align:left;">
 				<button class="btn btn-default" type="submit">S'enregistrer</button>
 			</div>
+			</fieldset>
 		</form>
-		</div>
-
-		<div id="formu2">
+		<br/>
 		<h3>Vous n'avez pas encore de compte</h3>
 		<form id="login-nav" accept-charset="UTF-8" action="inscription.php" method="post" role="form" class="form">
+			<fieldset>
 			<div class="form-group">
 			   <label for="email" class="sr-only">Adresse email</label>
-			   <input type="email" required="" placeholder="Adresse email" id="email2" name="email2" class="form-control">
+			   <input type="email" required="" placeholder="Adresse email" id="email2" name="email2" class="form-control" style="width:50%;">
 			</div>
-			<div style="text-align:center;">
+			<div style="text-align:left;">
 				<button class="btn btn-default" type="submit">Créer mon compte</button>
 			</div>
+			</fieldset>
 		</form>
-		</div>
 	<?php
 	}
 	else
@@ -180,42 +182,59 @@ else
 										<img style="max-width: 130px;" src="'.retourneParametre("repertoireUpload").''.$produit->image.'" alt="'.$produit->nomProduit.'"/>
 									</td>
 									<td>'.$produit->nomProduit.'</td>
-									<td>'.$produit->prixProduit.' €</td>
+									<td>'.number_format($produit->prixProduit, 2, ',', ' ').' €</td>
 									<td>'.$article_acheté['qte'].'</td>
-									<td>'.$produit->prixProduit*$article_acheté['qte'].' €</td>						
+									<td>'.number_format($produit->prixProduit*$article_acheté['qte'], 2, ',', ' ').' €</td>						
 								</tr>';
 								$total_panier += $produit->prixProduit*$article_acheté['qte'];
 						}
 						
 							echo '</tbody></table>
 						</div>';
-					  echo '<hr><div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</div>
-			  <form action="panier.php?comm&valider" method="POST">
-				<label>Informations supplémentaires : <textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="500" rows="10" cols="50"></textarea>
-				<br/>
-				<label>Mode de livraison : </label><select name="liv">';
+					  echo '<div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</div>
+			  <form action="panier.php?comm&valider" method="POST" class="form-horizontal">
+			  <fieldset>
+			  <legend>Confirmation</legend>
+				<p></p>
+				<div class="form-group">
+				  <label class="col-md-3 control-label">Informations supplémentaires : </label>  
+					  <div class="col-md-6">
+						<textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="500" rows="5"></textarea>
+					  </div>
+					</div>
+					<div class="form-group">
+				<label class="col-md-3 control-label">Mode de livraison :</label>  
+				<div class="col-lg-6 input-group"> 
+				<select name="liv" class="form-control">';
 					$res = retourneFrais(2);
 				foreach(retourneListeLivraison() as $element) // retourne un array de mode de livraison 
 						{
 							echo '<option value="'.$element->idModeLivraison.'">'.$element->libelleModeLivraison.'</option>'; 
 						}
-				echo '</select>(Frais supplémentaires pour envoi par colissimo : '.$res->frais.' €)<br/>';
+				echo '</select>(Frais supplémentaires pour envoi par colissimo : '.$res->frais.' €)</div></div>';
 				
-				echo '<label>Mode de paiement : 
-				</label><select name="paie">';
+				echo '<label class="col-md-3 control-label">Mode de paiement :</label> 
+				<div class="col-lg-6 input-group"> 
+				<select name="paie" class="form-control">';
 				foreach(retourneListePaiement() as $element) // retourne un array de mode de livraison 
 						{
 							echo '<option value="'.$element->idModePaiement.'">'.$element->libelleModePaiement.'</option>'; 
 						}
-				echo '</select><br/>
+				echo '</select></div><br/>
 				<input type="hidden" name="prix" value="'.$total_panier.'"></input>
-				<input type="submit" name="valider"></input>
+				<div class="form-group">
+					  <label class="col-md-3 control-label"> </label>
+					  <div class="col-md-4">
+					<input type="submit" name="valider" value="Valider" class="btn btn-primary" >
+					</div></div>
+					</fieldset>
 				</form>';
 		}
 		else
 		{
 			if(!isset($_GET['payer']))
 			{
+				$total_panier += $_POST['prix'];
 				if($_POST['message'] == null)
 				{
 					$info = " ";
@@ -228,7 +247,7 @@ else
 				if($_POST['liv'] == 2)
 				{
 					$res = retourneFrais(2);
-					$total_panier += $_POST['prix'] + $res->frais;
+					$total_panier += $res->frais;
 				}
 				$res = ajouterCommande(date("Y-m-d H:i:s"),1,$_POST['paie'],$_POST['liv'],idUtilisateurConnecte(),$info);
 
