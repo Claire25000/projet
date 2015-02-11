@@ -246,11 +246,11 @@ else
 				
 				if($_POST['liv'] == 2)
 				{
-					$res = retourneFrais(2);
-					$total_panier += $res->frais;
+					$resultat = retourneFrais(2);
+					$total_panier += $resultat->frais;
 				}
 				$res = ajouterCommande(date("Y-m-d H:i:s"),1,$_POST['paie'],$_POST['liv'],idUtilisateurConnecte(),$info);
-
+	
 				foreach($_SESSION['panier'] as $id_article=>$article_acheté)
 				{
 					ajouterLigneCommande($res,$id_article,$article_acheté['qte']);
@@ -263,7 +263,7 @@ else
 				<a href="panier.php?comm&valider&payer&ok&id='.$res.'" class="btn btn-default" role="button">Payer cette commande</a>';
 			}
 			else			
-			{				
+			{
 				if(isset($_GET['ok']))
 				{
 					$commande = retourneCommande($_GET['id']);
