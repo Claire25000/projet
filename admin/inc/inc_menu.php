@@ -1,12 +1,9 @@
-<nav class="navbar navbar-default navbar-static-top">
-      <div class="container">
-<ul class="nav navbar-nav navbar">
-<div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-			<!-- -->
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-			<li><a href="/index.php"> Accueil site</a></li> 
+    <nav style="margin-bottom:5%" class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li><a href="/index.php"> Accueil site</a></li> 
 			<li><a href="produit.php"> Gestion des produits </a></li>
 			<li><a href="commande.php"> Gestion des commandes </a></li>
 			<?php if(estWebmaster()){ echo '
@@ -16,8 +13,7 @@
 				  }
 			?>
 			<li><a href="?deco"> Déconnexion </a></li>
-		</ul>
-</div>
-</ul>
-</div>
-</nav>
+				</ul>
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav><br/>

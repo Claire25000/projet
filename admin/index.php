@@ -1,5 +1,4 @@
 <?php
-require_once('inc/inc_head.php');
 require_once("inc/inc_top.php");
 require_once("../fonctions/fonctionsCommande.php");
 

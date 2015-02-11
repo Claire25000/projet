@@ -1,5 +1,4 @@
 <?php
-require_once('inc/inc_head.php');
 require_once("inc/inc_top.php");
 
 if(isset($_GET['deco'])){
