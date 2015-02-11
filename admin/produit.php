@@ -1,5 +1,4 @@
 <?php
-require_once('inc/inc_head.php');
 require_once('inc/inc_top.php');
 
 require_once("../fonctions/fonctionComm.php");
@@ -137,20 +136,23 @@ if(isset($_GET['deco'])){
 				  </div>
 				</div>
 				</br><br/>
-				<p>Description</p><textarea name='desc' rows='10' class="ckeditor" cols='50'></textarea></br>
+				<p>Description</p><br/><textarea name='desc' rows='10' class="ckeditor" cols='50'></textarea></br>
 				<div class='form-group'>
-				  <label class='col-md-2 control-label'>Prix du produit</label>  
+				  <label class='col-md-2 control-label'>Prix</label>  
 				  <div class='col-md-4'><input type='text' name='prix' class='form-control input-md' required=''/>
 				  </div>
 				</div>
-					<div class='form-group'>
-				  <label class='col-md-2 control-label'>Stock du produit</label>  
+				<br/><br/>
+				<div class='form-group'>
+				  <label class='col-md-2 control-label'>Stock</label>  
 				  <div class='col-md-4'><input type='text' name='stock' class='form-control input-md' required=''/>
 				  </div>
 				</div>
+				<br/><br/>
+				<div class='form-group'>
 					<label class="col-md-2 control-label">Catégorie</label>  
 						<div class="col-lg-4 input-group"> 
-						<select name="cat" class="form-control">';
+						<select name="cat" class="form-control" style="margin-left:5%">';
 						<?php			
 						$sql = $connexion->query("SET NAMES 'utf8'"); 
 						$sql = $connexion->query("Select idCategorie, libelleCategorie from categorie");
@@ -168,25 +170,43 @@ if(isset($_GET['deco'])){
 						}
 						echo "</select></div></div>
 
-					
-					<label for='photo'>Image</label><input name='photo' id='image' type='file' />
-					<br/>";
-				echo "
-						<input type='submit' name='oka' value='Ajouter le produit'></input>
-			</fieldset></form>";
+					<div class='form-group'>
+					  <label class='col-md-2 control-label'>Image du produit</label>  
+					  <div class='col-md-4'>
+				  <input name='photo' id='image' type='file' />
+				  </div>
+				  </div>
+					<br/></br>
+				  <div style='text-align:center'>
+					<input type='submit' name='oka' class='btn btn-primary' value='Ajouter le produit'/>
+					</div>
+				</fieldset>
+				</form>";
 		}
 		elseif(isset($_GET['supp'])) // on supprime le produit
 		{
-			echo '
-				<form name="frm" action="produit.php?supp&id='.$_GET['id'].'&idCat='.$_GET['idCat'].'" method="post">
-							<h3>Etes-vous sûre de vouloir supprimer ce produit ?</h3>
-							<br/>
-							<input type="hidden" name="no" value="'.$_GET['id'].'">
-							<input type="hidden" name="cat" value="'.$_GET['idCat'].'">
-							<input type="radio" name="rep" value="non" checked> Non
-							<input type="radio" name="rep" value="oui" > Oui
-							<br/><br/>
-							<input type="submit" name="suppP" value="Valider">
+			echo '<form name="frm" action="produit.php?supp&id='.$_GET['id'].'&idCat='.$_GET['idCat'].'" method="post">
+					<fieldset>
+					<h3>Êtes-vous sûre de vouloir supprimer ce produit ?</h3>
+					<input type="hidden" name="no" value="'.$_GET['id'].'">
+					<input type="hidden" name="cat" value="'.$_GET['idCat'].'">
+					<div class="col-lg-1">
+						<div class="input-group">
+							<span class="input-group-addon">
+								<input type="radio" name="rep" value="non" checked> Non
+							</span>
+							<span class="input-group-addon">
+								<input type="radio" name="rep" value="oui" > Oui
+							</span>
+						</div>
+					</div>
+					<br/><br/>
+					<div class="form-group">
+					  <label class="col-md-0 control-label"> </label>
+					  <div class="col-md-4">
+					<input type="submit" name="suppP" value="Valider" class="btn btn-primary" >
+					</div></div>
+					</fieldset>
 				</form>';
 				
 				$rep = "non"; 
@@ -199,38 +219,64 @@ if(isset($_GET['deco'])){
 				$sql->setFetchMode(PDO::FETCH_OBJ);
 				$res = $sql->fetch();
 				
-				echo '<form enctype="multipart/form-data" action="produit.php?modif&id='.$id.'&idCat='.$_GET['idCat'].'" method="POST">
-						<input type="hidden"  name="no" value="'.$id.'" ></input>
+				echo "<form enctype='multipart/form-data' action='produit.php?modif&id=".$id."&idCat=".$_GET['idCat']."' method='POST' class='form'>
+				<fieldset>
+				<input type='hidden' name='no' value='".$id."'/>
+				<div class='form-group'>
+				  <label class='col-md-2 control-label'>Nom du produit</label>  
+				  <div class='col-md-4'>
+				  <input type='text' name='nom' class='form-control input-md' required='' value='".$res->nomProduit."'/>
+				  </div>
+				</div>
+				</br><br/>
+				<p>Description</p><br/><textarea name='desc' rows='10' class='ckeditor' cols='50'>".$res->descriptionProduit."</textarea></br>
+				<div class='form-group'>
+				  <label class='col-md-2 control-label'>Prix</label>  
+				  <div class='col-md-4'><input type='text' name='prix' class='form-control input-md' required='' value='".$res->prixProduit."'/>
+				  </div>
+				</div>
+				<br/><br/>
+				<div class='form-group'>
+				  <label class='col-md-2 control-label'>Stock</label>  
+				  <div class='col-md-4'><input type='text' name='stock' class='form-control input-md' required='' value='".$res->stockProduit."'/>
+				  </div>
+				</div>
+				<br/><br/>
+				<div class='form-group'>
+					<label class='col-md-2 control-label'>Catégorie</label>  
+						<div class='col-lg-4 input-group'> 
+						<select name='cat' class='form-control' style='margin-left:5%'>";
 						
-						<label>Nom du produit</label><input type="text" name="nom" value="'.$res->nomProduit.'"></input><br/>
-						<br/><p>Description</p><textarea name="desc" class="ckeditor" rows="10" cols="50">'.$res->descriptionProduit.'</textarea><br/>
-						<label>Prix </label><input type="text" name="prix" value="'.$res->prixProduit.'"></input><br/>
-						<label>Stock</label><input type="text" name="stock" value="'.$res->stockProduit.'"></input><br/>
-						<label>Catégorie</label>
-							<select name="cat">';
-								$req = $connexion->query("SET NAMES 'utf8'");
-								$req = $connexion->query("select * FROM categorie");
-								$req->setFetchMode(PDO::FETCH_OBJ);
-								
-								while($resultat = $req->fetch()){
-									if($res->idCategorie == $resultat->idCategorie)
-									{
-										echo "<option selected value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
-									}
-									else
-									{
-										echo '<option value="'.$resultat->idCategorie.'">'.$resultat->libelleCategorie.'</option>';
-									}
-								}
-								echo "
-							</select><br/><br/>
-						<label for='photo'>Image</label><input name='photo' id='image' type='file' />
-						<br/><br/>
-						<img src='../upload/".$res->image."' alt='[Aucune image]'/>
-						
-						<br/><br/>
-						<input type='submit' name='okm' value='Modifier'></input>
-					 </form>";
+						$sql = $connexion->query("SET NAMES 'utf8'"); 
+						$sql = $connexion->query("Select idCategorie, libelleCategorie from categorie");
+						$sql->setFetchMode(PDO::FETCH_OBJ);
+					
+						while($resultat = $sql->fetch())
+						{
+							if($res->idCategorie == $resultat->idCategorie)
+							{
+								echo "<option selected value='".$resultat->idCategorie."'>".$resultat->libelleCategorie."</option>";
+							}
+							else
+							{
+								echo '<option value="'.$resultat->idCategorie.'">'.$resultat->libelleCategorie.'</option>';
+							}
+						}
+						echo "</select></div></div>
+
+					<div class='form-group'>
+					  <label class='col-md-2 control-label'>Image du produit</label>  
+					  <div class='col-md-4'>
+				  <input name='photo' id='image' type='file' />
+				  </div>
+				  </div>
+				  <br/><br/>
+				  <img src='../upload/".$res->image."' alt='[Aucune image]'/>
+					<br/></br>
+				  <div style='text-align:center'>
+					<input type='submit' name='okm' class='btn btn-primary' value='Modifier'/>
+					</div>
+				</fieldset></form>";
 					
 					// ------------------------------------------------------ MODIFICATION CARACTERISTIQUES ----------------------------------//
 					$sql = $connexion->query("SET NAMES 'utf8'"); 
