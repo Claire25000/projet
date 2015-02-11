@@ -7,7 +7,7 @@ function ajouterCommentaire($idProd,$comm)
 	
 	try
 		{
-			$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`commentaire` values (".$idProd.",".idUtilisateurConnecte().",'".$comm."',NOW())"); //on insère le commentaire dans la base
+			$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`commentaire` values (".$idProd.",".idUtilisateurConnecte().",'".addslashes($comm)."',NOW())"); //on insère le commentaire dans la base
 			$requete->execute();
 			return true;			
 		}
@@ -24,7 +24,7 @@ function retourneListeCommentaire($idProd)
 	
 	$liste = array();
 	$req = $connexion->query("SET NAMES 'utf8'");
-	$req = $connexion->query("Select commentaire.* from commentaire where idProduit = ".$idProd);
+	$req = $connexion->query("Select commentaire.* from commentaire where idProduit = '".$idProd."' ORDER BY date DESC;");
 	$req->setFetchMode(PDO::FETCH_OBJ);
 	
 	while($res = $req->fetch())
