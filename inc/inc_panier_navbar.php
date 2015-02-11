@@ -36,10 +36,7 @@ if(isset($_SESSION['panier']))
 							</div>
 						</li>';
 					}
-					if(estConnecte() && estAdmin(idUtilisateurConnecte()))
-						{
-						}
-						else
+					if(!estConnecte() || !estAdmin(idUtilisateurConnecte()))
 						{
 							echo '<div style="text-align:center;margin-top:10px" class="row">
 								<div class="btn-group" role="group" aria-label="...">

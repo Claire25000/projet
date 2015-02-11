@@ -44,12 +44,9 @@ function connecteUtilisateur($email,$password){
 // deconnecteUtilisateur()
 // retourne true si la session est détruite (utilisateur déconnecté), false sinon
 function deconnecteUtilisateur(){
-	$_SESSION = array();
-	if(session_destroy()){
-		session_start();
-		return true;
-	}
-	return false;
+	unset($_SESSION['idUtilisateur ']);
+	unset($_SESSION['typeUtilisateur ']);
+	return true;
 }
 // ajouterUtilisateur("nomUtilisateur","password","idTypeUtilisateur");
 // retourne l'ID du l'utilisateur créé, retourne 0 en cas d'erreur

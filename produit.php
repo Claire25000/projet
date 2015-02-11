@@ -17,7 +17,6 @@ if(isset($_GET['supp']))
 
 if(isset($_GET['ajouterPanier']))
 {
-	ajouterNotation(73,1,5);
 	if(retourneStock($_GET['id']) - getQteProduit($_GET['id']) > 0){ // si la quantité du produit ajouté ne dépasse pas le stock du produit<
 		if(ajouterPanier($_GET['id'],1)){$message = '<div class="alert alert-success" role="alert">Le produit a été ajouté à votre panier.</div>';}
 	}else{
@@ -47,13 +46,13 @@ if(isset($_POST['commenter'])){
 $req = $connexion->query("SET NAMES 'utf8'");	
 $req = $connexion->query("Select produit.*, categorie.libelleCategorie, categorie.idCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
 $req->setFetchMode(PDO::FETCH_OBJ);
-$res = $req->fetch();
+$resProd = $req->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
   <head>  
 	<?php require_once("inc/inc_head.php");?>
-    <title><?php echo $res->nomProduit; ?></title>
+    <title><?php echo $resProd->nomProduit; ?></title>
   </head>
   <body>
 	<!-- navbar -->
@@ -67,9 +66,9 @@ $res = $req->fetch();
 			echo $message;
 		}		 
 		// --------------------------------- AFFICHAGE DU PRODUIT
-		$sql = $connexion->query("SET NAMES 'utf8'"); 
-		$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
-		$sql->setFetchMode(PDO::FETCH_OBJ);
+		//$sql = $connexion->query("SET NAMES 'utf8'"); 
+		//$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
+		//$sql->setFetchMode(PDO::FETCH_OBJ);
 		?>
 		
 		<div class="content-wrapper">	
@@ -77,7 +76,7 @@ $res = $req->fetch();
 				<div class="container" style="padding-left:15px">	
 					
 						<div style="padding: 1%" class="product col-md-4 service-image-left">
-							<img id="item-display" src="<?php echo "".retourneParametre("repertoireUpload")."".$res->image."";?>" alt=""></img>
+							<img id="item-display" src="<?php echo "".retourneParametre("repertoireUpload")."".$resProd->image."";?>" alt=""></img>
 						</div>
 						
 						<!-- AJOUT DE PLUSIEURS IMAGES 
@@ -99,8 +98,8 @@ $res = $req->fetch();
 					<div class="col-md-7">
 						<div class="product-title">
 							<?php 
-							  echo $res->nomProduit; 
-							  if(estConnecte() && estAdmin(idUtilisateurConnecte())){echo " <a href='admin/produit.php?modif&id=".$_GET['id']."&idCat=".$res->idCategorie."'>[Modifier]</a>";} // Si admin : Affiche un lien pour modifier le produit
+							  echo $resProd->nomProduit; 
+							  if(estConnecte() && estAdmin(idUtilisateurConnecte())){echo " <a href='admin/produit.php?modif&id=".$_GET['id']."&idCat=".$resProd->idCategorie."'>[Modifier]</a>";} // Si admin : Affiche un lien pour modifier le produit
 							?>
 						</div>
 						<div class="product-desc">
@@ -115,9 +114,9 @@ $res = $req->fetch();
 						</div>
 						<div class="product-rating"><i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star-o"></i> </div>
 						<hr>
-						<div class="product-price"><?php echo $res->prixProduit; ?> €</div>
+						<div class="product-price"><?php echo $resProd->prixProduit; ?> €</div>
 						<?php 
-							$stockActuel = retourneStock($res->idProduit) - getQteProduit($res->idProduit);
+							$stockActuel = retourneStock($resProd->idProduit) - getQteProduit($resProd->idProduit);
 							if($stockActuel>0){
 								echo '<div class="product-stock">En Stock</div>';
 							}else{
@@ -129,7 +128,7 @@ $res = $req->fetch();
 						{
 							?>
 							<div class="btn-group cart">
-								<div style="text-align:right;"><a href="produit.php?ajouterPanier&id=<?php echo $res->idProduit; ?>" <?php if($stockActuel<1){echo 'class="btn btn-danger" disabled="disabled"';}else{echo 'class="btn btn-success"';} ?> role="button">Ajouter au panier</a></div>
+								<div style="text-align:right;"><a href="produit.php?ajouterPanier&id=<?php echo $resProd->idProduit; ?>" <?php if($stockActuel<1){echo 'class="btn btn-danger" disabled="disabled"';}else{echo 'class="btn btn-success"';} ?> role="button">Ajouter au panier</a></div>
 							</div>
 							<?php
 						}
@@ -162,7 +161,7 @@ $res = $req->fetch();
 							<div class="tab-pane fade in active" id="service-one">
 								<section class="container product-info">
 									<p>
-										<?php echo $res->descriptionProduit; ?>
+										<?php echo $resProd->descriptionProduit; ?>
 									</p>
 										<?php
 											// ------------------------------------------------------------------------------ AFFICHAGE CARACTERISTIQUES //
@@ -179,7 +178,7 @@ $res = $req->fetch();
 														<li>".$resultat->nom." : ".$resultat->valeur."</li>";
 													}
 												echo "</ul><br/>";
-											//echo '<div style="text-align:right;"><a href="produit.php?ajouterPanier&id='.$res->idProduit.'" class="btn btn-default" role="button">Ajouter au panier</a></div>';
+											//echo '<div style="text-align:right;"><a href="produit.php?ajouterPanier&id='.$resProd->idProduit.'" class="btn btn-default" role="button">Ajouter au panier</a></div>';
 										?>
 								</section>		  
 							</div>
@@ -240,7 +239,6 @@ $res = $req->fetch();
 								?>
 							</section>
 						</div>
-						
 						<div class="tab-pane fade" id="service-three">
 							<section style="padding-top:3%;" class="container">
 								<div class="col-lg-6">
