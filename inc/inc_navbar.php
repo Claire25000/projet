@@ -31,7 +31,7 @@
 								  //echo '<li><a href="commande.php"> Commande </a></li>';
 								  echo '<li style="margin-top:2px;margin-bottom:2px"><a href="commande.php"> Commande </a></li>';
 				  }else{
-					echo '<li><a href="inscription.php"> S\'inscrire </a></li>';
+					echo '<li style="margin-top:2px;margin-bottom:2px"><a href="inscription.php"> S\'inscrire </a></li>';
 				  }
 			?>
             

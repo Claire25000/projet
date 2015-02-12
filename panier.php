@@ -123,6 +123,27 @@ if(isset($_GET['vide']))
 		float: left;
 	}
 	</style>
+	<script>
+    function run() {
+        var modeLiv = document.getElementById("liv").value;
+		var sousTotal = document.getElementById("divTotalLivraison").innerHTML;
+		sousTotal = parseFloat(sousTotal);
+		var fraisLiv;
+
+		if(modeLiv ==2){
+			fraisLiv = 0;
+			fraisLiv = "<?php $fraisLiv = retourneFrais(2); echo $fraisLiv->frais;?>"
+			fraisLiv = parseFloat(fraisLiv);
+			document.getElementById("divFraisLivraison").innerHTML = fraisLiv; 
+		}else{
+			fraisLiv = 0;
+			document.getElementById("divFraisLivraison").innerHTML = fraisLiv;
+		}
+		document.getElementById("divSousTotalLivraison").innerHTML = sousTotal+fraisLiv;
+    }
+	//
+	
+	</script>
   </head>
   
   <body>
@@ -269,7 +290,9 @@ else
 						
 							echo '</tbody></table>
 						</div>';
-					  echo '<div style="text-align:right;"><h3>Total: ', number_format($total_panier, 2, ',', ' '), ' €</div>
+					  echo '<div style="text-align:right;"><h3>Total produit: <div style="display: inline;" id="divTotalLivraison">', number_format($total_panier, 2, ',', ' '), '</div> €</div>
+							<div style="text-align:right;"><h3>Livraison : <div style="display: inline;" id="divFraisLivraison">0</div> €</h3></div>
+							<div style="text-align:right;"><h3>Sous total : <div style="display: inline;" id="divSousTotalLivraison">', number_format($total_panier, 2, ',', ' '), '</div> €</h3></div>
 								<form method="POST" action="panier.php?comm&valider" class="form-horizontal">
 								<fieldset>
 								<!-- Textarea -->
@@ -284,13 +307,13 @@ else
 								<div class="form-group">
 								  <label class="col-md-4 control-label" for="liv">Mode de livraison</label>
 								  <div class="col-md-4">
-									<select id="liv" name="liv" class="form-control">';
-												$res = retourneFrais(2);
+									<select onchange="run()" id="liv" name="liv" class="form-control">';
 												foreach(retourneListeLivraison() as $element) // retourne un array de mode de livraison 
 														{
-															echo '<option value="'.$element->idModeLivraison.'">'.$element->libelleModeLivraison.'</option>'; 
+															$res = retourneFrais($element->idModeLivraison);
+															echo '<option value="'.$element->idModeLivraison.'">'.$element->libelleModeLivraison.'  '.$res->frais.'€</option>';
 														}
-												echo '</select>(Frais supplémentaires pour envoi par colissimo : '.$res->frais.' €)
+												echo '</select>
 								  </div>
 								</div>
 								<!-- Select Basic -->
