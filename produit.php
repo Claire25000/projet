@@ -72,7 +72,7 @@ $resProd = $req->fetch();
 		?>
 		
 		<div class="content-wrapper">	
-			<div style="padding:1%" class="item-container">	
+			<div style="margin-top: -2%;padding:1%" class="item-container">	
 				<div class="container" style="padding-left:15px">	
 					
 						<div style="padding: 1%" class="product col-md-4 service-image-left">
@@ -201,9 +201,9 @@ $resProd = $req->fetch();
 													<form action="produit.php?id='.$_GET['id'].'" method="POST">
 														<div>        
 															<br style="clear:both">
-																<div class="form-group col-md-4 ">                                
+																<div class="form-group col-md-12 ">                                
 																	<label id="messageLabel" for="message">Commentaire : </label>
-																	<textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="250" style="width: 574px; height: 87px;"></textarea>
+																	<textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="250" style="width: 100%; height: 87px;"></textarea>
 																		<span class="help-block"><p id="characterLeft" class="help-block ">You have reached the limit</p></span>                    
 																</div>
 															<br style="clear:both">

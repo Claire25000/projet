@@ -7,15 +7,18 @@ require_once("fonctions/fonctionsCommande.php");
 $id_article = null;
 $qte_article = 1;
 
+/*
 if(isset($_GET['id']) && isset($_GET['qte']))
 {
-	$id_article = $_GET['id'];
-	$qte_article = $_GET['qte'];
+	//$id_article = $_GET['id'];
+	//$qte_article = $_GET['qte'];
 }
-elseif(isset($_POST['id']))
+else*/
+if(isset($_POST['id']))
 {
 	$id_article = $_POST['id'];
 	$qte_article = $_POST['qte'];
+	$message = '<div class="alert alert-success" role="alert">La quantité a été mise à jour</div>';
 }
 
 if(isset($_POST['modifier']))  
@@ -363,10 +366,15 @@ else
 				}
 				$res = ajouterCommande(date("Y-m-d H:i:s"),1,$_POST['paie'],$_POST['liv'],idUtilisateurConnecte(),$info);
 	
-				foreach($_SESSION['panier'] as $id_article=>$article_acheté)
-				{
-					ajouterLigneCommande($res,$id_article,$article_acheté['qte']);
-					deduireStock($id_article,$article_acheté['qte']);
+				if(isset($_SESSION['panier'])){
+					foreach($_SESSION['panier'] as $id_article=>$article_acheté)
+					{
+						ajouterLigneCommande($res,$id_article,$article_acheté['qte']);
+						deduireStock($id_article,$article_acheté['qte']);
+					}
+				}else{
+					echo '<div class="alert alert-danger" role="alert">Une erreur est survenue !</div>';
+					die;
 				}
 				
 				viderPanier();
@@ -375,7 +383,7 @@ else
 					echo '<a href="panier.php?comm&valider&payer&ok&id='.$res.'" class="btn btn-default" role="button">Payer cette commande [fictif]</a><br/><br/>';
 				}else{
 					echo "<div class='panel panel-default'><div class='panel-body'>Veuillez adresser votre paiement à l'adresse suivante : </br>".retourneParametre('ordre');
-					echo '</br>Indiquez la référence de la commande : <b>'.$res.'</b> <br/><a href="commande.php" class="btn btn-default" role="button">Voir vos commandes</a></div></div>';
+					echo '</br>Indiquez la référence de la commande : <b>'.$res.'</b> <br/><br/><a href="commande.php" class="btn btn-default" role="button">Voir vos commandes</a></div></div>';
 				}
 				
 				echo '<h3>Prix total de la commande <b>: '.number_format($total_panier, 2, ',', ' '), ' €</b></h3>';

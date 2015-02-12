@@ -8,7 +8,7 @@ require_once('inc/inc_top.php');
 <html lang="fr">
   <head>
 	<?php require_once("inc/inc_head.php");?>
-    <title>Accueil - </title>
+    <title>Accueil</title>
   </head>
   
   <body>
