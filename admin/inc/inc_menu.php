@@ -1,4 +1,4 @@
-    <nav style="margin-bottom:5%" class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <nav style="margin-bottom:5%" class="navbar navbar-default navbar-static-top" role="navigation">
 		<div class="container">
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

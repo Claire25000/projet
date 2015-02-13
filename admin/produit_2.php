@@ -301,97 +301,27 @@ if(isset($_GET['deco'])){
 				</fieldset></form>";
 					
 					// ------------------------------------------------------ MODIFICATION CARACTERISTIQUES ----------------------------------//
-					$sql = $connexion->query("SET NAMES 'utf8'"); //on recupere les carac
+					$sql = $connexion->query("SET NAMES 'utf8'"); 
 					$sql = $connexion->query("Select data.idNom, nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$id);
 					$sql->setFetchMode(PDO::FETCH_OBJ);
 					
-					echo'	
-					<div class="table-responsive">
-							<table class="table table-striped" style="width: 99%">
-								<tr>
-									<th>Caractéristiques</th>
-									<th>Modifier</th>
-									<th>Supprimer</th>
-								</tr>';
-					echo '		<tr class="info" style="border: 2px dashed;">
-									<td><!-------------------------------------------- data_nom -->
-										<form class="form-horizontal">
-											<fieldset>
-											<!-- Text input-->
-											<div class="form-group">
-											    
-											  <div class="col-md-10">
-											  <input id="data_nom" name="data_nom" placeholder="placeholder" class="form-control input-md" type="text">
-											  </div>
-											</div>
-											<!-- Select Basic -->
-											<div class="form-group">
-											  
-											  <div class="col-md-10">
-												<select id="selectbasic" name="selectbasic" class="form-control">
-												  <option value="1">Option one</option>
-												  <option value="2">Option two</option>
-												</select>
-											  </div>
-											</div>
-											<div class="form-group">
-											  <div class="col-md-10">
-												<button id="singlebutton" name="singlebutton" class="btn btn-primary btn-block">Valider</button>
-											  </div>
-											</div>
-											</fieldset>
-										</form>
-									</td><!-------------------------------------------- data_valeur -->
-									<td class="danger">
-										<form class="form-horizontal">
-											<fieldset>
-											<!-- Text input-->
-											<div class="form-group">
-											    
-											  <div class="col-md-10">
-											  <input disabled="disabled" id="data_nom" name="data_nom" placeholder="placeholder" class="form-control input-md" type="text">
-											  </div>
-											</div>
-											<!-- Select Basic -->
-											<div class="form-group">
-											  
-											  <div class="col-md-10">
-												<select disabled="disabled" id="selectbasic" name="selectbasic" class="form-control">
-												  <option value="1">Option one</option>
-												  <option value="2">Option two</option>
-												</select>
-											  </div>
-											</div>
-											<div class="form-group">
-											  <div class="col-md-10">
-												<button disabled="disabled" id="singlebutton" name="singlebutton" class="btn btn-primary btn-block">Valider</button>
-											  </div>
-											</div>
-											</fieldset>
-										</form>
-									</td>
-									<td>
-									<!------->
-									</td>
-
-								</tr>';
-								
-								while($resultat = $sql->fetch()) // on boucle sur les carac du produit
-								{
-									echo '<tr>
-											<td>'.$resultat->nom.'</td> 
-											<td><form class="form-inline">
-												<input type="text" class="form-control" id="data_valeur" placeholder="Entrer une valeur..." value="'.$resultat->valeur.'">
-												<button type="submit" class="btn btn-default">Modifier</button>
-												</form>
-											</td>
-											<td><center><a href="produit.php?modif&idCat='.$_GET['idCat'].'&ds&id='.$id.'&idNom='.$resultat->idNom.'">X</a></center></td>
-										 </tr>';
-								}
-					   echo '</table>
-					</div>';
+					echo "<table>
+							<tr>
+								<th>Caractéristiques</th>
+								<th>Modifier</th>
+								<th>Supprimer</th>
+							</tr>";
 					
-					
+					while($resultat = $sql->fetch())
+					{
+					// ----------------------------------------------------------------------------------------affichage des caract 
+						echo "<tr>
+								<td>".$resultat->nom." : ".$resultat->valeur."</td> 
+								<td><center><a href='produit.php?modif&idCat=".$_GET['idCat']."&dm&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
+								<td><center><a href='produit.php?modif&idCat=".$_GET['idCat']."&ds&id=".$id."&idNom=".$resultat->idNom."'>X</a></center></td>
+							 </tr>";
+					}
+					echo "</table><br/>";
 					if(isset($_GET['dm']))
 					{
 						echo "<form action='produit.php?modif&idCat=".$_GET['idCat']."&dm&id=".$_GET['id']."&idNom=".$_GET['idNom']."&ok' method='POST'>
@@ -460,7 +390,7 @@ if(isset($_GET['deco'])){
 						$rep = "non"; 
 					}
 				elseif(!isset($_POST['okc']))
-				{/*
+				{
 					echo "<label>Ajouter de nouvelles caractéristiques : </label>";
 					echo "<br/><form action='produit.php?modif&idCat=".$_GET['idCat']."&id=".$_GET['id']."' method='POST'><label>Nom : </label><select name='carNom'>
 						<option value=null> </option>";
@@ -487,9 +417,9 @@ if(isset($_GET['deco'])){
 					echo "
 					</select> ou <input type='text' name='nom' style='width:100px; height:20px;'></input><br/>
 					<input type='submit' name='okc' value='Ajouter'></input>			
-					</form>";*/
+					</form>";
 				}else
-				{/*
+				{
 					if($_POST['carNom'] == 'null')
 					{
 						$e = ifNomExist($_POST['nom']);
@@ -532,10 +462,10 @@ if(isset($_GET['deco'])){
 					}
 					echo "
 					</select> ou <input type='text' name='val' style='width:100px; height:20px;'></input><br/>
-					<input type='submit' name='okc2' value='Ajouter'></input>";*/
+					<input type='submit' name='okc2' value='Ajouter'></input>";
 				}
 				if(isset($_POST['okc2']))
-				{/*
+				{
 					if($_POST['carVal'] == 'null')
 						{				
 							$e = ifValeurExist($_POST['val']);
@@ -550,7 +480,7 @@ if(isset($_GET['deco'])){
 						{
 							$idValeur = $_POST['carVal'];
 						}
-						ajouterData($_GET['id'],$_POST['nom'],$idValeur);*/
+						ajouterData($_GET['id'],$_POST['nom'],$idValeur);
 				}
 		}
 		elseif(isset($_GET['id']))
