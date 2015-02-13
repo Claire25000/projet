@@ -4,6 +4,21 @@ if(!isset($_GET['id'])){header('Location: ../404.php?err=404');} // si on a pas 
 require_once('inc/inc_top.php');
 require_once("fonctions/fonctionProd.php");
 require_once("fonctions/fonctionCategorie.php");
+
+
+if(isset($_GET['croissant'])){
+	$maRequete = "Select * from produit where idCategorie=".$_GET['id']." ORDER BY prixProduit ASC";
+}else if(isset($_GET['decroissant'])){
+	$maRequete = "Select * from produit where idCategorie=".$_GET['id']." ORDER BY prixProduit DESC";
+}else if(isset($_GET['note'])){
+	$maRequete = "Select * from produit where idCategorie=".$_GET['id'].""; // A FAIRE
+}else{
+	$maRequete = "Select * from produit where idCategorie=".$_GET['id']." ORDER BY idProduit DESC";
+}
+$req = $connexion->query("SET NAMES 'utf8'");
+$req = $connexion->query($maRequete);
+$req->setFetchMode(PDO::FETCH_OBJ);
+			
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -30,12 +45,12 @@ require_once("fonctions/fonctionCategorie.php");
 			<div class="form-group">
 			  <label class="col-md-6 control-label" for="tri"></label>
 			  <div class="col-md-6">
-				<select id="tri" name="tri" class="form-control" onChange="top.location.href=this.options[this.selectedIndex].value;">
+				<select id="tri" name="tri" class="form-control" onChange="top.location.href='categorie.php?id=<?php echo $_GET['id'];?>&titleCat=<?php echo $_GET['titleCat'];?>'+this.options[this.selectedIndex].value;">
 				  <option value="#" selected="selected">Trier les articles</option>
-				  <option value="?croissant">Prix : ordre croissant</option>
-				  <option value="decroissant">Prix : ordre décroissant</option>
-				  <option value="note">Note moyenne</option>
-				  <option value="date">Date d'ajout</option>
+				  <option value="&croissant">Prix : ordre croissant</option>
+				  <option value="&decroissant">Prix : ordre décroissant</option>
+				  <option value="&note">Note moyenne</option>
+				  <option value="&date">Date d'ajout</option>
 				  
 				</select>
 			  </div>
@@ -45,9 +60,6 @@ require_once("fonctions/fonctionCategorie.php");
 			</form>
 
 		<?php
-			$req = $connexion->query("SET NAMES 'utf8'");
-			$req = $connexion->query("Select * from produit where idCategorie=".$_GET['id']."");
-			$req->setFetchMode(PDO::FETCH_OBJ);
 			$i = 1; // variable d'incrementation
 			 //on récupère les produits voulus
 			while($res = $req->fetch())
