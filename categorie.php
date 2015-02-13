@@ -24,6 +24,26 @@ require_once("fonctions/fonctionCategorie.php");
 			echo $message;
 		}
 		?>
+		<form class="form-horizontal">
+			<fieldset>
+			<!-- Select Basic -->
+			<div class="form-group">
+			  <label class="col-md-6 control-label" for="tri"></label>
+			  <div class="col-md-6">
+				<select id="tri" name="tri" class="form-control" onChange="top.location.href=this.options[this.selectedIndex].value;">
+				  <option value="#" selected="selected">Trier les articles</option>
+				  <option value="?croissant">Prix : ordre croissant</option>
+				  <option value="decroissant">Prix : ordre décroissant</option>
+				  <option value="note">Note moyenne</option>
+				  <option value="date">Date d'ajout</option>
+				  
+				</select>
+			  </div>
+			</div>
+
+			</fieldset>
+			</form>
+
 		<?php
 			$req = $connexion->query("SET NAMES 'utf8'");
 			$req = $connexion->query("Select * from produit where idCategorie=".$_GET['id']."");

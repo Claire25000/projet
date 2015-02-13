@@ -314,57 +314,99 @@ if(isset($_GET['deco'])){
 									<th>Supprimer</th>
 								</tr>';
 					echo '		<tr class="info" style="border: 2px dashed;">
-									<td><!-------------------------------------------- data_nom -->
-										<form class="form-horizontal">
+									<td><!-------------------------------------------- data_nom (ajout carac=)---------------------------------------------->
+										<form action="produit.php?modif&idCat='.$_GET["idCat"].'&id='.$_GET["id"].'" method="POST" class="form-horizontal">
 											<fieldset>
 											<!-- Text input-->
 											<div class="form-group">
 											    
 											  <div class="col-md-10">
-											  <input id="data_nom" name="data_nom" placeholder="placeholder" class="form-control input-md" type="text">
+											  <input id="nom" name="nom" placeholder="Nouvelle caractérisitque" class="form-control input-md" type="text">
 											  </div>
 											</div>
 											<!-- Select Basic -->
 											<div class="form-group">
 											  
 											  <div class="col-md-10">
-												<select id="selectbasic" name="selectbasic" class="form-control">
-												  <option value="1">Option one</option>
-												  <option value="2">Option two</option>
-												</select>
+												<select id="carNom" name="carNom" class="form-control">
+												  <option value="null">Séléctionner une caractéristique existante</option>';
+												  	$nom = $connexion->query("Select * from data_nom");
+													$nom->setFetchMode(PDO::FETCH_OBJ);
+													$noms = genererNomCategorie($_GET['idCat']);
+																		
+													if($noms == null){
+														while($res = $nom->fetch()){
+															echo "<option value='".$res->idNom."'>".$res->nom."</option>";
+														}
+													}else{
+														foreach($noms as $element){ // retourne un array des noms
+															echo "<option value='".$element->idNom."'>".$element->nom."</option>";
+														}
+													}
+										   echo '</select>
 											  </div>
 											</div>
 											<div class="form-group">
 											  <div class="col-md-10">
-												<button id="singlebutton" name="singlebutton" class="btn btn-primary btn-block">Valider</button>
+												<button id="okc" name="okc" class="btn btn-primary btn-block">Valider</button>
 											  </div>
 											</div>
 											</fieldset>
 										</form>
-									</td><!-------------------------------------------- data_valeur -->
+									</td><!-------------------------------------------- data_valeur (ajout)----------------------------------------->
 									<td class="danger">
-										<form class="form-horizontal">
+										<form action="produit.php?modif&idCat='.$_GET['idCat'].'&id='.$_GET["id"].'&ok" method="POST" class="form-horizontal">
 											<fieldset>
 											<!-- Text input-->
 											<div class="form-group">
 											    
 											  <div class="col-md-10">
-											  <input disabled="disabled" id="data_nom" name="data_nom" placeholder="placeholder" class="form-control input-md" type="text">
+											  <input id="data_nom" name="data_nom" placeholder="Nouvelle donnée" class="form-control input-md" type="text">
 											  </div>
 											</div>
 											<!-- Select Basic -->
 											<div class="form-group">
 											  
 											  <div class="col-md-10">
-												<select disabled="disabled" id="selectbasic" name="selectbasic" class="form-control">
-												  <option value="1">Option one</option>
-												  <option value="2">Option two</option>
-												</select>
+												<select id="carVal" name="carVal" class="form-control">
+												  <option value="null">Donnée existante</option>';
+												  
+													if(isset($_POST['carNom'])){ // si le data_nom a été séléctionné dans la liste 
+														if($_POST['carNom'] == 'null'){ // si on a une nouvelle data_nom
+															$e = ifNomExist($_POST['nom']);
+															if($e == 0){
+																ajouterNom($_POST['nom']);
+															}
+															$idNom = getIdNom($_POST['nom']);
+														}else{ // si la data_nom existe
+															$idNom = $_POST['carNom'];
+														}
+													}
+													
+												  	$val = $connexion->query("Select * from data_valeur");
+													$val->setFetchMode(PDO::FETCH_OBJ);
+													
+													if(isset($idNom)){ // si on a recu le form data_nom, on a déja 
+														$valeur = genererValeurNom($idNom);
+													}else{
+														$valeur=null;
+													}
+													
+													if($valeur == null){ // si la data_nom est nouvelle
+														while($res = $val->fetch()){
+															echo "<option value='".$res->idValeur."'>".$res->valeur."</option>";
+														}
+													}else{
+														foreach($valeur as $element){ // si la data_nom existe, on retourne les data_valeurs qui correspondent
+															echo "<option value='".$element->idValeur."'>".$element->valeur."</option>";
+														}
+													}
+										  echo '</select>
 											  </div>
 											</div>
 											<div class="form-group">
 											  <div class="col-md-10">
-												<button disabled="disabled" id="singlebutton" name="singlebutton" class="btn btn-primary btn-block">Valider</button>
+												<button  id="singlebutton" name="singlebutton" class="btn btn-primary btn-block">Valider</button>
 											  </div>
 											</div>
 											</fieldset>
@@ -390,8 +432,9 @@ if(isset($_GET['deco'])){
 								}
 					   echo '</table>
 					</div>';
-					
-					
+					///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+					// ancien code pas encore modifié ci-dessous//
+					//////////////////////////////////////////////
 					if(isset($_GET['dm']))
 					{
 						echo "<form action='produit.php?modif&idCat=".$_GET['idCat']."&dm&id=".$_GET['id']."&idNom=".$_GET['idNom']."&ok' method='POST'>

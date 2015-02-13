@@ -389,7 +389,7 @@ if(isset($_GET['deco'])){
 						
 						$rep = "non"; 
 					}
-				elseif(!isset($_POST['okc']))
+				elseif(!isset($_POST['okc'])) // si on a pas envpyé le form pour ajouter data_nom (ajout de data)
 				{
 					echo "<label>Ajouter de nouvelles caractéristiques : </label>";
 					echo "<br/><form action='produit.php?modif&idCat=".$_GET['idCat']."&id=".$_GET['id']."' method='POST'><label>Nom : </label><select name='carNom'>
@@ -418,7 +418,7 @@ if(isset($_GET['deco'])){
 					</select> ou <input type='text' name='nom' style='width:100px; height:20px;'></input><br/>
 					<input type='submit' name='okc' value='Ajouter'></input>			
 					</form>";
-				}else
+				}else // si on a envoyé le form data_nom  ajout de data
 				{
 					if($_POST['carNom'] == 'null')
 					{
@@ -444,7 +444,7 @@ if(isset($_GET['deco'])){
 					$val->setFetchMode(PDO::FETCH_OBJ);
 				
 					
-					$valeur = genererValeurNom($idNom);
+					$valeur = null;
 					
 					if($valeur == null)
 					{
