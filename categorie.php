@@ -11,7 +11,7 @@ if(isset($_GET['croissant'])){
 }else if(isset($_GET['decroissant'])){
 	$maRequete = "Select * from produit where idCategorie=".$_GET['id']." ORDER BY prixProduit DESC";
 }else if(isset($_GET['note'])){
-	$maRequete = "Select * from produit where idCategorie=".$_GET['id'].""; // A FAIRE
+	$maRequete = "SELECT *,AVG(notation.note) as noteMoyenne FROM `produit`,`notation` WHERE produit.idProduit = ".$_GET['id']." AND produit.idProduit = notation.idProduit ORDER BY AVG(notation.note) DESC"; // A FAIRE
 }else{
 	$maRequete = "Select * from produit where idCategorie=".$_GET['id']." ORDER BY idProduit DESC";
 }
@@ -39,23 +39,22 @@ $req->setFetchMode(PDO::FETCH_OBJ);
 			echo $message;
 		}
 		?>
-		<form class="form-horizontal">
+		<form class="form-horizontal"> <!-- select pour modifier le tri des produits de la categorie -->
 			<fieldset>
 			<!-- Select Basic -->
 			<div class="form-group">
 			  <label class="col-md-6 control-label" for="tri"></label>
 			  <div class="col-md-6">
 				<select id="tri" name="tri" class="form-control" onChange="top.location.href='categorie.php?id=<?php echo $_GET['id'];?>&titleCat=<?php echo $_GET['titleCat'];?>'+this.options[this.selectedIndex].value;">
-				  <option value="#" selected="selected">Trier les articles</option>
-				  <option value="&croissant">Prix : ordre croissant</option>
-				  <option value="&decroissant">Prix : ordre décroissant</option>
-				  <option value="&note">Note moyenne</option>
-				  <option value="&date">Date d'ajout</option>
+				  <option value="#">Trier les articles</option>
+				  <option <?php if(isset($_GET['croissant'])){echo'selected="selected"';}?> value="&croissant">Prix : ordre croissant</option>
+				  <option <?php if(isset($_GET['decroissant'])){echo'selected="selected"';}?> value="&decroissant">Prix : ordre décroissant</option>
+				  <option <?php if(isset($_GET['note'])){echo'selected="selected"';}?> value="&note">Note moyenne</option>
+				  <option <?php if(isset($_GET['date'])){echo'selected="selected"';}?> value="&date">Date d'ajout</option>
 				  
 				</select>
 			  </div>
 			</div>
-
 			</fieldset>
 			</form>
 

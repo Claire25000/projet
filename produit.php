@@ -4,6 +4,8 @@ if(!isset($_GET['id']))
 {
 	header("Location:404.php?err=202");
 	exit;
+}else{
+	$idProduit = $_GET['id'];
 }
 require_once("fonctions/fonctionComm.php");
 require_once("fonctions/fonctionProd.php");
@@ -12,13 +14,45 @@ require_once("fonctions/fonctionsNotation.php");
 
 if(isset($_GET['supp']))
 {
-	supprimerCommentaire($_GET['id']);
+	if(!isset($_POST['validSuprComm'])){
+		$message = '<div class="alert alert-info" role="alert">
+					<form method="POST" action="produit.php?id='.$idProduit.'&supp" class="form-horizontal">
+					<fieldset>
+					<!-- Multiple Radios (inline) -->
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="validSuprComm">Valider la supression du commentaire ?</label>
+					  <div class="col-md-4"> 
+						<label class="radio-inline" for="validSuprComm-0">
+						  <input name="validSuprComm" id="validSuprComm-0" value="1" checked="checked" type="radio">
+						  Oui
+						</label> 
+						<label class="radio-inline" for="validSuprComm-1">
+						  <input name="validSuprComm" id="validSuprComm-1" value="2" type="radio">
+						  Non
+						</label>
+					  </div>
+					</div>
+					<!-- Button -->
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="singlebutton"></label>
+					  <div class="col-md-4">
+						
+						<button id="singlebutton" name="singlebutton" type="submit" class="btn btn-primary">Valider</button>
+					  </div>
+					</div>
+
+					</fieldset>
+					</form>
+					</div>';
+	}else if(isset($_POST['validSuprComm']) && $_POST['validSuprComm'] == '1'){
+		supprimerCommentaire($idProduit);
+	}	
 }
 
 if(isset($_GET['ajouterPanier']))
 {
-	if(retourneStock($_GET['id']) - getQteProduit($_GET['id']) > 0){ // si la quantité du produit ajouté ne dépasse pas le stock du produit<
-		if(ajouterPanier($_GET['id'],1)){$message = '<div class="alert alert-success" role="alert">Le produit a été ajouté à votre panier.</div>';}
+	if(retourneStock($idProduit) - getQteProduit($idProduit) > 0){ // si la quantité du produit ajouté ne dépasse pas le stock du produit<
+		if(ajouterPanier($idProduit,1)){$message = '<div class="alert alert-success" role="alert">Le produit a été ajouté à votre panier.</div>';}
 	}else{
 		$message = '<div class="alert alert-danger" role="alert">Le produit n\'est plus en stock suffisant, n\'hésitez pas à nous contacter !</div>';
 	}
@@ -26,7 +60,7 @@ if(isset($_GET['ajouterPanier']))
 
 if(isset($_POST['note'])){
 	if(estConnecte()){
-		if(ajouterNotation($_GET['id'],idUtilisateurConnecte(),$_POST['note'])){
+		if(ajouterNotation($idProduit,idUtilisateurConnecte(),$_POST['note'])){
 			$message = '<div class="alert alert-success" role="alert">Votre note a été ajoutée, merci !</div>';
 		}
 	}else{
@@ -36,7 +70,7 @@ if(isset($_POST['note'])){
 
 if(isset($_POST['commenter'])){
 	if(estConnecte()){
-		if(ajouterCommentaire($_GET['id'],$_POST['message'])){
+		if(ajouterCommentaire($idProduit,$_POST['message'])){
 			$message = '<div class="alert alert-success" role="alert">Votre commentaire a été ajouté, merci !</div>';
 		}
 	}	
@@ -44,7 +78,7 @@ if(isset($_POST['commenter'])){
 
  //on récupère le produit voulu
 $req = $connexion->query("SET NAMES 'utf8'");	
-$req = $connexion->query("Select produit.*, categorie.libelleCategorie, categorie.idCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$_GET['id']);
+$req = $connexion->query("Select produit.*, categorie.libelleCategorie, categorie.idCategorie from produit, categorie where produit.idCategorie = categorie.idCategorie and idProduit=".$idProduit);
 $req->setFetchMode(PDO::FETCH_OBJ);
 $resProd = $req->fetch();
 ?>
@@ -53,6 +87,15 @@ $resProd = $req->fetch();
   <head>  
 	<?php require_once("inc/inc_head.php");?>
     <title><?php echo $resProd->nomProduit; ?></title>
+	<style>
+	.user_name{
+    font-size:14px;
+    font-weight: bold;
+	}
+	.comments-list .media{
+		border-bottom: 1px dotted #ccc;
+	}
+	</style>
   </head>
   <body>
 	<!-- navbar -->
@@ -64,11 +107,7 @@ $resProd = $req->fetch();
 		require_once('inc/inc_menu.php');
 		if(isset($message)){
 			echo $message;
-		}		 
-		// --------------------------------- AFFICHAGE DU PRODUIT
-		//$sql = $connexion->query("SET NAMES 'utf8'"); 
-		//$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
-		//$sql->setFetchMode(PDO::FETCH_OBJ);
+		}
 		?>
 		
 		<div class="content-wrapper">	
@@ -78,34 +117,17 @@ $resProd = $req->fetch();
 						<div style="padding: 1%" class="product col-md-4 service-image-left">
 							<img id="item-display" src="<?php echo "".retourneParametre("repertoireUpload")."".$resProd->image."";?>" alt=""></img>
 						</div>
-						
-						<!-- AJOUT DE PLUSIEURS IMAGES 
-						<div class="container service1-items col-sm-2 col-md-2 pull-left">
-							<center>
-								<a id="item-1" class="service1-item">
-									<img src="http://www.corsair.com/Media/catalog/product/g/s/gs600_psu_sideview_blue_2.png" alt=""></img>
-								</a>
-								<a id="item-2" class="service1-item">
-									<img src="http://www.corsair.com/Media/catalog/product/g/s/gs600_psu_sideview_blue_2.png" alt=""></img>
-								</a>
-								<a id="item-3" class="service1-item">
-									<img src="http://www.corsair.com/Media/catalog/product/g/s/gs600_psu_sideview_blue_2.png" alt=""></img>
-								</a>
-							</center>
-						</div>-->
-					
-						
 					<div class="col-md-7">
 						<div class="product-title">
 							<?php 
 							  echo $resProd->nomProduit; 
-							  if(estConnecte() && estAdmin(idUtilisateurConnecte())){echo " <a href='admin/produit.php?modif&id=".$_GET['id']."&idCat=".$resProd->idCategorie."'>[Modifier]</a>";} // Si admin : Affiche un lien pour modifier le produit
+							  if(estConnecte() && estAdmin(idUtilisateurConnecte())){echo " <a href='admin/produit.php?modif&id=".$idProduit."&idCat=".$resProd->idCategorie."'>[Modifier]</a>";} // Si admin : Affiche un lien pour modifier le produit
 							?>
 						</div>
 						<div class="product-desc">
-							<?php printf("%.2f",retourneNote($_GET['id'])); // retourne la moyenne des notes du produit arondies x,xx?>
+							<?php printf("%.2f",retourneNote($idProduit)); // retourne la moyenne des notes du produit arondies x,xx?>
 							<?php 
-							if(aDejaNote(idUtilisateurConnecte(),$_GET['id'])){ // si l'utilisateur a déja noté
+							if(aDejaNote(idUtilisateurConnecte(),$idProduit)){ // si l'utilisateur a déja noté
 								$dejaNote = true;
 							}else{
 								$dejaNote = false;
@@ -148,14 +170,12 @@ $resProd = $req->fetch();
 							<li class="active"><a href="#service-one" data-toggle="tab">DESCRIPTION</a></li>
 							<li><a href="#service-two" data-toggle="tab">COMMENTAIRES</a></li>
 							<?php
-							if(aDejaNote(idUtilisateurConnecte(),$_GET['id'])){ // s'il a déja noter on affiche pas l'encart
+							if(aDejaNote(idUtilisateurConnecte(),$idProduit)){ // s'il a déja noter on affiche pas l'encart
 								echo '<li><a href="#" data-toggle="tab">Vous avez noté</a></li>';
 							}else{
 								echo '<li><a href="#service-three" data-toggle="tab">NOTATION</a></li>';
 							}
 							?>
-							
-							
 						</ul>
 					<div id="myTabContent" class="tab-content">
 							<div class="tab-pane fade in active" id="service-one">
@@ -166,7 +186,7 @@ $resProd = $req->fetch();
 										<?php
 											// ------------------------------------------------------------------------------ AFFICHAGE CARACTERISTIQUES //
 											$sql = $connexion->query("SET NAMES 'utf8'"); 
-											$sql = $connexion->query("Select data.idNom, nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
+											$sql = $connexion->query("Select data.idNom, nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$idProduit);
 											$sql->setFetchMode(PDO::FETCH_OBJ);
 											
 											echo "<h3>Caractéristiques : </h3>
@@ -189,52 +209,63 @@ $resProd = $req->fetch();
 									// ------------------------------------------------------------------------------ GESTION COMMENTAIRES//
 									echo '<div class="container">';
 									if(retourneParametre("afficherCommentaire") == 'true')
-									{					
+									{
 										if(estConnecte() == 'true')
 										{
-											if(commentaireExiste($_GET['id'],idUtilisateurConnecte()) == 1)
+											if(commentaireExiste($idProduit,idUtilisateurConnecte()) == 1) // si l'utilisateur a deja commenter
 											{
-												echo '</br><h4>Vous avez déjà saisi un commentaire pour ce produit !</h4>';
+												echo '</br><h3>Vous ne pouvez publiquer qu\'un commentaire par produit.</h3>';
 											}
-											else{
+											else{ // si l'utilisateur n'a pas commenter : zone de commentaire
 												echo '
-													<form action="produit.php?id='.$_GET['id'].'" method="POST">
+													<form action="produit.php?id='.$idProduit.'" method="POST">
 														<div>        
 															<br style="clear:both">
 																<div class="form-group col-md-12 ">                                
 																	<label id="messageLabel" for="message">Commentaire : </label>
 																	<textarea class="form-control input-sm " type="textarea" id="message" name="message" placeholder="Message" maxlength="250" style="width: 100%; height: 87px;"></textarea>
-																		<span class="help-block"><p id="characterLeft" class="help-block ">You have reached the limit</p></span>                    
+																		<span class="help-block"><p id="characterLeft" class="help-block ">Limite atteinte</p></span>                    
 																</div>
 															<br style="clear:both">
-															<div class="form-group col-md-2">
-															<button class="form-control input-sm btn btn-success disabled" id="btnSubmit" name="commenter" type="submit" style="height:35px"> Envoyer</button>    
+															<div class="form-group col-md-4">
+															<button class="form-control input-sm btn btn-success disabled" id="btnSubmit" name="commenter" type="submit" style="height:35px">Publier mon commentaire</button>    
 														</div>
 													</form>
 												</br></br>';
 											}
 										}
-											
-										foreach(retourneListeCommentaire($_GET['id']) as $element)
-										{
-											$date = new DateTime($element->date);
-											echo '<br/><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> <u>Par '.retourneUtilisateur($element->idUtilisateur)->login.' le '.$date->format('d/m/Y').' :</u> ';
-													if(aDejaNote($element->idUtilisateur,$_GET['id']) == true)
-													{
-														echo "<span class='label label-primary'>".intval(retourneNote($_GET['id']))."/10</span>";
-													}
-											
-											if(estConnecte() == 'true')
-											{
-												if($element->idUtilisateur == idUtilisateurConnecte())
-												{
-													echo "  <a href='produit.php?id=".$_GET['id']."&supp'>Supprimer</a>";
-												}
-											}
-											
-											echo '</br>'.$element->comm;
-										}
-										echo '</div>';
+										
+									  echo '<div class="container">
+												<div class="row">
+													<div class="col-md-11">
+													  <div class="page-header">
+													  </div> 
+													   <div class="comments-list">';
+													   ////////////////////////////////////////////////////////////////////////////////////////////////////////
+														foreach(retourneListeCommentaire($idProduit) as $element) // on boucle sur les commentaires du produit
+														{
+															$date = new DateTime($element->date);
+															$note = '';
+															if(aDejaNote($element->idUtilisateur,$idProduit) == true){$note = intval(retourneNoteUtilisateur($idProduit,$element->idUtilisateur)).'/10';} // si l'user a noté on affiche la note
+																	
+															echo '	<div class="media">
+																	<p class="pull-right"><small>le '.$date->format('d/m/Y').'</small></p>
+																		<div class="media-body">
+																			<h4 class="media-heading user_name">';
+															if(estConnecte() == 'true'){if($element->idUtilisateur == idUtilisateurConnecte()){echo "  <a href='produit.php?id=".$idProduit."&supp'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a>";}}
+															echo '		'.retourneUtilisateur($element->idUtilisateur)->login.'
+																				<span class="label label-primary">'.$note.'</span>
+																			</h4>
+																			<span class="glyphicon glyphicon-comment" aria-hidden="true"></span> '.$element->comm.'
+																		</div>
+																	</div>';
+														}
+														////////////////////////////////////////////////////////////////////////////////////////////////////////
+											echo 	'	</div>
+														</div>
+													</div>
+												</div>
+											</div>';
 									}
 								?>
 							</section>
@@ -242,7 +273,7 @@ $resProd = $req->fetch();
 						<div class="tab-pane fade" id="service-three">
 							<section style="padding-top:3%;" class="container">
 								<div class="col-lg-6">
-								<form action="produit.php?id=<?php echo $_GET['id'];?>" method="POST">
+								<form action="produit.php?id=<?php echo $idProduit;?>" method="POST">
 								<div class="input-group">
 								  <select id="note" name="note" class="form-control">
 										          <option value="1">1</option>

@@ -19,6 +19,15 @@ function retourneNote($idProduit){
 	
 	return $nb;
 }
+function retourneNoteUtilisateur($idProduit,$idUtilisateur){
+	global $connexion; // on définie la variables globale de connection dans la fonction
+
+	$requete = $connexion->query("SELECT note FROM `notation`WHERE idUtilisateur = ".$idUtilisateur." AND idProduit =".$idProduit);
+	$res = $requete->fetch();
+	$nb = $res['note'];
+	
+	return $nb;
+}
 function aDejaNote($idUtilisateur,$idProduit){
 	global $connexion; // on définie la variables globale de connection dans la fonction
 	
