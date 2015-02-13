@@ -1,11 +1,17 @@
 <?php
 require_once('inc/inc_top.php');
-if(!isset($_GET['id']))
+if(!isset($_GET['id'])) // si on a pas d'id produit on redirige
 {
 	header("Location:404.php?err=202");
 	exit;
 }else{
-	$idProduit = $_GET['id'];
+	if(is_numeric($_GET['id'])){ // si l'id est uniquement numérique
+		$idProduit = intval($_GET['id']); // on enregistre une valeur numérique forée de l'ID
+	}else{ // si l'ID n'est pas numérique on redirige vers sa version numérique
+		header("Location:produit.php?id=".intval($_GET['id']).""); 
+		exit;
+	}
+	
 }
 require_once("fonctions/fonctionComm.php");
 require_once("fonctions/fonctionProd.php");
@@ -60,7 +66,12 @@ if(isset($_GET['ajouterPanier']))
 
 if(isset($_POST['note'])){
 	if(estConnecte()){
-		if(ajouterNotation($idProduit,idUtilisateurConnecte(),$_POST['note'])){
+		if(aDejaNote(idUtilisateurConnecte(),$idProduit)){ // l'utilisateur a déja noter on met a jour 
+			if(actualiserNotation($idProduit,idUtilisateurConnecte(),$_POST['note'])){
+				$message = '<div class="alert alert-success" role="alert">Votre note a été mise à jour, merci !</div>';
+			}
+		}
+		else if(ajouterNotation($idProduit,idUtilisateurConnecte(),$_POST['note'])){ // l'utilisateur n'avais pas encore noté : on insert la note
 			$message = '<div class="alert alert-success" role="alert">Votre note a été ajoutée, merci !</div>';
 		}
 	}else{
@@ -155,53 +166,42 @@ $resProd = $req->fetch();
 							<?php
 						}
 						?>
-						<!--<div class="btn-group wishlist">
-							<button type="button" class="btn btn-danger">
-								Add to wishlist 
-							</button>
-						</div>-->
 					</div>
 				</div> 
 			</div>
 			<div class="container-fluid">		
 				<div class="col-md-12 product-info">
-						<ul id="myTab" class="nav nav-tabs nav_tabs"> <!-- onglets produit -->
-							
-							<li class="active"><a href="#service-one" data-toggle="tab">DESCRIPTION</a></li>
-							<li><a href="#service-two" data-toggle="tab">COMMENTAIRES</a></li>
-							<?php
-							if(aDejaNote(idUtilisateurConnecte(),$idProduit)){ // s'il a déja noter on affiche pas l'encart
-								echo '<li><a href="#" data-toggle="tab">Vous avez noté</a></li>';
-							}else{
-								echo '<li><a href="#service-three" data-toggle="tab">NOTATION</a></li>';
-							}
-							?>
-						</ul>
+					<ul id="myTab" class="nav nav-tabs nav_tabs"> <!-- onglets produit -->
+						<li class="active"><a href="#service-one" data-toggle="tab">DESCRIPTION</a></li>
+						<li><a href="#service-two" data-toggle="tab">COMMENTAIRES</a></li>
+						<li><a href="#service-three" data-toggle="tab">NOTATION</a></li>
+					</ul>
+					
 					<div id="myTabContent" class="tab-content">
-							<div class="tab-pane fade in active" id="service-one">
-								<section class="container product-info">
-									<p>
-										<?php echo $resProd->descriptionProduit; ?>
-									</p>
-										<?php
-											// ------------------------------------------------------------------------------ AFFICHAGE CARACTERISTIQUES //
-											$sql = $connexion->query("SET NAMES 'utf8'"); 
-											$sql = $connexion->query("Select data.idNom, nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$idProduit);
-											$sql->setFetchMode(PDO::FETCH_OBJ);
-											
-											echo "<h3>Caractéristiques : </h3>
-											<ul>";
-											
-													while($resultat = $sql->fetch())
-													{
-														echo "<tr>
-														<li>".$resultat->nom." : ".$resultat->valeur."</li>";
-													}
-												echo "</ul><br/>";
-											//echo '<div style="text-align:right;"><a href="produit.php?ajouterPanier&id='.$resProd->idProduit.'" class="btn btn-default" role="button">Ajouter au panier</a></div>';
-										?>
-								</section>		  
-							</div>
+						<div class="tab-pane fade in active" id="service-one">
+							<section class="container product-info">
+								<p>
+									<?php echo $resProd->descriptionProduit; ?>
+								</p>
+									<?php
+										// ------------------------------------------------------------------------------ AFFICHAGE CARACTERISTIQUES //
+										$sql = $connexion->query("SET NAMES 'utf8'"); 
+										$sql = $connexion->query("Select data.idNom, nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$idProduit);
+										$sql->setFetchMode(PDO::FETCH_OBJ);
+										
+										echo "<h3>Caractéristiques : </h3>
+										<ul>";
+										
+												while($resultat = $sql->fetch())
+												{
+													echo "<tr>
+													<li>".$resultat->nom." : ".$resultat->valeur."</li>";
+												}
+											echo "</ul><br/>";
+										//echo '<div style="text-align:right;"><a href="produit.php?ajouterPanier&id='.$resProd->idProduit.'" class="btn btn-default" role="button">Ajouter au panier</a></div>';
+									?>
+							</section>		  
+						</div>
 							
 						<div class="tab-pane fade" id="service-two">
 							<section class="container">
@@ -240,7 +240,7 @@ $resProd = $req->fetch();
 													<div class="col-md-11">
 													  <div class="page-header">
 													  </div> 
-													   <div class="comments-list">';
+													   <div class="col-md-12 comments-list">';
 													   ////////////////////////////////////////////////////////////////////////////////////////////////////////
 														foreach(retourneListeCommentaire($idProduit) as $element) // on boucle sur les commentaires du produit
 														{
@@ -276,19 +276,32 @@ $resProd = $req->fetch();
 								<form action="produit.php?id=<?php echo $idProduit;?>" method="POST">
 								<div class="input-group">
 								  <select id="note" name="note" class="form-control">
-										          <option value="1">1</option>
-												  <option value="2">2</option>
-												  <option value="3">3</option>
-												  <option value="4">4</option>
-												  <option value="5">5</option>
-												  <option value="6">6</option>
-												  <option value="7">7</option>
-												  <option value="8">8</option>
-												  <option value="9">9</option>
-												  <option value="10">10</option>
+								  <?php
+									if(aDejaNote(idUtilisateurConnecte(),$idProduit)){$note = retourneNoteUtilisateur($idProduit,idUtilisateurConnecte());}
+									
+									for ($i = 1; $i <= 10; $i++) {
+										if(isset($note)){
+											if($note == $i){ // si l'utilisateur a noté on préséléctionne la note
+												echo '<option selected="selected" value="'.$i.'">'.$i.'</option>';
+											}else{
+												echo ' <option value="'.$i.'">'.$i.'</option>';
+											}
+										}else{
+											echo '<option value="'.$i.'">'.$i.'</option>';
+										}
+										
+									}
+									?>
 								  </select>
 								  <span class="input-group-btn">
-									<button class="btn btn-default" type="submit">Noter le produit</button>
+									<?php
+									if(aDejaNote(idUtilisateurConnecte(),$idProduit)){
+										echo '<button class="btn btn-default" type="submit">Mettre à jour la note</button>';
+									}else{
+										echo '<button class="btn btn-default" type="submit">Noter le produit</button>';
+									}
+									?>
+									
 								  </span>
 								</div>
 								</form>

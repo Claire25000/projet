@@ -7,9 +7,19 @@ function ajouterNotation($idProduit,$idUtilisateur,$note){
 		return true; 
 	} catch ( Exception $e ) {
 		return false;
-		echo "Une erreur est survenue";
 	}
 }
+function actualiserNotation($idProduit,$idUtilisateur,$note){
+	global $connexion; // on définie la variables globale de connection dans la fonction
+
+	try {
+		$requete = $connexion->exec('UPDATE `webuzzer54gs9`.`notation` SET `note` = '.$note.' WHERE `notation`.`idProduit` = '.$idProduit.' AND `notation`.`idUtilisateur` = '.$idUtilisateur.';');
+		return true; 
+	} catch ( Exception $e ) {
+		return false;
+	}
+}
+
 function retourneNote($idProduit){
 	global $connexion; // on définie la variables globale de connection dans la fonction
 
