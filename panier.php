@@ -142,7 +142,11 @@ if(isset($_GET['vide']))
 			fraisLiv = 0;
 			document.getElementById("divFraisLivraison").innerHTML = fraisLiv;
 		}
+		alert("sous tot"+sousTotal);
+		alert("I am an alert box!");
+		
 		document.getElementById("divSousTotalLivraison").innerHTML = sousTotal+fraisLiv;
+		//document.getElementById("divSousTotalLivraison").innerHTML = 22.11+66.33;
     }
 	//
 	
@@ -293,9 +297,9 @@ else
 						
 							echo '</tbody></table>
 						</div>';
-					  echo '<div style="text-align:right;"><h3>Total produit: <div style="display: inline;" id="divTotalLivraison">', number_format($total_panier, 2, ',', ' '), '</div> €</div>
+					  echo '<div style="text-align:right;"><h3>Total produit: <div style="display: inline;" id="divTotalLivraison">', number_format($total_panier, 2, '.', ' '), '</div> €</div>
 							<div style="text-align:right;"><h3>Livraison : <div style="display: inline;" id="divFraisLivraison">0</div> €</h3></div>
-							<div style="text-align:right;"><h3>Sous total : <div style="display: inline;" id="divSousTotalLivraison">', number_format($total_panier, 2, ',', ' '), '</div> €</h3></div>
+							<div style="text-align:right;"><h3>Sous total : <div style="display: inline;" id="divSousTotalLivraison">', number_format($total_panier, 2, '.', ' '), '</div> €</h3></div>
 								<form method="POST" action="panier.php?comm&valider" class="form-horizontal">
 								<fieldset>
 								<!-- Textarea -->

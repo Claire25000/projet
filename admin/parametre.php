@@ -8,6 +8,14 @@ if(isset($_GET['deco'])){
 }
 
 if(isset($_POST['valid_modif']) || isset($_POST['valid_error'])){ // -------------------- MODIFICATION DES PARAMETRES ------------------ //
+
+	/*-------------------Gestion d'un parametre spécial : prix de la livraison-------------------------*/
+	if(isset($_POST['coliFrais'])){ // on change la valeur des frais de l'envoi par coli
+		$query = $connexion->query("SET NAMES 'utf8'"); 
+		$query = $connexion->prepare("UPDATE `modelivraison` SET `frais` = '".floatval($_POST['coliFrais'])."' WHERE `modelivraison`.`idModeLivraison` =2;");
+		$query->execute();
+	}
+	/*-------------------------------------------------------------------------------------------------*/
 	foreach($_POST as $key => $value) {
 	  	try
 		{
@@ -112,6 +120,21 @@ if(isset($_POST['valid_modif']) || isset($_POST['valid_error'])){ // -----------
 				  </div>
 			  </div>
 			</div>
+			<!-- Text input-->
+			<?php 
+				// on récupère le montant de la livraison
+				$req = $connexion->query("SET NAMES 'utf8'");	
+				$req = $connexion->query("SELECT `frais`FROM `modelivraison`WHERE `idModeLivraison` = 2");
+				$req->setFetchMode(PDO::FETCH_OBJ);
+				$res = $req->fetch();
+			?>
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="coliFrais">coliFrais</label>  
+			  <div class="col-md-6">
+			  <input value="<?php echo $res->frais;?>" id="coliFrais" name="coliFrais" class="form-control input-md" required="" type="text"/>
+			  </div>
+			</div>
+			
 			<!-- Button -->
 			<div class="form-group">
 			  <label class="col-md-4 control-label" for="valid_modif"> </label>
