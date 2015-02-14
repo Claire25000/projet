@@ -13,12 +13,12 @@ if(isset($recherche)) // si le champ recherche contient quelque chose
 	}
 	else
 	{
-		echo '<p>Aucun produit ne correspond à votre recherche </p>';
+		$message = '<p>Aucun produit ne correspond à votre recherche. Veillez vérifier le nom du produit.</p>';
 	}
 }
 else
 {
-	echo '<p>Veuillez saisir une recherche ! </p>';
+	$message = '<p>Veuillez saisir une recherche ! </p>';
 }
 ?>
 <!DOCTYPE html>
@@ -36,6 +36,9 @@ else
       <div class="jumbotron" style="min-height:700px">
 		<?php
 		require_once('inc/inc_menu.php');
+		if(isset($message)){
+			echo $message;
+		}
 		?>
       </div>
     </div><!-- /container -->

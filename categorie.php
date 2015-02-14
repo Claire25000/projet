@@ -47,8 +47,8 @@ $req->setFetchMode(PDO::FETCH_OBJ);
 		<?php
 			require_once('inc/inc_menu.php');
 			if(isset($message)){
-			echo $message;
-		}
+				echo $message;
+			}
 		?>
 		<form class="form-horizontal"> <!-- select pour modifier le tri des produits de la categorie -->
 			<fieldset>
@@ -89,7 +89,7 @@ $req->setFetchMode(PDO::FETCH_OBJ);
 						<p>'.number_format($res->prixProduit, 2, ',', ' ').' €</p>
 						<p><a href="produit.php?id='.$res->idProduit.'" class="btn btn-primary btn-lg btn-block" role="button">Fiche produit</a></p>
 						</div>
-					</div><!--------------------------------------- ouvire topic sdz pour mise en forme css ------------------------------>
+					</div>
 				  </div>
 				
 				';

@@ -24,10 +24,35 @@ require_once('inc/inc_top.php');
 			echo $message;
 		}	
 		?>
-        <h1><?php echo retourneParametre('nomSite'); ?></h1>
 		<p style="padding-top:3%">
 			<?php echo retourneParametre('textAccueil'); ?>
 		</p>
+		<hr>
+		<p>Derniers articles ajoutés : </p>
+		<?php //----------------------------------------------- Affichage des derniers produits --------------------------//
+			$maRequete = "Select * from produit ORDER BY idProduit DESC LIMIT 0,3";
+			$req = $connexion->query("SET NAMES 'utf8'");
+			$req = $connexion->query($maRequete);
+			$req->setFetchMode(PDO::FETCH_OBJ);
+			while($res = $req->fetch()){
+								echo '
+				
+				  <div class="col-sm-4 col-md-4">
+					<div style="" class="thumbnail">
+						<a href="produit.php?id='.$res->idProduit.'">
+							<img style="border:2px solid gray" src="'.retourneParametre("repertoireUpload").''.$res->image.'" alt="">
+						</a>
+					  <div class="caption">
+						<h3>'.$res->nomProduit.'</h3>
+						</div>
+					</div>
+				  </div>
+				
+				';
+			}
+		?>
+		
+		
       </div>
     </div><!-- /container -->
   <?php require_once("inc/inc_footer.php"); ?>
