@@ -18,7 +18,7 @@ function ajouterClient($login,$password,$nom,$prenom,$adresse,$email){
 	$idUtilisateur = ajouterUtilisateur($login,$password,$email,$type);
 	
 	try {
-		$requete = $connexion->exec("INSERT INTO `webuzzer54gs9`.`client` (`idUtilisateur`, `nomCli`, `prenomCli`, `adrCli`) VALUES ('".$idUtilisateur."', '".$nom."', '".$prenom."', '".$adresse."');");
+		$requete = $connexion->exec("INSERT INTO `webuzzer54gs9`.`client` (`idUtilisateur`, `nomCli`, `prenomCli`, `adrCli`) VALUES ('".$idUtilisateur."', '".mysql_real_escape_string($nom)."', '".mysql_real_escape_string($prenom)."', '".mysql_real_escape_string($adresse)."');");
 		return true; 
 	} catch ( Exception $e ) {
 		return false;

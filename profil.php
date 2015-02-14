@@ -120,7 +120,7 @@ if(isset($_POST['ancienMdp']) && isset($_POST['nouveauMdp1']) && isset($_POST['n
 				<div class="form-group">
 				  <label class="col-md-2 control-label" for="mail">Mail </label>  
 				  <div class="col-md-4">
-				  <input id="mail" value="<?php echo $utilisateur->email; ?>" name="mail" class="form-control input-md" required="" type="text">
+				  <input id="mail" value="<?php echo $utilisateur->email; ?>" name="mail" class="form-control input-md" required="" type="email">
 				  </div>
 				</div>
 				<!-- Button -->

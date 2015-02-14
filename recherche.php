@@ -2,7 +2,7 @@
 require_once('inc/inc_top.php');
 require_once("fonctions/fonctionProd.php");
 if(isset($_GET['q'])){
-	$recherche = $_GET['q'];
+	$recherche = mysql_real_escape_string($_GET['q']);
 }
 if(isset($recherche)) // si le champ recherche contient quelque chose
 { 

@@ -55,7 +55,7 @@ function ajouterUtilisateur($login,$password,$email,$type){
 
 	$password = md5("&4à[5s".$password); // on hash directement le password, et on y ajoute le salt : &4à[5s
 	try {
-		$requete = $connexion->exec("INSERT INTO `webuzzer54gs9`.`utilisateur` (`idUtilisateur` ,`login` ,`passwd`,`email` ,`type`)VALUES (NULL, '".$login."', '".$password."', '".$email."', '".$type."');");
+		$requete = $connexion->exec("INSERT INTO `webuzzer54gs9`.`utilisateur` (`idUtilisateur` ,`login` ,`passwd`,`email` ,`type`)VALUES (NULL, '".mysql_real_escape_string($login)."', '".$password."', '".mysql_real_escape_string($email)."', '".$type."');");
 		envoyeMail('Votre compte client a été créé sur '.retourneParametre('nomSite').'.','Bienvenue sur '.retourneParametre('nomSite').' ! <br/> Votre compte a été créer sur notre plateforme, vous avez désormais accès à toutes les fonctionalitées. <br/> Votre email de connexion est '.$email.'.',$email);
 		return $connexion->lastInsertId(); 
 	} catch ( Exception $e ) {
@@ -88,7 +88,7 @@ function changerEmailUtilisateur($idUtilisateur,$email){
 	global $connexion; // on définie la variables globale de connection dans la fonction
 	
 	try {
-		$requete = $connexion->exec("UPDATE `webuzzer54gs9`.`utilisateur` SET `email` = '".$email."' WHERE `utilisateur`.`idUtilisateur` =".$idUtilisateur.";");
+		$requete = $connexion->exec("UPDATE `webuzzer54gs9`.`utilisateur` SET `email` = '".mysql_real_escape_string($email)."' WHERE `utilisateur`.`idUtilisateur` =".$idUtilisateur.";");
 	} catch ( Exception $e ) {
 		return false;
 	}
