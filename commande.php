@@ -5,6 +5,16 @@ if(!estConnecte() || estAdmin()){ // si non connecté, on login en tant qu'admin
 }
 require_once("fonctions/fonctionsCommande.php");
 require_once("fonctions/fonctionProd.php");
+
+if(isset($_GET['id'])){ // si on récupère un ID de commande
+	if(is_numeric($_GET['id'])){ // si l'id est uniquement numérique
+		$idCommande = intval($_GET['id']); // on enregistre une valeur numérique forée de l'ID
+	}else{ // si l'ID n'est pas numérique on redirige vers sa version numérique
+		header("Location:commande.php?id=".intval($_GET['id']).""); 
+		exit;
+	}
+}
+
 if(isset($_POST['supp']))
 {
 	if(isset($_POST['rep'])){$rep = $_POST['rep'];}
@@ -56,31 +66,32 @@ if(isset($_POST['supp']))
 			<?php 
 		
 			$client = retourneClient(idUtilisateurConnecte());
-			if(isset($_GET['id']))
+			if(isset($idCommande))
 			{
 				$total = 0;
 				echo '<div class="panel panel-default">
-			  <div class="panel-heading">Commande n°'.$_GET['id'].'</div>
+			  <div class="panel-heading">Commande n°'.$idCommande.'</div>
 			  <table class="table" border="1">
-						<tr>
-							<th>Identifiant Commande</th>
-							<th>Date</th>
-							<th>Statut</th>
-							<th>Mode de livraison</th>
-							<th>Mode de paiement</th>
-							<th>Nom Client</th>
-						</tr>';
+				<tr>
+					<th>Identifiant Commande</th>
+					<th>Date</th>
+					<th>Statut</th>
+					<th>Mode de livraison</th>
+					<th>Mode de paiement</th>
+				</tr>';
 					
-					$com = retourneCommande($_GET['id']);
-							echo '<tr>
-									<td>Commande n°'.$com->idCommande.'</td>
-									<td>'.$com->date.'</td>
-									<td>'.retourneStatut($com->statut).'</td>
-									<td>'.retourneLivraison($com->modeLivraison).'</td>
-									<td>'.retournePaiement($com->modePaiement).'</td>
-									<td>'.retourneClient($com->idClient)->nomCli.'</td>								
-								</tr>';				
-					echo '</table></div><br/>
+					$com = retourneCommande($idCommande);
+					$date = new DateTime($com->date);
+					
+			echo '<tr>
+					<td>Commande n°'.$com->idCommande.'</td>
+					<td>'.$date->format('d/m/Y').'</td>
+					<td>'.retourneStatut($com->statut).'</td>
+					<td>'.retourneLivraison($com->modeLivraison).'</td>
+					<td>'.retournePaiement($com->modePaiement).'</td>
+					
+				</tr>';				
+				echo '</table></div><br/>
 					<div class="panel panel-default">
 					<div class="panel-heading">Contenu de la commande</div>
 					<table class="table" border="1">
@@ -120,10 +131,10 @@ if(isset($_POST['supp']))
 				if(isset($_GET['supp']))
 				{
 					echo '
-						<form name="frm" action="commande.php?supp&id='.$_GET['id'].'" method="post">
+						<form name="frm" action="commande.php?supp&id='.$idCommande.'" method="post">
 					<fieldset>
 							<h3>Êtes-vous sûre de vouloir supprimer cette commande ?</h3>
-							<input type="hidden" name="no" value="'.$_GET['id'].'">
+							<input type="hidden" name="no" value="'.$idCommande.'">
 							<div class="col-lg-1">
 								<div class="input-group">
 									<span class="input-group-addon">
@@ -168,9 +179,11 @@ if(isset($_POST['supp']))
 						<?php
 						foreach(retourneListeCommandeEnCours($client->idUtilisateur) as $element) // retourne un array de commande pour un client
 							{
+								$date = new DateTime($element->date);
+					
 								echo '<tr>
 										<td><a href="commande.php?id='.$element->idCommande.'">Commande n°'.$element->idCommande.'</a></td>
-										<td>'.$element->date.'</td>
+										<td>'.$date->format('d/m/Y').'</td>
 										<td>'.retourneStatut($element->statut).'</td>
 										<td>'.retourneLivraison($element->modeLivraison).'</td>
 										<td>'.retournePaiement($element->modePaiement).'</td>';
@@ -201,9 +214,11 @@ if(isset($_POST['supp']))
 						<?php
 						foreach(retourneHistoriqueCommande($client->idUtilisateur) as $element) // retourne un array de commande pour un client
 							{
+								$date = new DateTime($element->date);
+							
 								echo '<tr>
 										<td><a href="commande.php?id='.$element->idCommande.'">Commande n°'.$element->idCommande.'</a></td>
-										<td>'.$element->date.'</td>
+										<td>'.$date->format('d/m/Y').'</td>
 										<td>'.retourneStatut($element->statut).'</td>
 										<td>'.retourneLivraison($element->modeLivraison).'</td>
 										<td>'.retournePaiement($element->modePaiement).'</td>						

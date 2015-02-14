@@ -1,19 +1,30 @@
 
 <?php
-if(!isset($_GET['id'])){header('Location: ../404.php?err=404');} // si on a pas d'ID, on redirige immédiatement en erreur
+if(!isset($_GET['id'])){
+	header('Location: ../404.php?err=404'); // si on a pas d'ID, on redirige immédiatement en erreur
+}else{
+	if(is_numeric($_GET['id'])){ // si l'id est uniquement numérique
+		$idCategorie = intval($_GET['id']); // on enregistre une valeur numérique forée de l'ID
+	}else{ // si l'ID n'est pas numérique on redirige vers sa version numérique
+		header("Location:categorie.php?id=".intval($_GET['id'])."&titleCat=".$_GET['titleCat'].""); 
+		exit;
+	}
+	
+}
+
 require_once('inc/inc_top.php');
 require_once("fonctions/fonctionProd.php");
 require_once("fonctions/fonctionCategorie.php");
 
 
 if(isset($_GET['croissant'])){
-	$maRequete = "Select * from produit where idCategorie=".$_GET['id']." ORDER BY prixProduit ASC";
+	$maRequete = "Select * from produit where idCategorie=".$idCategorie." ORDER BY prixProduit ASC";
 }else if(isset($_GET['decroissant'])){
-	$maRequete = "Select * from produit where idCategorie=".$_GET['id']." ORDER BY prixProduit DESC";
+	$maRequete = "Select * from produit where idCategorie=".$idCategorie." ORDER BY prixProduit DESC";
 }else if(isset($_GET['note'])){
-	$maRequete = "SELECT *,AVG(notation.note) as noteMoyenne FROM `produit`,`notation` WHERE produit.idProduit = ".$_GET['id']." AND produit.idProduit = notation.idProduit ORDER BY AVG(notation.note) DESC"; // A FAIRE
+	$maRequete = "SELECT *,AVG(notation.note) as noteMoyenne FROM `produit`,`notation` WHERE produit.idProduit = ".$idCategorie." AND produit.idProduit = notation.idProduit ORDER BY AVG(notation.note) DESC"; // A FAIRE
 }else{
-	$maRequete = "Select * from produit where idCategorie=".$_GET['id']." ORDER BY idProduit DESC";
+	$maRequete = "Select * from produit where idCategorie=".$idCategorie." ORDER BY idProduit DESC";
 }
 $req = $connexion->query("SET NAMES 'utf8'");
 $req = $connexion->query($maRequete);
@@ -24,7 +35,7 @@ $req->setFetchMode(PDO::FETCH_OBJ);
 <html lang="fr">
   <head>
 	<?php require_once("inc/inc_head.php");?>
-    <title>Catégorie <?php echo retourneLibelle($_GET['id']); ?></title>
+    <title>Catégorie <?php echo retourneLibelle($idCategorie); ?></title>
   </head>
   
   <body>
@@ -45,7 +56,7 @@ $req->setFetchMode(PDO::FETCH_OBJ);
 			<div class="form-group">
 			  <label class="col-md-6 control-label" for="tri"></label>
 			  <div class="col-md-6">
-				<select id="tri" name="tri" class="form-control" onChange="top.location.href='categorie.php?id=<?php echo $_GET['id'];?>&titleCat=<?php echo $_GET['titleCat'];?>'+this.options[this.selectedIndex].value;">
+				<select id="tri" name="tri" class="form-control" onChange="top.location.href='categorie.php?id=<?php echo $idCategorie;?>&titleCat=<?php echo $_GET['titleCat'];?>'+this.options[this.selectedIndex].value;">
 				  <option value="#">Trier les articles</option>
 				  <option <?php if(isset($_GET['croissant'])){echo'selected="selected"';}?> value="&croissant">Prix : ordre croissant</option>
 				  <option <?php if(isset($_GET['decroissant'])){echo'selected="selected"';}?> value="&decroissant">Prix : ordre décroissant</option>
