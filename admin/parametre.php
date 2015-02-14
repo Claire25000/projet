@@ -120,6 +120,28 @@ if(isset($_POST['valid_modif']) || isset($_POST['valid_error'])){ // -----------
 				  </div>
 			  </div>
 			</div>
+			<!-- Multiple Radios -->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="param_repertoireUpload">Derniers produits en page d'accueil</label>
+			  <div class="col-md-4">
+				  <div class="radio">
+					<?php 
+						if(retourneParametre('produitAccueil') == 'true'){$true='';}
+						else if(retourneParametre('produitAccueil') == 'false'){$false='';}; 
+					?>
+					<label for="param_repertoireUpload-0">
+					  <input <?php if(isset($true)){echo 'checked="checked"';}?> name="param_produitAccueil" id="param_produitAccueil-0" value="true" type="radio">
+					  Activer
+					</label>
+				  </div>
+				  <div class="radio">
+					<label for="param_produitAccueil-1">
+					  <input <?php if(isset($false)){echo 'checked="checked"';}?> name="param_produitAccueil" id="param_produitAccueil-1" value="false" type="radio">
+					  Désactiver
+					</label>
+				  </div>
+			  </div>
+			</div>
 			<!-- Text input-->
 			<?php 
 				// on récupère le montant de la livraison
