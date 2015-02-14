@@ -472,3 +472,27 @@ div.product-chooser{
   clear:both;
   padding-top:20px;
 } 
+/*------------------------etoiles notation-----------------------------*/
+.rating {
+   direction: rtl;
+}
+.rating a{
+   text-decoration: none;
+   font-size: 3em;
+   transition: color .4s;
+}
+.etoileVide{
+   color: #aaa;
+
+}
+.etoilePleine  {
+	color: orange;
+}
+.rating a:focus,
+.rating a:focus ~ a,
+.rating a:hover,
+.rating a:hover ~ a {
+   color: #2E64FE;
+   cursor: pointer;
+}
+/***/

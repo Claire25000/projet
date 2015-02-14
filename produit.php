@@ -64,14 +64,16 @@ if(isset($_GET['ajouterPanier']))
 	}
 }
 
-if(isset($_POST['note'])){
+if(isset($_POST['note']) || isset($_GET['note'])){
+	if(isset($_GET['note'])){$note = $_GET['note'];}else{$note = $_POST['note'];}
+	
 	if(estConnecte()){
 		if(aDejaNote(idUtilisateurConnecte(),$idProduit)){ // l'utilisateur a déja noter on met a jour 
-			if(actualiserNotation($idProduit,idUtilisateurConnecte(),$_POST['note'])){
+			if(actualiserNotation($idProduit,idUtilisateurConnecte(),$note)){
 				$message = '<div class="alert alert-success" role="alert">Votre note a été mise à jour, merci !</div>';
 			}
 		}
-		else if(ajouterNotation($idProduit,idUtilisateurConnecte(),$_POST['note'])){ // l'utilisateur n'avais pas encore noté : on insert la note
+		else if(ajouterNotation($idProduit,idUtilisateurConnecte(),$note)){ // l'utilisateur n'avais pas encore noté : on insert la note
 			$message = '<div class="alert alert-success" role="alert">Votre note a été ajoutée, merci !</div>';
 		}
 	}else{
@@ -136,7 +138,25 @@ $resProd = $req->fetch();
 							?>
 						</div>
 						<div class="product-desc">
-							<?php printf("%.2f",retourneNote($idProduit)); // retourne la moyenne des notes du produit arondies x,xx?>
+							<!---------------------------------------- affichage de la notation ------------------------------->
+							<?php
+								$nombreEtoilePleine = ceil(retourneNote($idProduit)); // Arrondi au chiffre supérieur
+								$nombreEtoileVide = 5 - $nombreEtoilePleine;
+								$etoileActuelle = 5;
+
+								echo '<div class="rating">';
+									for ($i = 1; $i <= $nombreEtoileVide; $i++) { // étoiles vides (différence entre la note actuelle et la note max)
+										echo '<a class="etoileVide" href="produit.php?id='.$idProduit.'&note='.$etoileActuelle.'" title="Donner '.$etoileActuelle.' étoiles">★</a>';
+										$etoileActuelle-=1;
+										
+									}
+									for ($i = 1; $i <= $nombreEtoilePleine; $i++) { // étoiles pleines (note du produit)
+										echo '<a class="etoilePleine" href="produit.php?id='.$idProduit.'&note='.$etoileActuelle.'" title="Donner '.$etoileActuelle.' étoiles">★</a>';
+										$etoileActuelle-=1;
+										
+									}
+								echo '</div>';
+							?>
 							<?php 
 							if(aDejaNote(idUtilisateurConnecte(),$idProduit)){ // si l'utilisateur a déja noté
 								$dejaNote = true;
@@ -145,7 +165,7 @@ $resProd = $req->fetch();
 							}
 							?>
 						</div>
-						<div class="product-rating"><i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star-o"></i> </div>
+
 						<hr>
 						<div class="product-price"><?php echo $resProd->prixProduit; ?> €</div>
 						<?php 
@@ -279,7 +299,7 @@ $resProd = $req->fetch();
 								  <?php
 									if(aDejaNote(idUtilisateurConnecte(),$idProduit)){$note = retourneNoteUtilisateur($idProduit,idUtilisateurConnecte());}
 									
-									for ($i = 1; $i <= 10; $i++) {
+									for ($i = 1; $i <= 5; $i++) {
 										if(isset($note)){
 											if($note == $i){ // si l'utilisateur a noté on préséléctionne la note
 												echo '<option selected="selected" value="'.$i.'">'.$i.'</option>';
