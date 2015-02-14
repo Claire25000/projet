@@ -57,7 +57,7 @@ function ajouterProduit($nom,$desc,$prix,$cat,$img,$stock)
 	try
 		{
 			$requete = $connexion->query("SET NAMES 'utf8'");
-			$requete = $connexion->prepare('INSERT INTO `webuzzer54gs9`.`produit` values (DEFAULT,"'.$nom.'","'.$desc.'",'.$prix.','.$cat.',"'.$img.'","'.$stock.'");'); //on insère le produit dans la base
+			$requete = $connexion->prepare('INSERT INTO `webuzzer54gs9`.`produit` values (DEFAULT,"'.mysql_real_escape_string($nom).'","'.mysql_real_escape_string($desc).'",'.mysql_real_escape_string($prix).','.mysql_real_escape_string($cat).',"'.$img.'","'.mysql_real_escape_string($stock).'");'); //on insère le produit dans la base
 			$requete->execute();
 			return true;
 		}
@@ -75,7 +75,7 @@ function ajouterData($idProd,$idNom,$idVal)
 	try
 		{
 			$requete = $connexion->query("SET NAMES 'utf8'"); 
-			$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`data` values (DEFAULT,".$idProd.",".$idNom.",".$idVal.")"); //on insère la data dans la base
+			$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`data` values (DEFAULT,".mysql_real_escape_string($idProd).",".mysql_real_escape_string($idNom).",".mysql_real_escape_string($idVal).")"); //on insère la data dans la base
 			$requete->execute();
 			return true;
 			
@@ -93,10 +93,10 @@ function supprimerProduit($id)
 	
 		try
 		{
-			$requete = $connexion->prepare("Delete from data where idProduit = ".$id); //on supprime les datas correspondantes au produit dans la base
+			$requete = $connexion->prepare("Delete from data where idProduit = ".mysql_real_escape_string($id)); //on supprime les datas correspondantes au produit dans la base
 			$requete->execute();
 			
-			$sql = $connexion->prepare("Delete from produit where idProduit = ".$id); //on supprime le produit de la base
+			$sql = $connexion->prepare("Delete from produit where idProduit = ".mysql_real_escape_string($id)); //on supprime le produit de la base
 			$sql->execute();
 			return true;
 			
@@ -115,7 +115,7 @@ function modifierData($id,$idNom,$idVal)
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare("update data set idValeur = ".$idVal." where idProduit = ".$id." and idNom = ".$idNom);
+			$query = $connexion->prepare("update data set idValeur = ".mysql_real_escape_string($idVal)." where idProduit = ".mysql_real_escape_string($id)." and idNom = ".mysql_real_escape_string($idNom));
 			$query->execute();
 			return true;
 		}
@@ -133,7 +133,7 @@ function modifierProduit($id,$nom,$desc,$prix,$cat,$img,$stock)
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare('update produit set nomProduit = "'.$nom.'",descriptionProduit = "'.$desc.'",prixProduit = '.$prix.',idCategorie = '.$cat.',image = "'.$img.'",stockProduit = "'.$stock.'" where idProduit = '.$id);
+			$query = $connexion->prepare('update produit set nomProduit = "'.mysql_real_escape_string($nom).'",descriptionProduit = "'.mysql_real_escape_string($desc).'",prixProduit = '.mysql_real_escape_string($prix).',idCategorie = '.mysql_real_escape_string($cat).',image = "'.mysql_real_escape_string($img).'",stockProduit = "'.mysql_real_escape_string($stock).'" where idProduit = '.mysql_real_escape_string($id));
 			$query->execute();
 			return true;
 		}
@@ -151,7 +151,7 @@ function modifierProduit2($id,$nom,$desc,$prix,$cat,$stock)
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare("update produit set nomProduit = '".$nom."',descriptionProduit = '".$desc."',prixProduit = ".$prix.",idCategorie = ".$cat.",stockProduit = '".$stock."' where idProduit = ".$id."");
+			$query = $connexion->prepare("update produit set nomProduit = '".mysql_real_escape_string($nom)."',descriptionProduit = '".mysql_real_escape_string($desc)."',prixProduit = ".mysql_real_escape_string($prix).",idCategorie = ".mysql_real_escape_string($cat).",stockProduit = '".mysql_real_escape_string($stock)."' where idProduit = ".mysql_real_escape_string($id)."");
 			$query->execute();
 			return true;
 		}
@@ -168,7 +168,7 @@ function supprimerData($idNom, $id)
 	
 	try
 		{
-			$query = $connexion->prepare("delete from data where idProduit=".$id." and idNom=".$idNom);
+			$query = $connexion->prepare("delete from data where idProduit=".mysql_real_escape_string($id)." and idNom=".mysql_real_escape_string($idNom));
 			$query->execute();
 			return true;
 		}

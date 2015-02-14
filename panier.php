@@ -141,12 +141,10 @@ if(isset($_GET['vide']))
 		}else{
 			fraisLiv = 0;
 			document.getElementById("divFraisLivraison").innerHTML = fraisLiv;
-		}
-		alert("sous tot"+sousTotal);
-		alert("I am an alert box!");
-		
-		document.getElementById("divSousTotalLivraison").innerHTML = sousTotal+fraisLiv;
-		//document.getElementById("divSousTotalLivraison").innerHTML = 22.11+66.33;
+		}	
+		var total = sousTotal+fraisLiv;
+		total = Math.round(total*100)/100;
+		document.getElementById("divSousTotalLivraison").innerHTML = total;
     }
 	//
 	

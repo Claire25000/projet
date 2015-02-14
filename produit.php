@@ -266,7 +266,7 @@ $resProd = $req->fetch();
 														{
 															$date = new DateTime($element->date);
 															$note = '';
-															if(aDejaNote($element->idUtilisateur,$idProduit) == true){$note = intval(retourneNoteUtilisateur($idProduit,$element->idUtilisateur)).'/10';} // si l'user a noté on affiche la note
+															if(aDejaNote($element->idUtilisateur,$idProduit) == true){$note = intval(retourneNoteUtilisateur($idProduit,$element->idUtilisateur)).'/5';} // si l'user a noté on affiche la note
 																	
 															echo '	<div class="media">
 																	<p class="pull-right"><small>le '.$date->format('d/m/Y').'</small></p>

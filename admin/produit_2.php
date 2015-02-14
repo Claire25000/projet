@@ -293,7 +293,7 @@ if(isset($_GET['deco'])){
 				  </div>
 				  </div>
 				  <br/><br/>
-				  <img src='".retourneParametre("repertoireUpload")."".$res->image."' alt='[Aucune image]'/>
+				  <img src='.".retourneParametre("repertoireUpload")."".$res->image."' alt='[Aucune image]'/>
 					<br/></br>
 				  <div style='text-align:center'>
 					<input type='submit' name='okm' class='btn btn-primary' value='Modifier'/>

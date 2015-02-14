@@ -27,7 +27,7 @@ if(!estConnecte()){
 	$menu = '<div class="row"><ul style="margin-top: -20px;" id="nav">';
 	$activ = '';
 	
-	$requete = $connexion->query("SELECT * FROM categorie");
+	$requete = $connexion->query("select * from categorie where idCategorie IN (select idCategorie from produit)"); // on affiche toutes les catégories avec >= 1 produit
 	$requete->setFetchMode(PDO::FETCH_OBJ);
 	while($enregistrement = $requete->fetch()){
 		if(isset($_GET['titleCat'])){
