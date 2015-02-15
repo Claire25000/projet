@@ -1,4 +1,5 @@
 <?php
+require_once('fonctionsClient.php');
 
 function retourneCommande($idCommande)
 {
@@ -70,7 +71,13 @@ function ajouterCommande($date,$statut,$modePaiement,$modeLivraison,$idClient,$i
 
 	try {
 		$requete = $connexion->exec("INSERT INTO `webuzzer54gs9`.`commande` (`idCommande`, `date`, `statut`, `modePaiement`, `modeLivraison`, `idClient`, `info`) VALUES (NULL, '".$date."', '".$statut."', '".$modePaiement."', '".$modeLivraison."','".$idClient."','".addslashes($info)."');");
-		return $connexion->lastInsertId(); 
+		$idCommande = $connexion->lastInsertId();
+
+		$client = retourneClient($idClient);
+		$utilisateur = retourneUtilisateur($idClient);
+		envoyeMail("Commande #".$connexion->lastInsertId()." effectuée avec succès","Bonjour ".$client->prenomCli." ! <br/> Votre commande (référence #".$connexion->lastInsertId()." à bien été enregistrée.<br/>Je vous remercie, et vous enverez un email vous indiquant l'état actuel de votre commande. <br/><br/><b>".retourneParametre('nomSite')."</b>",$utilisateur->email);
+
+		return $idCommande; 
 	} catch ( Exception $e ) {
 		return false;
 	}
@@ -183,6 +190,19 @@ function changerStatutCommande($idCommande,$statut)
 			$query = $connexion->query("SET NAMES 'utf8'"); 
 			$query = $connexion->prepare("update commande set statut = '".$statut."' where idCommande = ".$idCommande."");
 			$query->execute();
+			
+			if($statut == 2 || $statut == 3){
+			$commande = retourneCommande($idCommande);
+			$client = retourneClient($commande->idClient);
+			$utilisateur = retourneUtilisateur($commande->idClient);
+			}
+			if($statut == 2){
+				envoyeMail("Commande en cours de traitement","Bonjour, votre commande #".$idCommande." sur <b>".retourneParametre('nomSite')."</b> est désormais en cours de traitement et devrais vous être envoyée sous peu. <br/><br/><b>".retourneParametre('nomSite')."</b>",$utilisateur->email);
+			}else if($statut == 3){
+				envoyeMail("Commande traitée","Bonjour, votre commande #".$idCommande." sur <b>".retourneParametre('nomSite')."</b> est désormais traitée. <br/> Vous devriez la recevoire sous peu. <br/> N'hésitez pas à venir consulter les nouveaux produits ajoutés, en vous remerciant, <br/><b>".retourneParametre('nomSite')."</b>",$utilisateur->email);
+			}
+
+		
 			return true;
 		}
 		catch(Exception $e)

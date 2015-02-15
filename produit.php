@@ -253,6 +253,8 @@ $resProd = $req->fetch();
 													</form>
 												</br></br>';
 											}
+										}else{
+											echo '<br/><div class="alert alert-warning" role="alert">Vous devez être connecté pour commenter cet article.</div>';
 										}
 										
 									  echo '<div class="container">
@@ -293,6 +295,7 @@ $resProd = $req->fetch();
 						<div class="tab-pane fade" id="service-three">
 							<section style="padding-top:3%;" class="container">
 								<div class="col-lg-6">
+								<?php if(!estConnecte()){echo'<div class="alert alert-warning" role="alert">Vous devez être connecté pour noter ce produit.</div>';}?>
 								<form action="produit.php?id=<?php echo $idProduit;?>" method="POST">
 								<div class="input-group">
 								  <select id="note" name="note" class="form-control">

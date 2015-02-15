@@ -31,7 +31,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
   <body>
   <div class="container">
   <?php
-  if(estConnecte() && estWebmaster()){
+  if(estConnecte() && estAdmin()){
 			require_once('inc/inc_menu.php');
 		}
 		if(isset($message)){
