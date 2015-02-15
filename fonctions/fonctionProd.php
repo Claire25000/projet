@@ -115,7 +115,7 @@ function modifierData($id,$idNom,$idVal)
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare("update data set idValeur = ".mysql_real_escape_string($idVal)." where idProduit = ".mysql_real_escape_string($id)." and idNom = ".mysql_real_escape_string($idNom));
+			$query = $connexion->prepare("update data set idValeur = ".$idVal." where idProduit = ".$id." and idNom = ".$idNom);
 			$query->execute();
 			return true;
 		}
