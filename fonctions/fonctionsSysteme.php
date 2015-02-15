@@ -62,7 +62,7 @@ mail($destinataire,$sujet,$message,
         "Content-Type: text/html; charset=\"iso-8859-1\"\r\n");
 }*/
 function envoyeMail($sujet,$message,$destinataire){
-	// rien
+	// fonction utilisée pour le débugg (aucun serveur SMTP) utilisez la fonction commentée ci dessous, et commentez celle-là
 }
 
 // --------------------------------- FONCTIONS IMAGE  --------------------------------- //

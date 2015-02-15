@@ -1,6 +1,8 @@
 <?php
 require_once("inc/inc_top.php");
 
+if(!estWebmaster()){header('Location: ../404.php?err=1');} // on redirige les non-webmasteur
+
 if(isset($_GET['deco'])){
 	if(deconnecteUtilisateur()){ // si la fonction de déconnexion retourne true : utilisateur déconnecté
 		header('Location: index.php');
