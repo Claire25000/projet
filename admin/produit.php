@@ -101,6 +101,18 @@ if(isset($_GET['deco'])){
 		header('Location: index.php');
 	}
 }
+if(isset($_POST['valm']))
+{				
+	$e = ifValeurExist($_POST['valeur']);
+	if($e == 0)
+	{
+		ajouterValeur($_POST['valeur']);
+	}
+	
+	$idValeur = getIdValeur($_POST['valeur']);
+	$idNom = getIdNom($_POST['nom']);
+	modifierData($_GET['id'],$idNom,$idValeur);
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -298,7 +310,23 @@ if(isset($_GET['deco'])){
 					<input type='submit' name='okm' class='btn btn-primary' value='Modifier'/>
 					</div>
 				</fieldset></form>";
+				if(isset($_GET['ds']))
+				{
+					echo '<form name="frm" action="produit.php?modif&ds&id='.$_GET['id'].'&idNom='.$_GET['idNom'].'&idCat='.$_GET['idCat'].'" method="post">
+					<h3>Etes-vous sûre de vouloir supprimer cette caractéristique ?</h3>
+					<br/>
+					<input type="hidden" name="no" value="'.$_GET['id'].'">
+					<input type="hidden" name="nom" value="'.$_GET['idNom'].'">
+					<input type="hidden" name="cat" value="'.$_GET['id'].'">
+					<input type="radio" name="rep" value="non" checked> Non
+					<input type="radio" name="rep" value="oui" > Oui
+					<br/><br/>
+					<input type="submit" name="supp" value="Valider">
+					</form>
+					<br/>	 ';
 					
+					$rep = "non"; 
+				}					
 					// ------------------------------------------------------ MODIFICATION CARACTERISTIQUES ----------------------------------//
 					$sql = $connexion->query("SET NAMES 'utf8'"); //on recupere les carac
 					$sql = $connexion->query("Select data.idNom, nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$id);
@@ -312,6 +340,20 @@ if(isset($_GET['deco'])){
 									<th>Modifier</th>
 									<th>Supprimer</th>
 								</tr>';
+								while($resultat = $sql->fetch()) // on boucle sur les carac du produit
+								{
+									echo '<tr>
+											<td>'.$resultat->nom.'</td> 
+											<td><form action="produit.php?modif&id='.$_GET['id'].'&idCat='.$_GET['idCat'].'" method="POST" class="form-inline">
+												<input type="hidden" name="nom" value="'.$resultat->nom.'"/>
+												<input type="text" name="valeur" class="form-control" id="valeur" placeholder="Entrer une valeur..." value="'.$resultat->valeur.'">
+												<input type="submit" name="valm" class="btn btn-default" value="Modifier"/>
+												</form>
+											</td>
+											<td><center><a href="produit.php?modif&idCat='.$_GET['idCat'].'&ds&id='.$id.'&idNom='.$resultat->idNom.'">X</a></center></td>
+										 </tr>';
+								}
+								
 					echo '		<tr class="info" style="border: 2px dashed;">
 									<td><!-------------------------------------------- data_nom (ajout carac=)---------------------------------------------->
 										<form action="produit.php?modif&idCat='.$_GET["idCat"].'&id='.$_GET["id"].'" method="POST" class="form-horizontal">
@@ -328,7 +370,7 @@ if(isset($_GET['deco'])){
 											  
 											  <div class="col-md-10">
 												<select id="carNom" name="carNom" class="form-control">
-												  <option value="null">Séléctionner une caractéristique existante</option>';
+												  <option value="null">Sélectionner une caractéristique existante</option>';
 												  	$nom = $connexion->query("Select * from data_nom");
 													$nom->setFetchMode(PDO::FETCH_OBJ);
 													$noms = genererNomCategorie($_GET['idCat']);
@@ -347,254 +389,99 @@ if(isset($_GET['deco'])){
 											</div>
 											<div class="form-group">
 											  <div class="col-md-10">
-												<button id="okc" name="okc" class="btn btn-primary btn-block">Valider</button>
+												<input type="submit" id="okc" name="okc" class="btn btn-primary btn-block"/>
 											  </div>
 											</div>
 											</fieldset>
 										</form>
 									</td><!-------------------------------------------- data_valeur (ajout)----------------------------------------->
-									<td class="danger">
-										<form action="produit.php?modif&idCat='.$_GET['idCat'].'&id='.$_GET["id"].'&ok" method="POST" class="form-horizontal">
-											<fieldset>
-											<!-- Text input-->
-											<div class="form-group">
-											    
-											  <div class="col-md-10">
-											  <input id="data_nom" name="data_nom" placeholder="Nouvelle donnée" class="form-control input-md" type="text">
-											  </div>
-											</div>
-											<!-- Select Basic -->
-											<div class="form-group">
-											  
-											  <div class="col-md-10">
-												<select id="carVal" name="carVal" class="form-control">
-												  <option value="null">Donnée existante</option>';
+									';
+									if(isset($_POST['okc']))
+									{ 
+										if($_POST['carNom'] == 'null'){ // si on a une nouvelle data_nom
+											$e = ifNomExist($_POST['nom']);
+											if($e == 0){
+												ajouterNom($_POST['nom']);
+											}
+											$idNom = getIdNom($_POST['nom']);
+										}else{ // si la data_nom existe
+											$idNom = $_POST['carNom'];
+										}									
+										echo '
+										<td class="danger">
+											<form action="produit.php?modif&idCat='.$_GET['idCat'].'&id='.$_GET["id"].'&ok" method="POST" class="form-horizontal">
+												<fieldset>
+												<!-- Text input-->
+												<div class="form-group">
+													
+												  <div class="col-md-10">
+												  <input id="val" name="val" placeholder="Nouvelle donnée" class="form-control input-md" type="text">
+												  </div>
+												</div>
+												<!-- Select Basic -->
+												<div class="form-group">
 												  
-													if(isset($_POST['carNom'])){ // si le data_nom a été séléctionné dans la liste 
-														if($_POST['carNom'] == 'null'){ // si on a une nouvelle data_nom
-															$e = ifNomExist($_POST['nom']);
-															if($e == 0){
-																ajouterNom($_POST['nom']);
+												  <div class="col-md-10">
+													<select id="carVal" name="carVal" class="form-control">
+													  <option value="null">Donnée existante</option>';
+														
+														$val = $connexion->query("Select * from data_valeur");
+														$val->setFetchMode(PDO::FETCH_OBJ);
+														
+														if(isset($idNom)){ // si on a recu le form data_nom, on a déja 
+															$valeur = genererValeurNom($idNom);
+														}else{
+															$valeur=null;
+														}
+														
+														if($valeur == null){ // si la data_nom est nouvelle
+															while($res = $val->fetch()){
+																echo "<option value='".$res->idValeur."'>".$res->valeur."</option>";
 															}
-															$idNom = getIdNom($_POST['nom']);
-														}else{ // si la data_nom existe
-															$idNom = $_POST['carNom'];
+														}else{
+															foreach($valeur as $element){ // si la data_nom existe, on retourne les data_valeurs qui correspondent
+																echo "<option value='".$element->idValeur."'>".$element->valeur."</option>";
+															}
 														}
-													}
-													
-												  	$val = $connexion->query("Select * from data_valeur");
-													$val->setFetchMode(PDO::FETCH_OBJ);
-													
-													if(isset($idNom)){ // si on a recu le form data_nom, on a déja 
-														$valeur = genererValeurNom($idNom);
-													}else{
-														$valeur=null;
-													}
-													
-													if($valeur == null){ // si la data_nom est nouvelle
-														while($res = $val->fetch()){
-															echo "<option value='".$res->idValeur."'>".$res->valeur."</option>";
-														}
-													}else{
-														foreach($valeur as $element){ // si la data_nom existe, on retourne les data_valeurs qui correspondent
-															echo "<option value='".$element->idValeur."'>".$element->valeur."</option>";
-														}
-													}
-										  echo '</select>
-											  </div>
-											</div>
-											<div class="form-group">
-											  <div class="col-md-10">
-												<button  id="singlebutton" name="singlebutton" class="btn btn-primary btn-block">Valider</button>
-											  </div>
-											</div>
-											</fieldset>
-										</form>
-									</td>
-									<td>
-									<!------->
-									</td>
-
-								</tr>';
-								
-								while($resultat = $sql->fetch()) // on boucle sur les carac du produit
-								{
-									echo '<tr>
-											<td>'.$resultat->nom.'</td> 
-											<td><form class="form-inline">
-												<input type="text" class="form-control" id="data_valeur" placeholder="Entrer une valeur..." value="'.$resultat->valeur.'">
-												<button type="submit" class="btn btn-default">Modifier</button>
-												</form>
+											  echo '</select>
+												  </div>
+												</div>
+												<input type="hidden" name="nom" value="'.$idNom.'"/>
+												<div class="form-group">
+												  <div class="col-md-10">
+													<input type="submit"  id="okv" name="okv" class="btn btn-primary btn-block"/>
+												  </div>
+												</div>
+												</fieldset>
+											</form>
+										</td>
+										<td>
+											<!------->
 											</td>
-											<td><center><a href="produit.php?modif&idCat='.$_GET['idCat'].'&ds&id='.$id.'&idNom='.$resultat->idNom.'">X</a></center></td>
-										 </tr>';
-								}
+											
+											</tr>';
+									}
+									if(isset($_POST['okv']))
+										{
+											if($_POST['carVal'] == 'null')
+											{				
+												$e = ifValeurExist($_POST['val']);
+												if($e == 0)
+												{
+													ajouterValeur($_POST['val']);
+												}
+												$idValeur = getIdValeur($_POST['val']);
+											}
+											else
+											{
+												$idValeur = $_POST['carVal'];
+											}
+
+											ajouterData($_GET['id'],$_POST['nom'],$idValeur);
+										}
 					   echo '</table>
 					</div>';
-					///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-					// ancien code pas encore modifié ci-dessous//
-					//////////////////////////////////////////////
-					if(isset($_GET['dm']))
-					{
-						echo "<form action='produit.php?modif&idCat=".$_GET['idCat']."&dm&id=".$_GET['id']."&idNom=".$_GET['idNom']."&ok' method='POST'>
-						<label>Valeur : </label><select name='carValeur'>
-							<option value=null> </option>";
-								
-						$val = $connexion->query("Select * from data_valeur");
-						$val->setFetchMode(PDO::FETCH_OBJ);
-						
-						$valeur = genererValeurNom($_GET['idNom']);
-						
-						if($valeur == null)
-						{
-							while($res = $val->fetch())
-							{
-								echo "<option value='".$res->idValeur."'>".$res->valeur."</option>";
-							}
-						}
-						else
-						{
-							foreach($valeur as $element) // retourne un array des valeurs
-							{
-								echo "<option value='".$element->idValeur."'>".$element->valeur."</option>";
-							}
-						}
-						echo "
-						</select>&nbsp;<input type='text' name='val' style='width:100px; height:20px;'></input><br/>
-						<input type='submit' name='okmo' value='Modifier'></input>
-						</form>";
-						
-						if(isset($_POST['okmo']))
-						{
-							if($_POST['carValeur'] == 'null')
-							{				
-								$e = ifValeurExist($_POST['val']);
-								if($e == 0)
-								{
-									ajouterValeur($_POST['val']);
-								}
-								
-								$idValeur = getIdValeur($_POST['val']);
-							}
-							else
-							{
-								$idValeur = $_POST['carValeur'];
-							}
-							modifierData($_GET['id'],$_GET['idNom'],$idValeur);
-						}
-					}	
-					elseif(isset($_GET['ds']))
-					{
-						$idNom = $_GET['idNom'];
-						echo '<form name="frm" action="produit.php?modif&ds&id='.$id.'&idNom='.$idNom.'&idCat='.$_GET['id'].'" method="post">
-						<h3>Etes-vous sûre de vouloir supprimer cette caractéristique ?</h3>
-						<br/>
-						<input type="hidden" name="no" value="'.$id.'">
-						<input type="hidden" name="nom" value="'.$idNom.'">
-						<input type="hidden" name="cat" value="'.$_GET['id'].'">
-						<input type="radio" name="rep" value="non" checked> Non
-						<input type="radio" name="rep" value="oui" > Oui
-						<br/><br/>
-						<input type="submit" name="supp" value="Valider">
-						</form>
-							 ';
-						
-						$rep = "non"; 
-					}
-				elseif(!isset($_POST['okc']))
-				{/*
-					echo "<label>Ajouter de nouvelles caractéristiques : </label>";
-					echo "<br/><form action='produit.php?modif&idCat=".$_GET['idCat']."&id=".$_GET['id']."' method='POST'><label>Nom : </label><select name='carNom'>
-						<option value=null> </option>";
-							
-					$nom = $connexion->query("Select * from data_nom");
-					$nom->setFetchMode(PDO::FETCH_OBJ);
-				
-					$noms = genererNomCategorie($_GET['idCat']);
-										
-					if($noms == null)
-					{
-						while($res = $nom->fetch())
-						{
-							echo "<option value='".$res->idNom."'>".$res->nom."</option>";
-						}
-					}
-					else
-					{
-						foreach($noms as $element) // retourne un array des noms
-						{
-							echo "<option value='".$element->idNom."'>".$element->nom."</option>";
-						}
-					}
-					echo "
-					</select> ou <input type='text' name='nom' style='width:100px; height:20px;'></input><br/>
-					<input type='submit' name='okc' value='Ajouter'></input>			
-					</form>";*/
-				}else
-				{/*
-					if($_POST['carNom'] == 'null')
-					{
-						$e = ifNomExist($_POST['nom']);
-						
-						if($e == 0)
-						{
-							ajouterNom($_POST['nom']);
-						}
-						
-						$idNom = getIdNom($_POST['nom']);
-					}
-					else
-					{
-						$idNom = $_POST['carNom'];
-					}
-					
-					echo "<br/><form action='produit.php?modif&idCat=".$_GET['idCat']."&id=".$_GET['id']."&ok' method='POST'><label>Valeur : </label>
-					<input type='hidden' name='nom' value='".$idNom."'></input><select name='carVal'>
-						<option value=null> </option>";
-							
-					$val = $connexion->query("Select * from data_valeur");
-					$val->setFetchMode(PDO::FETCH_OBJ);
-				
-					
-					$valeur = genererValeurNom($idNom);
-					
-					if($valeur == null)
-					{
-						while($res = $val->fetch())
-						{
-							echo "<option value='".$res->idValeur."'>".$res->valeur."</option>";
-						}
-					}
-					else
-					{
-						foreach($valeur as $element) // retourne un array des valeurs
-						{
-							echo "<option value='".$element->idValeur."'>".$element->valeur."</option>";
-						}
-					}
-					echo "
-					</select> ou <input type='text' name='val' style='width:100px; height:20px;'></input><br/>
-					<input type='submit' name='okc2' value='Ajouter'></input>";*/
-				}
-				if(isset($_POST['okc2']))
-				{/*
-					if($_POST['carVal'] == 'null')
-						{				
-							$e = ifValeurExist($_POST['val']);
-							if($e == 0)
-							{
-								ajouterValeur($_POST['val']);
-							}
-							
-							$idValeur = getIdValeur($_POST['val']);
-						}
-						else
-						{
-							$idValeur = $_POST['carVal'];
-						}
-						ajouterData($_GET['id'],$_POST['nom'],$idValeur);*/
-				}
-		}
+		}		
 		elseif(isset($_GET['id']))
 		{
 			$req = $connexion->query("SET NAMES 'utf8'");	
