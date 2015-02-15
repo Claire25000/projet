@@ -20,7 +20,7 @@ function rechercheProduit($nom)
 	global $connexion;
 	
 	$req = $connexion->query("SET NAMES 'utf8'");
-	$req = $connexion->query("Select produit.* from produit where nomProduit = '".$nom."'");
+	$req = $connexion->query("Select produit.* from produit where nomProduit LIKE '%".$nom."%'");
 	$req->setFetchMode(PDO::FETCH_OBJ);
 	
 	return $req->fetch();

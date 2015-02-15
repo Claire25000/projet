@@ -2,7 +2,7 @@
 require_once('inc/inc_top.php');
 require_once("fonctions/fonctionProd.php");
 if(isset($_GET['q'])){
-	$recherche = mysql_real_escape_string($_GET['q']);
+	$recherche = mysql_real_escape_string(htmlentities($_GET['q']));
 }
 if(isset($recherche)) // si le champ recherche contient quelque chose
 { 
@@ -13,7 +13,7 @@ if(isset($recherche)) // si le champ recherche contient quelque chose
 	}
 	else
 	{
-		$message = '<p>Aucun produit ne correspond à votre recherche. Veillez vérifier le nom du produit.</p>';
+		$message = '<p>Vous n\'avons pas trouvé le produit <b>'.$recherche.'</b>.<br/>Veillez vérifier le nom du produit.</p>';
 	}
 }
 else

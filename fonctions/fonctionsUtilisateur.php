@@ -29,7 +29,7 @@ function retourneListeUtilisateur(){
 function connecteUtilisateur($email,$password){
 	global $connexion; // on définie la variables globale de connection dans la fonction
 	//$requete = $connexion->query("SELECT * FROM utilisateur where email='".$email."' AND passwd='".$password."'"); // on ajoute un salt au md5 : &4à[5s
-	$requete = $connexion->query("SELECT * FROM utilisateur where email='".$email."' AND passwd='".md5("&4à[5s".$password)."'"); // on ajoute un salt au md5 : &4à[5s
+	$requete = $connexion->query("SELECT * FROM utilisateur where email='".mysql_real_escape_string($email)."' AND passwd='".md5("&4à[5s".$password)."'"); // on ajoute un salt au md5 : &4à[5s
 	//echo "recu -> (".$email.")(".$password.")".md5("&4à[5s".$password)." <-  ";
 
 	$requete->setFetchMode(PDO::FETCH_OBJ);
@@ -66,7 +66,7 @@ function ajouterUtilisateur($login,$password,$email,$type){
 function changerPasswordUtilisateur($idUtilisateur,$passwordOld,$passwordNew){
 	global $connexion; // on définie la variables globale de connection dans la fonction
 
-	$requete = $connexion->query("SELECT * FROM `utilisateur`WHERE `idUtilisateur` =".$idUtilisateur."");
+	$requete = $connexion->query("SELECT * FROM `utilisateur`WHERE `idUtilisateur` =".mysql_real_escape_string($idUtilisateur)."");
 	$requete->setFetchMode(PDO::FETCH_OBJ);
 	$enregistrement = $requete->fetch();
 	$enregistrement->passwd; // mot de passe crypté actuel de l'utilisateur

@@ -21,15 +21,26 @@ if(isset($_GET['croissant'])){
 	$maRequete = "Select * from produit where idCategorie=".$idCategorie." ORDER BY prixProduit ASC";
 }else if(isset($_GET['decroissant'])){
 	$maRequete = "Select * from produit where idCategorie=".$idCategorie." ORDER BY prixProduit DESC";
-}else if(isset($_GET['note'])){
-	$maRequete = "SELECT *,AVG(notation.note) as noteMoyenne FROM `produit`,`notation` WHERE produit.idProduit = ".$idCategorie." AND produit.idProduit = notation.idProduit ORDER BY AVG(notation.note) DESC"; // A FAIRE
+/*}else if(isset($_GET['note'])){
+	$maRequete = "SELECT produit.*,AVG(notation.note) as noteMoyenne FROM `produit`,`notation` WHERE produit.idCategorie=".$idCategorie." AND produit.idProduit = notation.idProduit ORDER BY noteMoyenne DESC"; // A FAIRE
+	$maRequete2 = "SELECT produit.* FROM `produit` WHERE idCategorie=".$idCategorie." AND produit.idProduit NOT IN (SELECT notation.idProduit FROM notation,produit WHERE produit.idCategorie=".$idCategorie.")"; // A FAIRE
+*/
 }else{
 	$maRequete = "Select * from produit where idCategorie=".$idCategorie." ORDER BY idProduit DESC";
 }
-$req = $connexion->query("SET NAMES 'utf8'");
+
+
+//$req = $connexion->query("SET NAMES 'utf8'");
 $req = $connexion->query($maRequete);
 $req->setFetchMode(PDO::FETCH_OBJ);
-			
+
+/*
+if(isset($_GET['note'])){
+$req = $connexion->query("SET NAMES 'utf8'");
+$req = $connexion->query($maRequete2);
+$req->setFetchMode(PDO::FETCH_OBJ);
+}
+*/
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -60,7 +71,6 @@ $req->setFetchMode(PDO::FETCH_OBJ);
 				  <option value="#">Trier les articles</option>
 				  <option <?php if(isset($_GET['croissant'])){echo'selected="selected"';}?> value="&croissant">Prix : ordre croissant</option>
 				  <option <?php if(isset($_GET['decroissant'])){echo'selected="selected"';}?> value="&decroissant">Prix : ordre décroissant</option>
-				  <option <?php if(isset($_GET['note'])){echo'selected="selected"';}?> value="&note">Note moyenne</option>
 				  <option <?php if(isset($_GET['date'])){echo'selected="selected"';}?> value="&date">Date d'ajout</option>
 				  
 				</select>
@@ -104,6 +114,7 @@ $req->setFetchMode(PDO::FETCH_OBJ);
 				
 				
 				$i++;
+				
 			}
 		?>
       </div>
