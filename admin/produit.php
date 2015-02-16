@@ -309,7 +309,7 @@ if(isset($_POST['valm']))
 				  </div>
 				  </div>
 				  <br/><br/>
-				  <img src='".retourneParametre("repertoireUpload")."".$res->image."' alt='[Aucune image]'/>
+				  <img src='.".retourneParametre("repertoireUpload")."".$res->image."' alt='[Aucune image]'/>
 					<br/></br>
 				  <div style='text-align:center'>
 					<input type='submit' name='okm' class='btn btn-primary' value='Modifier le produit'/>
@@ -362,19 +362,6 @@ if(isset($_POST['valm']))
 									<th>Modifier</th>
 									<th>Supprimer</th>
 								</tr>';
-								while($resultat = $sql->fetch()) // on boucle sur les carac du produit
-								{
-									echo '<tr>
-											<td>'.$resultat->nom.'</td> 
-											<td><form action="produit.php?modif&id='.$_GET['id'].'&idCat='.$_GET['idCat'].'" method="POST" class="form-inline">
-												<input type="hidden" name="nom" value="'.$resultat->nom.'"/>
-												<input type="text" name="valeur" class="form-control" id="valeur" placeholder="Entrer une valeur..." value="'.$resultat->valeur.'">
-												<input type="submit" name="valm" class="btn btn-default" value="Modifier"/>
-												</form>
-											</td>
-											<td><center><a href="produit.php?modif&idCat='.$_GET['idCat'].'&ds&id='.$id.'&idNom='.$resultat->idNom.'#supr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAABVAAAAVQFx6ibxAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAFpQTFRF////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsR9YqAAAAB10Uk5TAAMGCA4QFxgoPENPX2BvgJCUsLzAxcnKzs/g8Pzsax2GAAAAcUlEQVQoU93QNxKAMAxEURFsTDSYHPb+14ShMDJDqvnlvlEjope8dtprvRMEWOatBQFffSEkerXVQwrhW+jg1FkYXRgthEnGSkILVPKD8tifwOQDigJDbk6gySCKYEj/FCpVI45Rq+rrr24gbVgpg4tWxfsXpV7GSV0AAAAASUVORK5CYIIb5e809b39867cb188c85e4a69afc3291"/></a></center></td>
-										 </tr>';
-								}
 								
 					echo '		<tr class="info" style="border: 2px dashed;">';
 									
@@ -487,6 +474,23 @@ if(isset($_POST['valm']))
 											</td>
 											
 											</tr>';
+									}else
+									{
+										echo '<td class="danger"></td>';
+									}
+									echo '<td class="danger"></td>';
+									while($resultat = $sql->fetch()) // on boucle sur les carac du produit
+									{
+										echo '<tr>
+												<td>'.$resultat->nom.'</td> 
+												<td><form action="produit.php?modif&id='.$_GET['id'].'&idCat='.$_GET['idCat'].'" method="POST" class="form-inline">
+													<input type="hidden" name="nom" value="'.$resultat->nom.'"/>
+													<input type="text" name="valeur" class="form-control" id="valeur" placeholder="Entrer une valeur..." value="'.$resultat->valeur.'">
+													<input type="submit" name="valm" class="btn btn-default" value="Modifier"/>
+													</form>
+												</td>
+												<td><center><a href="produit.php?modif&idCat='.$_GET['idCat'].'&ds&id='.$id.'&idNom='.$resultat->idNom.'#supr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAABVAAAAVQFx6ibxAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAFpQTFRF////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsR9YqAAAAB10Uk5TAAMGCA4QFxgoPENPX2BvgJCUsLzAxcnKzs/g8Pzsax2GAAAAcUlEQVQoU93QNxKAMAxEURFsTDSYHPb+14ShMDJDqvnlvlEjope8dtprvRMEWOatBQFffSEkerXVQwrhW+jg1FkYXRgthEnGSkILVPKD8tifwOQDigJDbk6gySCKYEj/FCpVI45Rq+rrr24gbVgpg4tWxfsXpV7GSV0AAAAASUVORK5CYIIb5e809b39867cb188c85e4a69afc3291"/></a></center></td>
+											 </tr>';
 									}
 									if(isset($_POST['okv']))
 										{
@@ -556,13 +560,12 @@ if(isset($_POST['valm']))
 					$sql = $connexion->query("Select data.idNom, nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$_GET['id']);
 					$sql->setFetchMode(PDO::FETCH_OBJ);
 					
-					echo "<label>Caractéristiques : </label>
+					echo "<label>Caractéristiques : </label><br/><br/>
 					<ul>";
 					
 							while($resultat = $sql->fetch())
 							{
-								echo "<tr>
-								<li>".$resultat->nom." : ".$resultat->valeur."</li>";
+								echo "<li>".$resultat->nom." : ".$resultat->valeur."</li>";
 							}
 						echo "</ul><br/>";
 			}
@@ -588,34 +591,17 @@ if(isset($_POST['valm']))
 					<tr>
 						<th>Numéro du produit</th>
 						<th>Nom du produit</th>
-						<th>Description du produit</th>
-						<th>Prix du produit</th>
-						<th>Caractéristiques supplémentaires</th>
 						<th>Modifier</th>
 						<th>Supprimer</th>
 					</tr>";
 					
 				while($res = $req->fetch())
-				{
-					$sql = $connexion->query("SET NAMES 'utf8'"); 
-					$sql = $connexion->query("Select nom, valeur from data, data_nom, data_valeur where data.idNom = data_nom.idNom and data.idValeur = data_valeur.idValeur and idProduit = ".$res->idProduit);
-					$sql->setFetchMode(PDO::FETCH_OBJ);
-					
+				{					
 					echo "<tr>
 						<td>".$res->idProduit."</td>
 						<td><a href='produit.php?id=".$res->idProduit."&idCat=".$_GET['idCat']."'>".$res->nomProduit."</a></td>
-						<td>".$res->descriptionProduit."</td>
-						<td>".$res->prixProduit."</td>
-						<td>
-							<ul>";
-							while($resultat = $sql->fetch())
-							{
-								echo "<li>".$resultat->nom." : ".$resultat->valeur."</li>";
-							}
-						echo "</ul>
-						</td>
-							<td><a href='produit.php?modif&id=".$res->idProduit."&idCat=".$_GET['idCat']."'><img src='design/pencil.png'/></a></td>
-							<td><a href='produit.php?supp&id=".$res->idProduit."&idCat=".$_GET['idCat']."'><img src='design/delete.png'/></a></td>";
+						<td><a href='produit.php?modif&id=".$res->idProduit."&idCat=".$_GET['idCat']."'><img src='design/pencil.png'/></a></td>
+						<td><a href='produit.php?supp&id=".$res->idProduit."&idCat=".$_GET['idCat']."'><img src='design/delete.png'/></a></td>";
 				}
 				echo "</tr></table></div>";
 			}

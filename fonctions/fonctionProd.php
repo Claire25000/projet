@@ -20,7 +20,7 @@ function rechercheProduit($nom)
 	global $connexion;
 	
 	$req = $connexion->query("SET NAMES 'utf8'");
-	$req = $connexion->query("Select produit.* from produit where nomProduit LIKE '%".$nom."%'");
+	$req = $connexion->query("Select produit.* from produit where nomProduit LIKE '%".addslashes($nom)."%'");
 	$req->setFetchMode(PDO::FETCH_OBJ);
 	
 	return $req->fetch();
@@ -115,7 +115,7 @@ function modifierData($id,$idNom,$idVal)
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare("update data set idValeur = ".$idVal." where idProduit = ".$id." and idNom = ".$idNom);
+			$query = $connexion->prepare("update data set idValeur = ".$idVal." where idProduit = ".$id." and idNom = ".addslashes($idNom));
 			$query->execute();
 			return true;
 		}
@@ -133,7 +133,7 @@ function modifierProduit($id,$nom,$desc,$prix,$cat,$img,$stock)
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare('update produit set nomProduit = "'.mysql_real_escape_string($nom).'",descriptionProduit = "'.mysql_real_escape_string($desc).'",prixProduit = '.mysql_real_escape_string($prix).',idCategorie = '.mysql_real_escape_string($cat).',image = "'.mysql_real_escape_string($img).'",stockProduit = "'.mysql_real_escape_string($stock).'" where idProduit = '.mysql_real_escape_string($id));
+			$query = $connexion->prepare('update produit set nomProduit = "'.addslashes($nom).'",descriptionProduit = "'.mysql_real_escape_string($desc).'",prixProduit = '.mysql_real_escape_string($prix).',idCategorie = '.mysql_real_escape_string($cat).',image = "'.mysql_real_escape_string($img).'",stockProduit = "'.mysql_real_escape_string($stock).'" where idProduit = '.mysql_real_escape_string($id));
 			$query->execute();
 			return true;
 		}
@@ -151,7 +151,7 @@ function modifierProduit2($id,$nom,$desc,$prix,$cat,$stock)
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare("update produit set nomProduit = '".mysql_real_escape_string($nom)."',descriptionProduit = '".mysql_real_escape_string($desc)."',prixProduit = ".mysql_real_escape_string($prix).",idCategorie = ".mysql_real_escape_string($cat).",stockProduit = '".mysql_real_escape_string($stock)."' where idProduit = ".mysql_real_escape_string($id)."");
+			$query = $connexion->prepare("update produit set nomProduit = '".addslashes($nom)."',descriptionProduit = '".mysql_real_escape_string($desc)."',prixProduit = ".mysql_real_escape_string($prix).",idCategorie = ".mysql_real_escape_string($cat).",stockProduit = '".mysql_real_escape_string($stock)."' where idProduit = ".mysql_real_escape_string($id)."");
 			$query->execute();
 			return true;
 		}

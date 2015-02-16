@@ -42,7 +42,7 @@ function ajouterNom($nom)
 	try
 	{
 		$requete = $connexion->query("SET NAMES 'utf8'"); 
-		$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`data_nom` values (DEFAULT,'".$nom."')"); //on insère le nom dans la base
+		$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`data_nom` values (DEFAULT,'".addslashes($nom)."')"); //on insère le nom dans la base
 		$requete->execute();
 		return true;
 	}
@@ -60,7 +60,7 @@ function ajouterValeur($valeur)
 	try
 	{
 		$requete = $connexion->query("SET NAMES 'utf8'"); 
-		$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`data_valeur` values (DEFAULT,'".$valeur."')"); //on insère la valeur dans la base
+		$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`data_valeur` values (DEFAULT,'".addslashes($valeur)."')"); //on insère la valeur dans la base
 		$requete->execute();
 		return true;
 	}
@@ -110,7 +110,7 @@ function getIdNom($nom)
 	global $connexion;
 	
 	$req = $connexion->query("SET NAMES 'utf8'");
-	$req = $connexion->query("Select * from data_nom where nom = '".$nom."'");
+	$req = $connexion->query("Select * from data_nom where nom = '".addslashes($nom)."'");
 	$req->setFetchMode(PDO::FETCH_OBJ);
 	$res = $req->fetch();
 	
@@ -122,7 +122,7 @@ function getIdValeur($val)
 	global $connexion;
 	
 	$req = $connexion->query("SET NAMES 'utf8'");
-	$req = $connexion->query("Select * from data_valeur where valeur = '".$val."'");
+	$req = $connexion->query("Select * from data_valeur where valeur = '".addslashes($val)."'");
 	$req->setFetchMode(PDO::FETCH_OBJ);
 	$res = $req->fetch();
 	
