@@ -57,7 +57,7 @@ function ajouterProduit($nom,$desc,$prix,$cat,$img,$stock)
 	try
 		{
 			$requete = $connexion->query("SET NAMES 'utf8'");
-			$requete = $connexion->prepare('INSERT INTO `webuzzer54gs9`.`produit` values (DEFAULT,"'.mysql_real_escape_string($nom).'","'.mysql_real_escape_string($desc).'",'.mysql_real_escape_string($prix).','.mysql_real_escape_string($cat).',"'.$img.'","'.mysql_real_escape_string($stock).'");'); //on insère le produit dans la base
+			$requete = $connexion->prepare('INSERT INTO `webuzzer54gs9`.`produit` values (DEFAULT,"'.addslashes($nom).'","'.addslashes($desc).'",'.addslashes($prix).','.addslashes($cat).',"'.$img.'","'.addslashes($stock).'");'); //on insère le produit dans la base
 			$requete->execute();
 			return true;
 		}
@@ -75,7 +75,7 @@ function ajouterData($idProd,$idNom,$idVal)
 	try
 		{
 			$requete = $connexion->query("SET NAMES 'utf8'"); 
-			$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`data` values (DEFAULT,".mysql_real_escape_string($idProd).",".mysql_real_escape_string($idNom).",".mysql_real_escape_string($idVal).")"); //on insère la data dans la base
+			$requete = $connexion->prepare("INSERT INTO `webuzzer54gs9`.`data` values (DEFAULT,".addslashes($idProd).",".addslashes($idNom).",".addslashes($idVal).")"); //on insère la data dans la base
 			$requete->execute();
 			return true;
 			
@@ -93,10 +93,10 @@ function supprimerProduit($id)
 	
 		try
 		{
-			$requete = $connexion->prepare("Delete from data where idProduit = ".mysql_real_escape_string($id)); //on supprime les datas correspondantes au produit dans la base
+			$requete = $connexion->prepare("Delete from data where idProduit = ".addslashes($id)); //on supprime les datas correspondantes au produit dans la base
 			$requete->execute();
 			
-			$sql = $connexion->prepare("Delete from produit where idProduit = ".mysql_real_escape_string($id)); //on supprime le produit de la base
+			$sql = $connexion->prepare("Delete from produit where idProduit = ".addslashes($id)); //on supprime le produit de la base
 			$sql->execute();
 			return true;
 			
@@ -133,7 +133,7 @@ function modifierProduit($id,$nom,$desc,$prix,$cat,$img,$stock)
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare('update produit set nomProduit = "'.addslashes($nom).'",descriptionProduit = "'.mysql_real_escape_string($desc).'",prixProduit = '.mysql_real_escape_string($prix).',idCategorie = '.mysql_real_escape_string($cat).',image = "'.mysql_real_escape_string($img).'",stockProduit = "'.mysql_real_escape_string($stock).'" where idProduit = '.mysql_real_escape_string($id));
+			$query = $connexion->prepare('update produit set nomProduit = "'.addslashes($nom).'",descriptionProduit = "'.addslashes($desc).'",prixProduit = '.addslashes($prix).',idCategorie = '.addslashes($cat).',image = "'.addslashes($img).'",stockProduit = "'.addslashes($stock).'" where idProduit = '.addslashes($id));
 			$query->execute();
 			return true;
 		}
@@ -151,7 +151,7 @@ function modifierProduit2($id,$nom,$desc,$prix,$cat,$stock)
 	try
 		{
 			$query = $connexion->query("SET NAMES 'utf8'"); 
-			$query = $connexion->prepare("update produit set nomProduit = '".addslashes($nom)."',descriptionProduit = '".mysql_real_escape_string($desc)."',prixProduit = ".mysql_real_escape_string($prix).",idCategorie = ".mysql_real_escape_string($cat).",stockProduit = '".mysql_real_escape_string($stock)."' where idProduit = ".mysql_real_escape_string($id)."");
+			$query = $connexion->prepare("update produit set nomProduit = '".addslashes($nom)."',descriptionProduit = '".addslashes($desc)."',prixProduit = ".addslashes($prix).",idCategorie = ".addslashes($cat).",stockProduit = '".addslashes($stock)."' where idProduit = ".addslashes($id)."");
 			$query->execute();
 			return true;
 		}
@@ -168,7 +168,7 @@ function supprimerData($idNom, $id)
 	
 	try
 		{
-			$query = $connexion->prepare("delete from data where idProduit=".mysql_real_escape_string($id)." and idNom=".mysql_real_escape_string($idNom));
+			$query = $connexion->prepare("delete from data where idProduit=".addslashes($id)." and idNom=".addslashes($idNom));
 			$query->execute();
 			return true;
 		}
