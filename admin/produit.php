@@ -359,7 +359,8 @@ if(isset($_POST['valm']))
 									if(!isset($_POST['okc'])){echo "<td class='succes'>";$disabled='';}
 									else{echo '<td class="danger">';$disabled='disabled';}
 									echo '<!-------------------------------------------- data_nom (ajout carac=)---------------------------------------------->
-										<form action="produit.php?modif&idCat='.$_GET["idCat"].'&id='.$_GET["id"].'" method="POST" class="form-horizontal">
+										
+										<form id="ajout" action="produit.php?modif&idCat='.$_GET["idCat"].'&id='.$_GET["id"].'#ajout" method="POST" class="form-horizontal">
 											<fieldset>
 											<!-- Text input-->
 											<div class="form-group">
@@ -413,7 +414,7 @@ if(isset($_POST['valm']))
 										if(isset($_POST['okc'])){echo "<td class='succes'>";;}
 										else{echo '<td class="danger">';}
 										echo '
-											<form action="produit.php?modif&idCat='.$_GET['idCat'].'&id='.$_GET["id"].'&ok" method="POST" class="form-horizontal">
+											<form action="produit.php?modif&idCat='.$_GET['idCat'].'&id='.$_GET["id"].'&ok#ajout" method="POST" class="form-horizontal">
 												<fieldset>
 												<!-- Text input-->
 												<div class="form-group">
