@@ -20,8 +20,12 @@ if(isset($_POST['supp']))
  if($rep == "oui")
 	{
 		supprimerData($nom,$num);
+		header("Location:produit.php?modif&idCat=".$cat."&id=".$num."&suprCarac");
 	}
-	header("Location:produit.php?modif&idCat=".$cat."&id=".$num);
+	header("Location:produit.php?modif&idCat=".$cat."&id=".$num."#ajout");
+}
+if(isset($_GET['suprCarac'])){
+	$message='<div class="alert alert-success" role="alert">Caractéristique supprimée avec succès</div>';
 }
 
 if(isset($_POST['suppP']))
@@ -133,10 +137,11 @@ if(isset($_POST['valm']))
    <div class="container">
 		<?php
 		require_once('inc/inc_menu.php');
-		echo ' <div style="padding-top:5%" class="jumbotron">';
 		if(isset($message)){
 			echo $message;
 		}
+		echo ' <div style="padding-top:5%" class="jumbotron">';
+
 		
 
 		echo '<div class="row">
@@ -307,23 +312,40 @@ if(isset($_POST['valm']))
 				  <img src='".retourneParametre("repertoireUpload")."".$res->image."' alt='[Aucune image]'/>
 					<br/></br>
 				  <div style='text-align:center'>
-					<input type='submit' name='okm' class='btn btn-primary' value='Modifier'/>
+					<input type='submit' name='okm' class='btn btn-primary' value='Modifier le produit'/>
 					</div>
-				</fieldset></form>";
+				</fieldset></form><hr>";
 				if(isset($_GET['ds']))
 				{
-					echo '<form name="frm" action="produit.php?modif&ds&id='.$_GET['id'].'&idNom='.$_GET['idNom'].'&idCat='.$_GET['idCat'].'" method="post">
-					<h3>Etes-vous sûre de vouloir supprimer cette caractéristique ?</h3>
+					echo '<br/><div class="alert alert-warning"><form style="margin-top:2%" name="frm" action="produit.php?modif&ds&id='.$_GET['id'].'&idNom='.$_GET['idNom'].'&idCat='.$_GET['idCat'].'" method="post">
+					<h3 id="supr">Etes-vous sûre de vouloir supprimer cette caractéristique ?</h3>
 					<br/>
 					<input type="hidden" name="no" value="'.$_GET['id'].'">
 					<input type="hidden" name="nom" value="'.$_GET['idNom'].'">
 					<input type="hidden" name="cat" value="'.$_GET['id'].'">
-					<input type="radio" name="rep" value="non" checked> Non
-					<input type="radio" name="rep" value="oui" > Oui
-					<br/><br/>
-					<input type="submit" name="supp" value="Valider">
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="rep"></label>
+					  <div class="col-md-4"> 
+						<label class="radio-inline" for="rep-0">
+						  <input name="rep" id="rep-0" value="non" checked="checked" type="radio">
+						  non
+						</label> 
+						<label class="radio-inline" for="rep-1">
+						  <input name="rep" id="rep-1" value="oui" type="radio">
+						  oui
+						</label>
+					  </div>
+					</div>
+
+					<!-- Button -->
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="supp"></label>
+					  <div class="col-md-4">
+						<button id="supp" name="supp" class="btn btn-success">Supprimer</button>
+					  </div>
+					</div>
 					</form>
-					<br/>	 ';
+					<br/><br/><br/></div>';
 					
 					$rep = "non"; 
 				}					
@@ -350,7 +372,7 @@ if(isset($_POST['valm']))
 												<input type="submit" name="valm" class="btn btn-default" value="Modifier"/>
 												</form>
 											</td>
-											<td><center><a href="produit.php?modif&idCat='.$_GET['idCat'].'&ds&id='.$id.'&idNom='.$resultat->idNom.'">X</a></center></td>
+											<td><center><a href="produit.php?modif&idCat='.$_GET['idCat'].'&ds&id='.$id.'&idNom='.$resultat->idNom.'#supr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAABVAAAAVQFx6ibxAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAFpQTFRF////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsR9YqAAAAB10Uk5TAAMGCA4QFxgoPENPX2BvgJCUsLzAxcnKzs/g8Pzsax2GAAAAcUlEQVQoU93QNxKAMAxEURFsTDSYHPb+14ShMDJDqvnlvlEjope8dtprvRMEWOatBQFffSEkerXVQwrhW+jg1FkYXRgthEnGSkILVPKD8tifwOQDigJDbk6gySCKYEj/FCpVI45Rq+rrr24gbVgpg4tWxfsXpV7GSV0AAAAASUVORK5CYIIb5e809b39867cb188c85e4a69afc3291"/></a></center></td>
 										 </tr>';
 								}
 								
