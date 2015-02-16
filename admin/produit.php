@@ -614,8 +614,8 @@ if(isset($_POST['valm']))
 							}
 						echo "</ul>
 						</td>
-							<td><a href='produit.php?modif&id=".$res->idProduit."&idCat=".$_GET['idCat']."'>X</a></td>
-							<td><a href='produit.php?supp&id=".$res->idProduit."&idCat=".$_GET['idCat']."'>X</a></td>";
+							<td><a href='produit.php?modif&id=".$res->idProduit."&idCat=".$_GET['idCat']."'><img src='design/pencil.png'/></a></td>
+							<td><a href='produit.php?supp&id=".$res->idProduit."&idCat=".$_GET['idCat']."'><img src='design/delete.png'/></a></td>";
 				}
 				echo "</tr></table></div>";
 			}

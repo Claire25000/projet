@@ -132,8 +132,8 @@ if(isset($_POST['ok']))
 						echo '<tr>
 								<td>'.$element->idCategorie.'</td>
 								<td><a href="produit.php?idCat='.$element->idCategorie.'">'.$element->libelleCategorie.'</a></td>
-								<td><a href="?modif&id='.$element->idCategorie.'">X</a></td>
-								<td><a href="?supp&id='.$element->idCategorie.'">X</a></td>
+								<td><a href="?modif&id='.$element->idCategorie.'"><img src="design/pencil.png"/></a></td>
+								<td><a href="?supp&id='.$element->idCategorie.'"><img src="design/delete.png"/></a></td>
 							</tr>';
 					}
 				echo '</table></div>';

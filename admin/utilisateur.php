@@ -131,7 +131,7 @@ echo $_POST['login'];
 						<td>'.$element->login .'</td>
 						<td>'.$element->email .'</td>
 						<td>'.retourneLibelleType($element->type).'</td>
-						<td><a href="?suprUtil='.$element->idUtilisateur.'"> [x]</a></td>
+						<td><a href="?suprUtil='.$element->idUtilisateur.'"><img src="design/delete.png"/></a></td>
 					</tr>';
 			}
 		echo '</table></div>';
