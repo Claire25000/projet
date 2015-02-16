@@ -376,7 +376,7 @@ if(isset($_POST['valm']))
 											<div class="form-group">
 											    
 											  <div class="col-md-10">
-											  <input '.$disabled.' id="nom" name="nom" placeholder="Nouvelle caractérisitque" class="form-control input-md" type="text">
+											  <input '.$disabled.' id="nom" name="nom" placeholder="Nouvelle caractéristique" class="form-control input-md" type="text">
 											  </div>
 											</div>
 											<!-- Select Basic -->
