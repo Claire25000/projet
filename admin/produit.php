@@ -256,6 +256,7 @@ if(isset($_POST['valm']))
 				$sql = $connexion->query("select * FROM produit where idProduit=".$id);
 				$sql->setFetchMode(PDO::FETCH_OBJ);
 				$res = $sql->fetch();
+			 
 				
 				echo "<form enctype='multipart/form-data' action='produit.php?modif&id=".$id."&idCat=".$_GET['idCat']."' method='POST' class='form'>
 				<fieldset>
@@ -263,7 +264,7 @@ if(isset($_POST['valm']))
 				<div class='form-group'>
 				  <label class='control-label'>Nom du produit</label>  
 				  <div class='col-md-4'>
-				  <input type='text' name='nom' class='form-control input-md' required='' value='".$res->nomProduit."'/>
+				  <input type='text' name='nom' class='form-control input-md' required=''"; echo 'value="'.$res->nomProduit.'"';echo "/>
 				  </div>
 				</div>
 				</br><br/>
