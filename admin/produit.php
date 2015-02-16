@@ -354,22 +354,25 @@ if(isset($_POST['valm']))
 										 </tr>';
 								}
 								
-					echo '		<tr class="info" style="border: 2px dashed;">
-									<td><!-------------------------------------------- data_nom (ajout carac=)---------------------------------------------->
+					echo '		<tr class="info" style="border: 2px dashed;">';
+									
+									if(!isset($_POST['okc'])){echo "<td class='succes'>";$disabled='';}
+									else{echo '<td class="danger">';$disabled='disabled';}
+									echo '<!-------------------------------------------- data_nom (ajout carac=)---------------------------------------------->
 										<form action="produit.php?modif&idCat='.$_GET["idCat"].'&id='.$_GET["id"].'" method="POST" class="form-horizontal">
 											<fieldset>
 											<!-- Text input-->
 											<div class="form-group">
 											    
 											  <div class="col-md-10">
-											  <input id="nom" name="nom" placeholder="Nouvelle caractérisitque" class="form-control input-md" type="text">
+											  <input '.$disabled.' id="nom" name="nom" placeholder="Nouvelle caractérisitque" class="form-control input-md" type="text">
 											  </div>
 											</div>
 											<!-- Select Basic -->
 											<div class="form-group">
 											  
 											  <div class="col-md-10">
-												<select id="carNom" name="carNom" class="form-control">
+												<select '.$disabled.' id="carNom" name="carNom" class="form-control">
 												  <option value="null">Sélectionner une caractéristique existante</option>';
 												  	$nom = $connexion->query("Select * from data_nom");
 													$nom->setFetchMode(PDO::FETCH_OBJ);
@@ -389,7 +392,7 @@ if(isset($_POST['valm']))
 											</div>
 											<div class="form-group">
 											  <div class="col-md-10">
-												<input type="submit" id="okc" name="okc" class="btn btn-primary btn-block"/>
+												<input type="submit" id="okc" name="okc" '.$disabled.' class="btn btn-primary btn-block"/>
 											  </div>
 											</div>
 											</fieldset>
@@ -397,7 +400,7 @@ if(isset($_POST['valm']))
 									</td><!-------------------------------------------- data_valeur (ajout)----------------------------------------->
 									';
 									if(isset($_POST['okc']))
-									{ 
+									{
 										if($_POST['carNom'] == 'null'){ // si on a une nouvelle data_nom
 											$e = ifNomExist($_POST['nom']);
 											if($e == 0){
@@ -406,9 +409,10 @@ if(isset($_POST['valm']))
 											$idNom = getIdNom($_POST['nom']);
 										}else{ // si la data_nom existe
 											$idNom = $_POST['carNom'];
-										}									
+										}
+										if(isset($_POST['okc'])){echo "<td class='succes'>";;}
+										else{echo '<td class="danger">';}
 										echo '
-										<td class="danger">
 											<form action="produit.php?modif&idCat='.$_GET['idCat'].'&id='.$_GET["id"].'&ok" method="POST" class="form-horizontal">
 												<fieldset>
 												<!-- Text input-->
